@@ -1,18 +1,18 @@
 CXX		=	g++
 
-NAME	=	test
+NAME	=	containers
 
 CPPFLAGS = -Wall -Wextra -Werror -std=c++98
 
-SRC		=	./srcs/main.cpp
-			./srcs/map.cpp
-			./srcs/set.cpp
-			./srcs/stack.cpp
+SRC		=	./srcs/main.cpp\
+			./srcs/map.cpp\
+			./srcs/set.cpp\
+			./srcs/stack.cpp\
 			./srcs/vector.cpp
 
-HEADER  =   ./includes/map.cpp
-			./includes/set.cpp
-			./includes/stack.cpp
+HEADER  =   ./includes/map.cpp\
+			./includes/set.cpp\
+			./includes/stack.cpp\
 			./includes/vector.cpp
 
 OBJ		=	$(SRC:.cpp=.o)

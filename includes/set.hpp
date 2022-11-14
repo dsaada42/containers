@@ -1,8 +1,12 @@
 #ifndef SET_HPP
 # define SET_HPP
 
-class set{
+namespace ft {
+        
+    class set{
 
-};
+    };
+
+}
 
 #endif
