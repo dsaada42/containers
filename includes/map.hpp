@@ -44,10 +44,10 @@ namespace ft {
             const_reverse_iterator rbegin() const;
             reverse_iterator rend();
             const_reverse_iterator rend() const;
-            const_iterator cbegin() const noexcept;
-            const_iterator cend() const noexcept;
-            const_reverse_iterator crbegin() const noexcept;
-            const_reverse_iterator crend() const noexcept;
+            const_iterator cbegin() const;
+            const_iterator cend() const;
+            const_reverse_iterator crbegin() const;
+            const_reverse_iterator crend() const;
 
         //***** CAPACITY *****
             bool empty() const;
@@ -68,8 +68,6 @@ namespace ft {
             void erase (iterator first, iterator last);
             void swap (map& x);
             void clear( void );
-            template <class... Args>  pair<iterator,bool> emplace (Args&&... args);
-            template <class... Args>  iterator emplace_hint (const_iterator position, Args&&... args);
 
         //***** OBSERVERS *****
             key_compare key_comp() const;

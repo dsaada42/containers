@@ -3,27 +3,28 @@
 
 namespace ft {
 
-    template < class T, class Alloc = allocator<T> >
+    template < class T, class Alloc >
     class vector{
+
+        typedef T                                       value_type;
+        typedef Alloc                                   allocator_type;
+        typedef allocator_type::reference               reference;
+        typedef allocator_type::const_reference         const_reference;
+        typedef allocator_type::pointer                 pointer;
+        typedef allocator_type::const_pointer           const_pointer;
+        typedef std::iterator<T>                        iterator;//random access iterator convertible to const iterator
+        typedef std::iterator<const T>                  const_iterator;
+        typedef reverse_iterator<iterator>              reverse_iterator;
+        typedef reverse_iterator<const_iterator>        const_reverse_iterator;
+        typedef ptrdiff_t                               difference_type;
+        typedef size_t                                  size_type;
+
         private:
             T* _data;
-            size_type _size;
-            size_type _capacity;
+            size_type _size = 0;
+            size_type _capacity = 0;
 
         public:
-            typedef T                                       value_type;
-            typedef Alloc                                   allocator_type;
-            typedef allocator_type::reference               reference;
-            typedef allocator_type::const_reference         const_reference;
-            typedef allocator_type::pointer                 pointer;
-            typedef allocator_type::const_pointer           const_pointer;
-            typedef                                         iterator;//random access iterator convertible to const iterator
-            typedef                                         const_iterator;//
-            typedef reverse_iterator<iterator>              reverse_iterator;
-            typedef reverse_iterator<const_iterator>        const_reverse_iterator;
-            typedef ptrdiff_t                               difference_type;
-            typedef size_t                                  size_type;
-
         //*****CONSTRUCTOR DESTRUCTOR*****
             //____default constructor : constructs an empty container, no elements
             explicit vector (const allocator_type& alloc = allocator_type()); 
@@ -46,10 +47,10 @@ namespace ft {
             const_reverse_iterator rbegin() const;
             reverse_iteraor rend();
             const_reverse_iterator rend() const;
-            const_iterator cbegin() const noexcept;
-            const_iterator cend() const noexcept;
-            const_reverse_iterator crbegin() const noexcept;
-            const_reverse_iterator crend() const noexcept;
+            const_iterator cbegin() const;
+            const_iterator cend() const;
+            const_reverse_iterator crbegin() const;
+            const_reverse_iterator crend() const;
 
         //*****CAPACITY*****
             size_type size() const;
@@ -69,8 +70,8 @@ namespace ft {
             const_reference front() const;
             reference back();
             const_reference back() const;
-            value_type* data() noexcept;
-            const value_type* data() const noexcept;
+            value_type* data();
+            const value_type* data() const;
 
         //*****MODIFIERS*****
             template <class InputIterator>  void assign (InputIterator first, InputIterator last);
@@ -84,9 +85,7 @@ namespace ft {
             iterator erase (iterator first, iterator last);
             void swap (vector& x);
             void clear();
-            template <class... Args>iterator emplace (const_iterator position, Args&&... args);
-            template <class... Args>  void emplace_back (Args&&... args);
-
+            
         //*****Allocator*****
             allocator_type get_allocator() const;
             
