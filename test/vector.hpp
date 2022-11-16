@@ -2,17 +2,26 @@
 # define VECTOR_HPP
 # include <cstddef>
 # include <iostream>
+# include "vector_iterator.hpp"
 
 namespace ft {
 
     template < class T >
     class vector{
         
-        typedef T                                       value_type;
-        typedef size_t                                  size_type;
-        typedef T&                                      reference;
-        typedef const T&                                const_reference;
-     
+        public:
+            typedef T                                       value_type;
+            typedef size_t                                  size_type;
+            typedef value_type&                             reference;
+            typedef const value_type&                       const_reference;
+            typedef value_type*                             pointer;
+            typedef const value_type*                       const_pointer;
+            typedef vector_iterator< vector<value_type> >   iterator;//random access iterator convertible to const iterator
+            //typedef vector_iterator<const value_type>       const_iterator;
+            typedef std::reverse_iterator<iterator>         reverse_iterator;
+            //typedef std::reverse_iterator<const_iterator>   const_reverse_iterator;
+
+
         private:
             T* _data;
             size_type _size;
@@ -20,20 +29,18 @@ namespace ft {
             void ReAlloc( size_type newCapacity )
             {
                 //allocate new block
-                //value_type* newBlock = new value_type[newCapacity];
-                value_type* newBlock = (value_type*) ::operator new(newCapacity * sizeof(value_type));
+                value_type* newBlock = (value_type*) ::operator new(newCapacity * sizeof(value_type)); //next step is using allocator
                 //copy all existing elements in new allocated block (better to move)
                 if (newCapacity < _size)
                     _size = newCapacity;
                 for (size_t i = 0 ; i < _size ; i++){
-                    newBlock[i] = _data[i]; //optimizing possibility to move item instead of copying (better practice)
+                    newBlock[i] = _data[i];
                 }
                 //delete old block
                 for (size_t i = 0; i < _size ; i++){
                     _data[i].~value_type();
                 }
-                //delete [] _data; // need to use operator delete or allocator.deallocate to avoid double free
-                ::operator delete(_data);
+                ::operator delete(_data); // need to use operator delete or allocator.deallocate to avoid double free
                 _data = newBlock;
                 _capacity = newCapacity;
             }
@@ -62,6 +69,14 @@ namespace ft {
             vector& operator= (const vector& x){
                 (void)x;
                 return (*this);
+            }
+
+        //******ITERATORS*****
+            iterator begin(){
+                return (iterator(_data));   
+            }
+            iterator end(){
+                return (iterator(_data + _size));
             }
 
         //*****CAPACITY*****

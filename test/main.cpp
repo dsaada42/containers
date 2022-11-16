@@ -17,28 +17,17 @@ int main( void ){
 
     myVector.push_back(125);
     myVector.push_back(120);
-
     PrintVector( myVector );
-
     myVector.push_back(15);
-
-    PrintVector( myVector );
-
     myVector.push_back(-254);
     myVector.push_back(5915);
     myVector.push_back(15465);
 
     PrintVector( myVector );
 
-    myVector.pop_back();
-    myVector.pop_back();
-    myVector.pop_back();
-
-    PrintVector( myVector );
- 
-    myVector.clear();
-
-    PrintVector( myVector);
-
+    std::cout << "Iterator:\n";
+    for (ft::vector<int>::iterator it = myVector.begin(); it != myVector.end(); it++){
+        std::cout << *it << std::endl;
+    }
     return (0);
 }
