@@ -1,6 +1,7 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 # include <cstddef>
+# include <iostream>
 
 namespace ft {
 
@@ -19,28 +20,33 @@ namespace ft {
             void ReAlloc( size_type newCapacity )
             {
                 //allocate new block
-                value_type* newBlock = new value_type[newCapacity];
+                //value_type* newBlock = new value_type[newCapacity];
+                value_type* newBlock = (value_type*) ::operator new(newCapacity * sizeof(value_type));
                 //copy all existing elements in new allocated block (better to move)
                 if (newCapacity < _size)
                     _size = newCapacity;
                 for (size_t i = 0 ; i < _size ; i++){
-                    newBlock[i] = std::move(_data[i]); //optimizing possibility to move item instead of copying (better practice)
+                    newBlock[i] = _data[i]; //optimizing possibility to move item instead of copying (better practice)
                 }
                 //delete old block
-                delete [] _data;
+                for (size_t i = 0; i < _size ; i++){
+                    _data[i].~value_type();
+                }
+                //delete [] _data; // need to use operator delete or allocator.deallocate to avoid double free
+                ::operator delete(_data);
                 _data = newBlock;
                 _capacity = newCapacity;
             }
 
         public:
-      
-
+    
         //*****CONSTRUCTOR DESTRUCTOR*****
             //____default constructor : constructs an empty container, no elements
             vector ( void ){
                 _size = 0;
                 _capacity = 2;
-                _data = new value_type[2];
+                //_data = new value_type[2];
+                _data = (value_type*)::operator new(2 * sizeof(value_type)); // -> better approach useing allocator
             }  
             //____copy constructor___
             vector (const vector& x){
@@ -48,9 +54,11 @@ namespace ft {
             }
             //___destructor___
             ~vector< T >( void ){
-                delete [] _data;
+                clear(); // calls each destructor one by one 
+                //delete [] _data;
+                ::operator delete(_data);
             }
-            //____opertor= surcharge___
+            //____operator= surcharge___
             vector& operator= (const vector& x){
                 (void)x;
                 return (*this);
@@ -128,13 +136,17 @@ namespace ft {
                 _size++;
             }
             void pop_back(){
-
+                if (_size > 0){
+                    _size--;
+                    _data[_size].~value_type();
+                }
             }
             void swap (vector& x){
                 (void)x;
             }
             void clear(){
-            
+                while (_size > 0)
+                    pop_back();
             }
     };
 

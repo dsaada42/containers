@@ -17,9 +17,28 @@ int main( void ){
 
     myVector.push_back(125);
     myVector.push_back(120);
-    myVector.push_back(15);
-    myVector.push_back(-254);
 
     PrintVector( myVector );
+
+    myVector.push_back(15);
+
+    PrintVector( myVector );
+
+    myVector.push_back(-254);
+    myVector.push_back(5915);
+    myVector.push_back(15465);
+
+    PrintVector( myVector );
+
+    myVector.pop_back();
+    myVector.pop_back();
+    myVector.pop_back();
+
+    PrintVector( myVector );
+ 
+    myVector.clear();
+
+    PrintVector( myVector);
+
     return (0);
 }
