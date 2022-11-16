@@ -4,16 +4,12 @@ NAME	=	containers
 
 CPPFLAGS = -Wall -Wextra -Werror -std=c++98
 
-SRC		=	./srcs/main.cpp\
-			./srcs/map.cpp\
-			./srcs/set.cpp\
-			./srcs/stack.cpp\
-			./srcs/vector.cpp
+SRC		=	./srcs/main.cpp
 
-HEADER  =   ./includes/map.cpp\
-			./includes/set.cpp\
-			./includes/stack.cpp\
-			./includes/vector.cpp
+HEADER  =   ./includes/map.hpp\
+			./includes/set.hpp\
+			./includes/stack.hpp\
+			./includes/vector.hpp
 
 OBJ		=	$(SRC:.cpp=.o)
 
