@@ -2,24 +2,33 @@
 # define VECTOR_HPP
 # include <cstddef>
 # include <iostream>
+# include <memory>
 # include "vector_iterator.hpp"
 
 namespace ft {
 
-    template < class T >
+    template < class T , class Alloc = std::allocator< T > >
     class vector{
         
         public:
             typedef T                                       value_type;
-            typedef size_t                                  size_type;
+            typedef Alloc                                   allocator_type;
             typedef value_type&                             reference;
             typedef const value_type&                       const_reference;
             typedef value_type*                             pointer;
             typedef const value_type*                       const_pointer;
+            /*
+            typedef allocator_type::reference               reference;
+            typedef allocator_type::const_reference         const_reference;
+            typedef allocator_type::pointer                 pointer;
+            typedef allocator_type::const_pointer           const_pointer;
+            */
             typedef vector_iterator< vector<value_type> >   iterator;//random access iterator convertible to const iterator
             //typedef vector_iterator<const value_type>       const_iterator;
             typedef std::reverse_iterator<iterator>         reverse_iterator;
             //typedef std::reverse_iterator<const_iterator>   const_reverse_iterator;
+            typedef size_t                                  size_type;
+            typedef ptrdiff_t                               difference_type;
 
 
         private:

@@ -1,7 +1,8 @@
 #ifndef VECTOR2_HPP
 # define VECTOR2_HPP
+# include <memory>
 
-template < typename T, typename Allocator = std::allocator<T> >
+template < typename T, typename Allocator = std::allocator< T > >
 class vector2 {
     public:
         typedef T                                       value_type;
@@ -17,9 +18,18 @@ class vector2 {
         typedef std::reverse_iterator<iterator>         reverse_iterator;
         typedef std::reverse_iterator<const_iterator>   const_reverse_iterator;
     
+    private:
+        value_type* _data;
+        size_type   _size;
+        size_type   __capacity;
+
     //***** CONSTRUCTORS *****
         //(1) Default constructor. Constructs an empty container with a default-constructed allocator.
-        vector(){}
+        vector(){
+            _size = 0;
+            __capacity = 0;
+            _data = (value_type*)::operator new(sizeof(value_type));
+        }
         //(2) Constructs an empty container with the given allocator alloc.
         explicit vector( const Allocator& alloc ){}
         //(3) Constructs the container with count copies of elements with value value.
@@ -70,11 +80,11 @@ class vector2 {
         iterator erase( iterator first, iterator last ){}
         void push_back( const T& value ){}
         void pop_back(){}
-        void resize( size_type count ){} //since c++ 11 d'apres la doc 
+        void resize( size_type count ){}
         void resize( size_type count, T value = T()){}
         void swap( vector& other ){}
 
-}{}
+};
 
 template< class T, class Alloc > bool operator==( const std::vector<T,Alloc>& lhs, const std::vector<T,Alloc>& rhs ){}
 template< class T, class Alloc > bool operator!=( const std::vector<T,Alloc>& lhs, const std::vector<T,Alloc>& rhs ){}
