@@ -14,12 +14,18 @@ namespace ft {
         public:
             typedef T                                                           value_type;
             typedef Alloc                                                       allocator_type;
+            /*
             typedef typename allocator_type::reference                          reference;
             typedef typename allocator_type::const_reference                    const_reference;
             typedef typename allocator_type::pointer                            pointer;
             typedef typename allocator_type::const_pointer                      const_pointer;
+            */
+            typedef value_type&                                                 reference;
+            typedef const value_type&                                           const_reference;
+            typedef value_type*                                                 pointer;
+            typedef const value_type*                                           const_pointer;
             typedef ft::vector_iterator< vector<value_type> >                   iterator;
-            typedef ft::vector_const_iterator< vector<const value_type> >       const_iterator;
+            typedef ft::vector_const_iterator< vector<value_type> >             const_iterator;
             typedef std::reverse_iterator<iterator>                             reverse_iterator;
             typedef std::reverse_iterator<const_iterator>                       const_reverse_iterator;
             typedef ptrdiff_t                                                   difference_type;
@@ -61,6 +67,7 @@ namespace ft {
             } 
             //____fill constructor : constructs a container with n elements, each is a copy of val  
             explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()){
+                (void)val;
                 _alloc = alloc;
                 _data = (value_type*)::operator new(n * sizeof(value_type)); // -> better approach useing allocator
                 //_data = _alloc.allocate(n);
@@ -92,19 +99,27 @@ namespace ft {
             iterator begin(){
                 return (iterator(_data));
             }
-            //const_iterator begin() const{}
+            const_iterator begin() const{
+                return (iterator(_data));
+            }
             iterator end(){
                 return (iterator(_data + _size));
             }
-            //const_iterator end() const{}
+            const_iterator end() const{
+                return (iterator(_data + _size));
+            }
             reverse_iterator rbegin(){
                 return (reverse_iterator(_data));
             }
-            //const_reverse_iterator rbegin() const{}
+            const_reverse_iterator rbegin() const{
+                return (reverse_iterator(_data));
+            }
             reverse_iterator rend(){
                 return (reverse_iterator(_data + _size));
             }
-            //const_reverse_iterator rend() const{}
+            const_reverse_iterator rend() const{
+                return (reverse_iterator(_data + _size));
+            }
 
         //*****CAPACITY*****
             size_type size() const{
@@ -162,7 +177,10 @@ namespace ft {
             }
 
         //*****MODIFIERS*****
-            //template <class InputIterator>  void assign (InputIterator first, InputIterator last){}
+            template <class InputIterator>  void assign (InputIterator first, InputIterator last){
+                (void)first;
+                (void)last;
+            }
             void assign (size_type n, const value_type& val){
                 (void)n;
                 (void)val;
@@ -182,14 +200,33 @@ namespace ft {
                     //_alloc.destroy(_data[_size]);
                 }
             }
-            /*
-            iterator insert (iterator position, const value_type& val){} //single element
-            void insert (iterator position, size_type n, const value_type& val){} //fill
-            template <class InputIterator> void insert (iterator position, InputIterator first, InputIterator last){} // range
-            iterator erase (iterator position){}
-            iterator erase (iterator first, iterator last){}
-            void swap (vector& x){}
-            */
+            iterator insert (iterator position, const value_type& val){
+                (void)position;
+                (void)val;
+                return (begin());
+            } //single element
+            void insert (iterator position, size_type n, const value_type& val){
+                (void)position;
+                (void)n;
+                (void)val;
+            } //fill
+            template <class InputIterator> void insert (iterator position, InputIterator first, InputIterator last){
+                (void)position;
+                (void)first;
+                (void)last;
+            } // range
+            iterator erase (iterator position){
+                (void)position;
+                return (begin());
+            }
+            iterator erase (iterator first, iterator last){
+                (void)first;
+                (void)last;
+                return (begin());
+            }
+            void swap (vector& x){
+                (void)x;
+            }
             void clear(){
                 while (_size > 0)
                     pop_back();
@@ -203,17 +240,42 @@ namespace ft {
     };
 
     //***** Non member function overloads *****
-    /*
     //___Relational operators___
-    template <class T, class Alloc>  bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){}
-    template <class T, class Alloc>  bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){}
-    template <class T, class Alloc>  bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){}	
-    template <class T, class Alloc>  bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){}
-    template <class T, class Alloc>  bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){}	
-    template <class T, class Alloc>  bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){}
+    template <class T, class Alloc>  bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
+        (void)lhs;
+        (void)rhs;
+        return (true);
+    }
+    template <class T, class Alloc>  bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
+        (void)lhs;
+        (void)rhs;
+        return (true);
+    }
+    template <class T, class Alloc>  bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
+        (void)lhs;
+        (void)rhs;
+        return (true);
+    }	
+    template <class T, class Alloc>  bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
+        (void)lhs;
+        (void)rhs;
+        return (true);
+    }
+    template <class T, class Alloc>  bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
+        (void)lhs;
+        (void)rhs;
+        return (true);
+    }	
+    template <class T, class Alloc>  bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
+        (void)lhs;
+        (void)rhs;
+        return (true);
+    }
     //___Swap ( vector )
-    template <class T, class Alloc>  void swap (vector<T,Alloc>& x, vector<T,Alloc>& y){}
-    */
+    template <class T, class Alloc>  void swap (vector<T,Alloc>& x, vector<T,Alloc>& y){
+        (void)x;
+        (void)y;
+    }
 
 }
 

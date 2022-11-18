@@ -1,6 +1,7 @@
 #ifndef VECTOR_CONST_ITERATOR_HPP
 # define VECTOR_CONST_ITERATOR_HPP
 # include "vector.hpp"
+# include <cstddef>
 
 namespace ft{
 
@@ -12,6 +13,8 @@ namespace ft{
             typedef const value_type&                   const_reference;
             typedef value_type*                         pointer;
             typedef const value_type*                   const_pointer;
+            typedef ptrdiff_t                           difference_type;
+            typedef size_t                              size_type;
         
             pointer _ptr;
 
@@ -65,6 +68,29 @@ namespace ft{
             }
             bool operator!=(const vector_const_iterator& rhs ) const{
                 return (_ptr != rhs._ptr);
+            }
+            //-----------A COMPLETER --------------
+            bool operator<(const vector_const_iterator& rhs ) const{
+                (void)rhs;
+                return (true); 
+            }
+            bool operator>(const vector_const_iterator& rhs ) const{
+                (void)rhs;
+                return (true);
+            }
+            bool operator<=(const vector_const_iterator& rhs ) const{
+                (void)rhs;
+                return (true); 
+            }
+            bool operator>=(const vector_const_iterator& rhs ) const{
+                (void)rhs;
+                return (true);
+            }
+            vector_const_iterator operator+(int rhs) const{
+                return (_ptr + rhs);
+            }
+            vector_const_iterator operator-(int rhs) const{
+                return (_ptr - rhs);
             }
 
     };
