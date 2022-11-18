@@ -11,7 +11,7 @@ HEADER  =   vector.hpp
 OBJ		=	$(SRC:.cpp=.o)
 
 %.o: %.cpp
-	$(CXX) $(CPPFLAGS) -c $<
+	$(CXX) $(CPPFLAGS) -o $@ -c $<
 
 $(NAME) : $(OBJ) $(HEADER)
 	$(CXX) $(CPPFLAGS) $(OBJ) -o $(NAME)

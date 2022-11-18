@@ -6,15 +6,13 @@ CPPFLAGS = -Wall -Wextra -Werror -std=c++98
 
 SRC		=	./srcs/main.cpp
 
-HEADER  =   ./includes/map.hpp\
-			./includes/set.hpp\
-			./includes/stack.hpp\
-			./includes/vector.hpp
+HEADER  =   ./includes/vector.hpp\
+			./includes/vector_iterator.hpp
 
 OBJ		=	$(SRC:.cpp=.o)
 
 %.o: %.cpp
-	$(CXX) $(CPPFLAGS) -c $<
+	$(CXX) $(CPPFLAGS) -o $@ -c $<
 
 $(NAME) : $(OBJ) $(HEADER)
 	$(CXX) $(CPPFLAGS) $(OBJ) -o $(NAME)
