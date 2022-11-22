@@ -1,7 +1,7 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 # include "vector_iterator.hpp"
-# include "vector_const_iterator.hpp"
+# include "type_traits.hpp"
 # include <iterator>
 # include <memory>
 # include <cstddef>
@@ -14,18 +14,12 @@ namespace ft {
         public:
             typedef T                                                           value_type;
             typedef Alloc                                                       allocator_type;
-            /*
             typedef typename allocator_type::reference                          reference;
             typedef typename allocator_type::const_reference                    const_reference;
             typedef typename allocator_type::pointer                            pointer;
             typedef typename allocator_type::const_pointer                      const_pointer;
-            */
-            typedef value_type&                                                 reference;
-            typedef const value_type&                                           const_reference;
-            typedef value_type*                                                 pointer;
-            typedef const value_type*                                           const_pointer;
-            typedef ft::vector_iterator< vector<value_type> >                   iterator;
-            typedef ft::vector_const_iterator< vector<value_type> >             const_iterator;
+            typedef ft::vector_iterator<value_type, false>                      iterator;
+            typedef ft::vector_iterator<value_type, true>                       const_iterator;
             typedef std::reverse_iterator<iterator>                             reverse_iterator;
             typedef std::reverse_iterator<const_iterator>                       const_reverse_iterator;
             typedef ptrdiff_t                                                   difference_type;
@@ -82,9 +76,7 @@ namespace ft {
                 (void)alloc;
             } 
             //____copy constructor___
-            vector (const vector& x){
-                (void)x;
-            }
+            vector (const vector& x){ (void)x; }
             ~vector< T , Alloc >( void ){
                 clear();
                 ::operator delete(_data);
@@ -96,85 +88,47 @@ namespace ft {
             }
 
         //******ITERATORS*****
-            iterator begin(){
-                return (iterator(_data));
-            }
-            const_iterator begin() const{
-                return (iterator(_data));
-            }
-            iterator end(){
-                return (iterator(_data + _size));
-            }
-            const_iterator end() const{
-                return (iterator(_data + _size));
-            }
-            reverse_iterator rbegin(){
-                return (reverse_iterator(_data));
-            }
-            const_reverse_iterator rbegin() const{
-                return (reverse_iterator(_data));
-            }
-            reverse_iterator rend(){
-                return (reverse_iterator(_data + _size));
-            }
-            const_reverse_iterator rend() const{
-                return (reverse_iterator(_data + _size));
-            }
+            iterator                begin(){ return (iterator(_data)); }
+            const_iterator          begin() const{ return (const_iterator(_data)); }
+            iterator                end(){ return (iterator(_data + _size)); }
+            const_iterator          end() const{ return (const_iterator(_data + _size)); }
+            reverse_iterator        rbegin(){ return (reverse_iterator(_data)); }
+            const_reverse_iterator  rbegin() const{ return (const_reverse_iterator(_data)); }
+            reverse_iterator        rend(){ return (reverse_iterator(_data + _size)); }
+            const_reverse_iterator  rend() const{ return (const_reverse_iterator(_data + _size)); }
 
         //*****CAPACITY*****
-            size_type size() const{
-                return (_size);
-            }
-            size_type max_size() const{
-                return (_alloc.max_size());
-            }
-            void resize (size_type n, value_type val = value_type()){
+            size_type               size() const{ return (_size); }
+            size_type               max_size() const{ return (_alloc.max_size()); }
+            void                    resize (size_type n, value_type val = value_type()){
                 (void)n;
                 (void)val;
             }
-            size_type capacity() const{
-                return (_capacity);
-            }
-            bool empty() const{
-                if (_size == 0)
-                    return (true);
-                return (false);
-            }
-            void reserve (size_type n){
+            size_type               capacity() const{ return (_capacity); }
+            bool                    empty() const{ return (_size == 0); }
+            void                    reserve (size_type n){
                 (void)n;
             }
 
         //*****ELEMENT ACCESS*****
-            reference operator[] (size_type n){
+            reference               operator[] (size_type n){ return (_data[n]); }
+            const_reference         operator[] (size_type n) const{ return (_data[n]); }
+            reference               at (size_type n){
+                if (n >= _size)
+                    throw std::out_of_range("vector");
                 return (_data[n]);
             }
-            const_reference operator[] (size_type n) const{
+            const_reference         at (size_type n) const{
+                if (n >= _size)
+                    throw std::out_of_range("vector");
                 return (_data[n]);
             }
-            reference at (size_type n){
-                return (_data[n]);
-            }
-            const_reference at (size_type n) const{
-                return (_data[n]);
-            }
-            reference front(){
-                return (_data[0]);
-            }
-            const_reference front() const{
-                return (_data[0]);
-            }
-            reference back(){
-                return (_data[_size - 1]);
-            }
-            const_reference back() const{
-                return (_data[_size - 1]);
-            }
-            value_type* data(){
-                return (_data);
-            }
-            const value_type* data() const{
-                return (_data);
-            }
+            reference               front(){ return (_data[0]); }
+            const_reference         front() const{ return (_data[0]); }
+            reference               back(){ return (_data[_size - 1]); }
+            const_reference         back() const{ return (_data[_size - 1]); }
+            value_type*             data(){ return (_data); }
+            const value_type*       data() const{ return (_data); }
 
         //*****MODIFIERS*****
             template <class InputIterator>  void assign (InputIterator first, InputIterator last){
