@@ -166,7 +166,7 @@ Size: 1 (file: tests/vector/push_back.cpp, line: 31)
 Vector content:
 -4356.89 
 
-Called destroy on uninitialized memory: 0x561ed1b1feb0
+Called destroy on uninitialized memory: 0x1297eb0
 ========================================
 No leak detected
 ========================================

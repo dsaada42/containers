@@ -1,5 +1,5 @@
---- logs/vector/resize__ft.log	2022-11-23 11:32:21.497384715 +0100
-+++ logs/vector/resize__std.log	2022-11-23 11:32:22.037401320 +0100
+--- logs/vector/resize__ft.log	2022-11-23 11:33:38.476145800 +0000
++++ logs/vector/resize__std.log	2022-11-23 11:33:39.459026800 +0000
 @@ -1,34 +1,34 @@
  Capacity Ok (file: tests/vector/resize.cpp, line: 24)
 -Size: 0 (file: tests/vector/resize.cpp, line: 24)

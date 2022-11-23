@@ -1,5 +1,5 @@
---- logs/vector/comparisons_le__ft.log	2022-11-23 11:31:56.368612368 +0100
-+++ logs/vector/comparisons_le__std.log	2022-11-23 11:31:56.852627238 +0100
+--- logs/vector/comparisons_le__ft.log	2022-11-23 11:32:54.094547700 +0000
++++ logs/vector/comparisons_le__std.log	2022-11-23 11:32:54.953311600 +0000
 @@ -1,9 +1,6 @@
  Less than or equal (file: tests/vector/comparisons_le.cpp, line: 22)
 -Less than or equal. (file: tests/vector/comparisons_le.cpp, line: 31)

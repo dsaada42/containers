@@ -1,5 +1,5 @@
---- logs/vector/push_back__ft.log	2022-11-23 11:32:18.801301818 +0100
-+++ logs/vector/push_back__std.log	2022-11-23 11:32:19.289316822 +0100
+--- logs/vector/push_back__ft.log	2022-11-23 11:33:33.688736500 +0000
++++ logs/vector/push_back__std.log	2022-11-23 11:33:34.596308200 +0000
 @@ -1,172 +1,171 @@
 -Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 22)
 +Capacity Ok (file: tests/vector/push_back.cpp, line: 22)
@@ -251,7 +251,7 @@
 --4356.89 
 +45.0123 45.0123 45.0123 45.0123 45.0123 45.0123 45.0123 45.0123 45.0123 45.0123 45.0123 45.0123 45.0123 45.0123 45.0123 45.0123 45.0123 45.0123 45.0123 45.0123 45.0123 45.0123 45.0123 45.0123 45.0123 45.0123 6 -4356.89 
  
--Called destroy on uninitialized memory: 0x561ed1b1feb0
+-Called destroy on uninitialized memory: 0x1297eb0
  ========================================
  No leak detected
  ========================================

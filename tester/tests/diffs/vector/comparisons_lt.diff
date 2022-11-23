@@ -1,5 +1,5 @@
---- logs/vector/comparisons_lt__ft.log	2022-11-23 11:31:57.328641863 +0100
-+++ logs/vector/comparisons_lt__std.log	2022-11-23 11:31:57.808656610 +0100
+--- logs/vector/comparisons_lt__ft.log	2022-11-23 11:32:55.792609500 +0000
++++ logs/vector/comparisons_lt__std.log	2022-11-23 11:32:56.625823000 +0000
 @@ -1,9 +1,4 @@
 -Less than (file: tests/vector/comparisons_lt.cpp, line: 22)
 -Less than. (file: tests/vector/comparisons_lt.cpp, line: 31)

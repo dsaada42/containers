@@ -121,6 +121,17 @@ namespace ft {
             size_type               size() const{ return (_size); }
             size_type               max_size() const{ return (_alloc.max_size()); }
             void                    resize (size_type n, value_type val = value_type()){
+                // si n > size 
+                    //si n > capacity 
+                        //si n > 2 x capacity or size
+                            //-> reserve n
+                        //si capacity or size > 0
+                            //-> reserve 2 x capacity or size
+                        //sinon
+                            //->reserve 1
+                        //-> on construit les elements de _size a n
+                // si n <= size
+                    //on detruit les elements de n a _size
                 (void)n;
                 (void)val;
             }
@@ -135,20 +146,18 @@ namespace ft {
             const_reference         operator[] (size_type n) const{ return (_data[n]); }
             reference               at (size_type n){
                 if (n >= _size)
-                    throw std::out_of_range("vector");
+                    throw std::out_of_range("vector: trying to access element out of range");
                 return (_data[n]);
             }
             const_reference         at (size_type n) const{
                 if (n >= _size)
-                    throw std::out_of_range("vector");
+                    throw std::out_of_range("vector: trying to access element out of range");
                 return (_data[n]);
             }
             reference               front(){ return (_data[0]); }
             const_reference         front() const{ return (_data[0]); }
             reference               back(){ return (_data[_size - 1]); }
             const_reference         back() const{ return (_data[_size - 1]); }
-            value_type*             data(){ return (_data); }
-            const value_type*       data() const{ return (_data); }
 
         //*****MODIFIERS*****
             template <class InputIterator>  void assign (InputIterator first, InputIterator last){
