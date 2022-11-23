@@ -1,0 +1,11 @@
+--- logs/vector/comparisons_ne__ft.log	2022-11-23 11:31:58.288671358 +0100
++++ logs/vector/comparisons_ne__std.log	2022-11-23 11:31:58.768686106 +0100
+@@ -1,8 +1,6 @@
+-Not equal (file: tests/vector/comparisons_ne.cpp, line: 22)
+ Not equal. (file: tests/vector/comparisons_ne.cpp, line: 31)
+ Not equal.. (file: tests/vector/comparisons_ne.cpp, line: 40)
+ Not equal... (file: tests/vector/comparisons_ne.cpp, line: 49)
+-Not equal... (file: tests/vector/comparisons_ne.cpp, line: 58)
+ Not equal.... (file: tests/vector/comparisons_ne.cpp, line: 67)
+ Not equal..... (file: tests/vector/comparisons_ne.cpp, line: 76)
+ ========================================

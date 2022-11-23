@@ -1,0 +1,13 @@
+--- logs/vector/comparisons_eq__ft.log	2022-11-23 11:31:53.496524135 +0100
++++ logs/vector/comparisons_eq__std.log	2022-11-23 11:31:53.980539004 +0100
+@@ -1,10 +1,5 @@
+ Equal (file: tests/vector/comparisons_eq.cpp, line: 22)
+-Equal. (file: tests/vector/comparisons_eq.cpp, line: 31)
+-Equal.. (file: tests/vector/comparisons_eq.cpp, line: 40)
+-Equal... (file: tests/vector/comparisons_eq.cpp, line: 49)
+ Equal... (file: tests/vector/comparisons_eq.cpp, line: 58)
+-Equal.... (file: tests/vector/comparisons_eq.cpp, line: 67)
+-Equal..... (file: tests/vector/comparisons_eq.cpp, line: 76)
+ ========================================
+ No leak detected
+ ========================================

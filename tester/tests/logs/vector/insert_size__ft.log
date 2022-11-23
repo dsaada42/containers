@@ -1,0 +1,60 @@
+Capacity Ok (file: tests/vector/insert_size.cpp, line: 25)
+Size: 0 (file: tests/vector/insert_size.cpp, line: 25)
+
+Vector content:
+
+
+Capacity Ok (file: tests/vector/insert_size.cpp, line: 29)
+Size: 0 (file: tests/vector/insert_size.cpp, line: 29)
+
+Vector content:
+
+
+Capacity Ok (file: tests/vector/insert_size.cpp, line: 33)
+Size: 0 (file: tests/vector/insert_size.cpp, line: 33)
+
+Vector content:
+
+
+Capacity Ok (file: tests/vector/insert_size.cpp, line: 37)
+Size: 0 (file: tests/vector/insert_size.cpp, line: 37)
+
+Vector content:
+
+
+Capacity Ok (file: tests/vector/insert_size.cpp, line: 41)
+Size: 0 (file: tests/vector/insert_size.cpp, line: 41)
+
+Vector content:
+
+
+Capacity Ok (file: tests/vector/insert_size.cpp, line: 45)
+Size: 0 (file: tests/vector/insert_size.cpp, line: 45)
+
+Vector content:
+
+
+Capacity Ok (file: tests/vector/insert_size.cpp, line: 49)
+Size: 0 (file: tests/vector/insert_size.cpp, line: 49)
+
+Vector content:
+
+
+Capacity Ok (file: tests/vector/insert_size.cpp, line: 53)
+Size: 0 (file: tests/vector/insert_size.cpp, line: 53)
+
+Vector content:
+
+
+Capacity Ok (file: tests/vector/insert_size.cpp, line: 57)
+Size: 0 (file: tests/vector/insert_size.cpp, line: 57)
+
+Vector content:
+
+
+========================================
+No leak detected
+========================================
+========================================
+Every objects destroyed
+========================================

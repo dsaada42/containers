@@ -1,0 +1,13 @@
+Not equal (file: tests/vector/comparisons_ne.cpp, line: 22)
+Not equal. (file: tests/vector/comparisons_ne.cpp, line: 31)
+Not equal.. (file: tests/vector/comparisons_ne.cpp, line: 40)
+Not equal... (file: tests/vector/comparisons_ne.cpp, line: 49)
+Not equal... (file: tests/vector/comparisons_ne.cpp, line: 58)
+Not equal.... (file: tests/vector/comparisons_ne.cpp, line: 67)
+Not equal..... (file: tests/vector/comparisons_ne.cpp, line: 76)
+========================================
+No leak detected
+========================================
+========================================
+Every objects destroyed
+========================================

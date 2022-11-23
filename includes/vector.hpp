@@ -28,8 +28,8 @@ namespace ft {
         private:
             value_type*          _data;
             allocator_type       _alloc;
-            size_type           _size;
-            size_type           _capacity;
+            size_type            _size;
+            size_type            _capacity;
             void ReAlloc( size_type newCapacity )
             {
                 //allocate new block
@@ -48,42 +48,62 @@ namespace ft {
                 _data = newBlock;
                 _capacity = newCapacity;
             }
-
         public:
         //*****CONSTRUCTOR DESTRUCTOR*****
             //____default constructor : constructs an empty container, no elements
             explicit vector (const allocator_type& alloc = allocator_type()){
                 _alloc = alloc;
                 _size = 0;
-                _capacity = 2;
-                _data = (value_type*)::operator new(2 * sizeof(value_type)); // -> better approach useing allocator
-                //_data = _alloc.allocate(2);
+                _capacity = 0;
+                //_data = (value_type*)::operator new(2 * sizeof(value_type)); // -> better approach useing allocator
+                _data = _alloc.allocate(0);
             } 
             //____fill constructor : constructs a container with n elements, each is a copy of val  
             explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()){
-                (void)val;
                 _alloc = alloc;
-                _data = (value_type*)::operator new(n * sizeof(value_type)); // -> better approach useing allocator
-                //_data = _alloc.allocate(n);
+                //_data = (value_type*)::operator new(n * sizeof(value_type)); // -> better approach useing allocator
+                _data = _alloc.allocate(n);
                 _size = n;
                 _capacity = n;
-                //reste a associer val aux elements crees
+                for (size_type i = 0; i < n ; i++)
+                    _alloc.construct(&_data[i], val);
             } 
             //____range constructor : constructs a container with as many elements as the range [first,last)
-            template <class InputIterator> vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()){
-                (void)first;
-                (void)last;
-                (void)alloc;
+            template <class InputIterator> vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),	typename ft::enable_if<!ft::is_same<InputIterator, int>::boolean>::type* = 0){
+                size_type nb = 0;
+
+                for ( InputIterator start = first; start != last; start++)
+                    nb++;
+                _size = nb;
+                _capacity = nb;
+                _alloc = alloc;
+                _data = _alloc.allocate(nb);
+                //On construit un objet pour chacune des valeurs d'iterateur de la range
+                for (size_type i = 0; i < nb; i++){
+                    _alloc.construct(&_data[i], *first);
+                    first++;
+                }
             } 
             //____copy constructor___
-            vector (const vector& x){ (void)x; }
+            vector (const vector& copy){
+                 _alloc = copy.get_allocator();
+                 _size = copy.size();
+                 _capacity = copy.capacity();
+                 //reste a copier tout le vector en accedant aux elements 1 par 1
+                 for (size_type i = 0; i < _size; i++)
+                    _alloc.construct(&_data[i], copy[i]);
+            }
             ~vector< T , Alloc >( void ){
-                clear();
-                ::operator delete(_data);
+                for (size_type i = 0; i < _size ; i++){
+                    _alloc.destroy(_data + i);
+                }
+                _alloc.deallocate(_data, _capacity);
             }
             //____opertor= surcharge___
-            vector& operator= (const vector& x){
-                (void)x;
+            vector& operator= (const vector& copy){
+                //clear first 
+
+                (void)copy;
                 return (*this);
             }
 

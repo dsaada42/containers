@@ -1,0 +1,175 @@
+Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 22)
+Size: 1 (file: tests/vector/push_back.cpp, line: 22)
+
+Vector content:
+45.0123 
+
+Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 22)
+Size: 1 (file: tests/vector/push_back.cpp, line: 22)
+
+Vector content:
+45.0123 
+
+Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 22)
+Size: 1 (file: tests/vector/push_back.cpp, line: 22)
+
+Vector content:
+45.0123 
+
+Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 22)
+Size: 1 (file: tests/vector/push_back.cpp, line: 22)
+
+Vector content:
+45.0123 
+
+Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 22)
+Size: 1 (file: tests/vector/push_back.cpp, line: 22)
+
+Vector content:
+45.0123 
+
+Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 22)
+Size: 1 (file: tests/vector/push_back.cpp, line: 22)
+
+Vector content:
+45.0123 
+
+Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 22)
+Size: 1 (file: tests/vector/push_back.cpp, line: 22)
+
+Vector content:
+45.0123 
+
+Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 22)
+Size: 1 (file: tests/vector/push_back.cpp, line: 22)
+
+Vector content:
+45.0123 
+
+Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 22)
+Size: 1 (file: tests/vector/push_back.cpp, line: 22)
+
+Vector content:
+45.0123 
+
+Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 22)
+Size: 1 (file: tests/vector/push_back.cpp, line: 22)
+
+Vector content:
+45.0123 
+
+Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 22)
+Size: 1 (file: tests/vector/push_back.cpp, line: 22)
+
+Vector content:
+45.0123 
+
+Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 22)
+Size: 1 (file: tests/vector/push_back.cpp, line: 22)
+
+Vector content:
+45.0123 
+
+Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 22)
+Size: 1 (file: tests/vector/push_back.cpp, line: 22)
+
+Vector content:
+45.0123 
+
+Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 22)
+Size: 1 (file: tests/vector/push_back.cpp, line: 22)
+
+Vector content:
+45.0123 
+
+Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 22)
+Size: 1 (file: tests/vector/push_back.cpp, line: 22)
+
+Vector content:
+45.0123 
+
+Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 22)
+Size: 1 (file: tests/vector/push_back.cpp, line: 22)
+
+Vector content:
+45.0123 
+
+Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 22)
+Size: 1 (file: tests/vector/push_back.cpp, line: 22)
+
+Vector content:
+45.0123 
+
+Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 22)
+Size: 1 (file: tests/vector/push_back.cpp, line: 22)
+
+Vector content:
+45.0123 
+
+Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 22)
+Size: 1 (file: tests/vector/push_back.cpp, line: 22)
+
+Vector content:
+45.0123 
+
+Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 22)
+Size: 1 (file: tests/vector/push_back.cpp, line: 22)
+
+Vector content:
+45.0123 
+
+Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 22)
+Size: 1 (file: tests/vector/push_back.cpp, line: 22)
+
+Vector content:
+45.0123 
+
+Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 22)
+Size: 1 (file: tests/vector/push_back.cpp, line: 22)
+
+Vector content:
+45.0123 
+
+Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 22)
+Size: 1 (file: tests/vector/push_back.cpp, line: 22)
+
+Vector content:
+45.0123 
+
+Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 22)
+Size: 1 (file: tests/vector/push_back.cpp, line: 22)
+
+Vector content:
+45.0123 
+
+Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 22)
+Size: 1 (file: tests/vector/push_back.cpp, line: 22)
+
+Vector content:
+45.0123 
+
+Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 22)
+Size: 1 (file: tests/vector/push_back.cpp, line: 22)
+
+Vector content:
+45.0123 
+
+Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 27)
+Size: 1 (file: tests/vector/push_back.cpp, line: 27)
+
+Vector content:
+6 
+
+Capacity is smaller than size (file: tests/vector/push_back.cpp, line: 31)
+Size: 1 (file: tests/vector/push_back.cpp, line: 31)
+
+Vector content:
+-4356.89 
+
+Called destroy on uninitialized memory: 0x561ed1b1feb0
+========================================
+No leak detected
+========================================
+========================================
+Every objects destroyed
+========================================

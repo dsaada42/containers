@@ -1,0 +1,13 @@
+Greater than (file: tests/vector/comparisons_gt.cpp, line: 22)
+Greater than. (file: tests/vector/comparisons_gt.cpp, line: 31)
+Greater than.. (file: tests/vector/comparisons_gt.cpp, line: 40)
+Greater than... (file: tests/vector/comparisons_gt.cpp, line: 49)
+Greater than... (file: tests/vector/comparisons_gt.cpp, line: 58)
+Greater than.... (file: tests/vector/comparisons_gt.cpp, line: 67)
+Greater than..... (file: tests/vector/comparisons_gt.cpp, line: 76)
+========================================
+No leak detected
+========================================
+========================================
+Every objects destroyed
+========================================

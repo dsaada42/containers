@@ -1,0 +1,13 @@
+Equal (file: tests/vector/comparisons_eq.cpp, line: 22)
+Equal. (file: tests/vector/comparisons_eq.cpp, line: 31)
+Equal.. (file: tests/vector/comparisons_eq.cpp, line: 40)
+Equal... (file: tests/vector/comparisons_eq.cpp, line: 49)
+Equal... (file: tests/vector/comparisons_eq.cpp, line: 58)
+Equal.... (file: tests/vector/comparisons_eq.cpp, line: 67)
+Equal..... (file: tests/vector/comparisons_eq.cpp, line: 76)
+========================================
+No leak detected
+========================================
+========================================
+Every objects destroyed
+========================================

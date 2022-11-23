@@ -1,0 +1,13 @@
+--- logs/vector/comparisons_ge__ft.log	2022-11-23 11:31:54.456553627 +0100
++++ logs/vector/comparisons_ge__std.log	2022-11-23 11:31:54.940568496 +0100
+@@ -1,10 +1,8 @@
+ Greater than or equal (file: tests/vector/comparisons_ge.cpp, line: 22)
+ Greater than or equal. (file: tests/vector/comparisons_ge.cpp, line: 31)
+-Greater than or equal.. (file: tests/vector/comparisons_ge.cpp, line: 40)
+ Greater than or equal... (file: tests/vector/comparisons_ge.cpp, line: 49)
+ Greater than or equal... (file: tests/vector/comparisons_ge.cpp, line: 58)
+ Greater than or equal.... (file: tests/vector/comparisons_ge.cpp, line: 67)
+-Greater than or equal..... (file: tests/vector/comparisons_ge.cpp, line: 76)
+ ========================================
+ No leak detected
+ ========================================

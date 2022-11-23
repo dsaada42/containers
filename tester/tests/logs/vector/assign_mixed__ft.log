@@ -1,0 +1,48 @@
+Capacity Ok (file: tests/vector/assign_mixed.cpp, line: 24)
+Size: 0 (file: tests/vector/assign_mixed.cpp, line: 24)
+
+Vector content:
+
+
+Capacity Ok (file: tests/vector/assign_mixed.cpp, line: 28)
+Size: 0 (file: tests/vector/assign_mixed.cpp, line: 28)
+
+Vector content:
+
+
+Capacity Ok (file: tests/vector/assign_mixed.cpp, line: 32)
+Size: 0 (file: tests/vector/assign_mixed.cpp, line: 32)
+
+Vector content:
+
+
+Capacity Ok (file: tests/vector/assign_mixed.cpp, line: 40)
+Size: 0 (file: tests/vector/assign_mixed.cpp, line: 40)
+
+Vector content:
+
+
+Capacity Ok (file: tests/vector/assign_mixed.cpp, line: 44)
+Size: 0 (file: tests/vector/assign_mixed.cpp, line: 44)
+
+Vector content:
+
+
+Capacity Ok (file: tests/vector/assign_mixed.cpp, line: 48)
+Size: 0 (file: tests/vector/assign_mixed.cpp, line: 48)
+
+Vector content:
+
+
+Capacity Ok (file: tests/vector/assign_mixed.cpp, line: 52)
+Size: 0 (file: tests/vector/assign_mixed.cpp, line: 52)
+
+Vector content:
+
+
+========================================
+No leak detected
+========================================
+========================================
+Every objects destroyed
+========================================

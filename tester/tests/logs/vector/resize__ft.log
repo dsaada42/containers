@@ -1,0 +1,37 @@
+Capacity Ok (file: tests/vector/resize.cpp, line: 24)
+Size: 0 (file: tests/vector/resize.cpp, line: 24)
+
+Vector content:
+
+
+Capacity Ok (file: tests/vector/resize.cpp, line: 28)
+Size: 0 (file: tests/vector/resize.cpp, line: 28)
+
+Vector content:
+
+
+Capacity Ok (file: tests/vector/resize.cpp, line: 32)
+Size: 0 (file: tests/vector/resize.cpp, line: 32)
+
+Vector content:
+
+
+Capacity Ok (file: tests/vector/resize.cpp, line: 36)
+Size: 0 (file: tests/vector/resize.cpp, line: 36)
+
+Vector content:
+
+
+Capacity Ok (file: tests/vector/resize.cpp, line: 40)
+Size: 0 (file: tests/vector/resize.cpp, line: 40)
+
+Vector content:
+
+
+Bad reserve (file: tests/vector/resize.cpp, line: 48)
+========================================
+No leak detected
+========================================
+========================================
+Every objects destroyed
+========================================

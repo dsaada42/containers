@@ -1,0 +1,12 @@
+--- logs/vector/comparisons_lt__ft.log	2022-11-23 11:31:57.328641863 +0100
++++ logs/vector/comparisons_lt__std.log	2022-11-23 11:31:57.808656610 +0100
+@@ -1,9 +1,4 @@
+-Less than (file: tests/vector/comparisons_lt.cpp, line: 22)
+-Less than. (file: tests/vector/comparisons_lt.cpp, line: 31)
+ Less than.. (file: tests/vector/comparisons_lt.cpp, line: 40)
+-Less than... (file: tests/vector/comparisons_lt.cpp, line: 49)
+-Less than... (file: tests/vector/comparisons_lt.cpp, line: 58)
+-Less than.... (file: tests/vector/comparisons_lt.cpp, line: 67)
+ Less than..... (file: tests/vector/comparisons_lt.cpp, line: 76)
+ ========================================
+ No leak detected

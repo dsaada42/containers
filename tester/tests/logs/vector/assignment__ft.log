@@ -1,0 +1,36 @@
+Capacity Ok (file: tests/vector/assignment.cpp, line: 25)
+Size: 0 (file: tests/vector/assignment.cpp, line: 25)
+
+Vector content:
+
+
+Capacity Ok (file: tests/vector/assignment.cpp, line: 29)
+Size: 0 (file: tests/vector/assignment.cpp, line: 29)
+
+Vector content:
+
+
+Capacity Ok (file: tests/vector/assignment.cpp, line: 33)
+Size: 0 (file: tests/vector/assignment.cpp, line: 33)
+
+Vector content:
+
+
+Capacity Ok (file: tests/vector/assignment.cpp, line: 37)
+Size: 0 (file: tests/vector/assignment.cpp, line: 37)
+
+Vector content:
+
+
+Capacity Ok (file: tests/vector/assignment.cpp, line: 41)
+Size: 0 (file: tests/vector/assignment.cpp, line: 41)
+
+Vector content:
+
+
+========================================
+No leak detected
+========================================
+========================================
+Every objects destroyed
+========================================
