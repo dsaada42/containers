@@ -1,5 +1,5 @@
---- logs/vector/insert_mixed__ft.log	2022-11-25 16:25:58.382478420 +0100
-+++ logs/vector/insert_mixed__std.log	2022-11-25 16:25:58.704480328 +0100
+--- logs/vector/insert_mixed__ft.log	2022-11-25 17:51:29.908891279 +0100
++++ logs/vector/insert_mixed__std.log	2022-11-25 17:51:29.620889572 +0100
 @@ -1,230 +1,230 @@
  Capacity Ok (file: tests/vector/insert_mixed.cpp, line: 24)
 -Size: 0 (file: tests/vector/insert_mixed.cpp, line: 24)

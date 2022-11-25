@@ -35,8 +35,14 @@ debug_test() {
 }
 
 do_test() {
-    LOG_FT="$LOGS/$1/$2"__ft.log
     LOG_STD="$LOGS/$1/$2"__std.log
+    LOG_FT="$LOGS/$1/$2"__ft.log
+
+
+    if ! $CXX $CXXFLAGS -DNAMESPACE=std -DSFINAE=fake_std $3 track/memory_tracker.cpp track/leak_checker.cpp; then
+        print_err "warning: std test failed to compile"
+    fi
+    ./a.out > $LOG_STD
 
     if $CXX $CXXFLAGS -DNAMESPACE=ft -DSFINAE=ft $3 track/memory_tracker.cpp track/leak_checker.cpp; then
         if ! ./a.out > $LOG_FT; then
@@ -48,11 +54,6 @@ do_test() {
         test_fail "$1 $2"
         return
     fi
-
-    if ! $CXX $CXXFLAGS -DNAMESPACE=std -DSFINAE=fake_std $3 track/memory_tracker.cpp track/leak_checker.cpp; then
-        print_err "warning: std test failed to compile"
-    fi
-    ./a.out > $LOG_STD
 
     DIFF_FILE="$DIFFS/$1/$2".diff
     diff -u $LOG_FT $LOG_STD > $DIFF_FILE

@@ -22,7 +22,7 @@ Size: 0 (file: tests/vector/ctor_size.cpp, line: 40)
 Vector content:
 
 
-unhandled exception (file: tests/vector/ctor_size.cpp, line: 52)
+Length exception (file: tests/vector/ctor_size.cpp, line: 50)
 ========================================
 No leak detected
 ========================================

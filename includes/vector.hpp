@@ -41,13 +41,13 @@ namespace ft {
                 _alloc = alloc;
                 _size = 0;
                 _capacity = 0;
-                //_data = (value_type*)::operator new(2 * sizeof(value_type)); // -> better approach useing allocator
                 _data = _alloc.allocate(0);
             } 
             //____fill constructor : constructs a container with n elements, each is a copy of val  
             explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()){
+                if (n > max_size())
+                    throw std::length_error("vector: tried to assign past max size");                
                 _alloc = alloc;
-                //_data = (value_type*)::operator new(n * sizeof(value_type)); // -> better approach useing allocator
                 _data = _alloc.allocate(n);
                 _size = n;
                 _capacity = n;
@@ -75,6 +75,7 @@ namespace ft {
                  _alloc = copy.get_allocator();
                  _size = copy.size();
                  _capacity = copy.capacity();
+                 _data = _alloc.allocate(_capacity);
                  for (size_type i = 0; i < _size; i++)
                     _alloc.construct(&_data[i], copy[i]);
             }
@@ -107,10 +108,10 @@ namespace ft {
             const_iterator          begin() const{ return (const_iterator(_data)); }
             iterator                end(){ return (iterator(_data + _size)); }
             const_iterator          end() const{ return (const_iterator(_data + _size)); }
-            reverse_iterator        rbegin(){ return (reverse_iterator(_data)); }
-            const_reverse_iterator  rbegin() const{ return (const_reverse_iterator(_data)); }
-            reverse_iterator        rend(){ return (reverse_iterator(_data + _size)); }
-            const_reverse_iterator  rend() const{ return (const_reverse_iterator(_data + _size)); }
+            reverse_iterator        rbegin(){ return (reverse_iterator(_data + _size - 1)); }
+            const_reverse_iterator  rbegin() const{ return (const_reverse_iterator(_data + _size - 1)); }
+            reverse_iterator        rend(){ return (reverse_iterator(_data - 1)); }
+            const_reverse_iterator  rend() const{ return (const_reverse_iterator(_data - 1)); }
 
         //*****CAPACITY*****
             size_type               size() const{ return (_size); }
@@ -258,7 +259,7 @@ namespace ft {
             }
             
         //*****Allocator*****
-            allocator_type get_allocator() const{
+            allocator_type get_allocator(void) const{
                 return (allocator_type());
             }
             
