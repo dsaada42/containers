@@ -4,6 +4,7 @@
 # include "type_traits.hpp"
 # include "equal.hpp"
 # include "lexicographical_compare.hpp"
+# include <iostream>
 # include <iterator>
 # include <memory>
 # include <cstddef>
@@ -85,9 +86,19 @@ namespace ft {
             }
             //____opertor= surcharge___
             vector& operator= (const vector& copy){
-                //clear first 
-
-                (void)copy;
+                //on libere l'espace
+                clear();
+                //dans le cas ou on a besoin d'une reallocation
+                if (copy.size() > _capacity){
+                    _alloc.deallocate(_data, _capacity);
+                    _capacity = copy.capacity();
+                    _data = _alloc.allocate(_capacity);
+                }
+                //on copie tous les elements de copy vers notre _data 
+                _size = copy.size();
+                for (size_type i = 0; i < _size; i++){
+                    _alloc.construct(&_data[i], copy[i]);
+                }
                 return (*this);
             }
 
@@ -162,12 +173,26 @@ namespace ft {
 
         //*****MODIFIERS*****
             template <class InputIterator>  void assign (InputIterator first, InputIterator last){
-                (void)first;
-                (void)last;
+                size_type nb = 0;
+                for( InputIterator tmp = first; tmp != last; tmp++)
+                    nb++;
+                clear();
+                if (nb > _capacity)
+                    reserve(nb);
+                for (size_type i = 0; i < nb; i++){
+                    _alloc.construct(&_data[i], *first);
+                    _size++;
+                    first++;
+                }
             }
             void assign (size_type n, const value_type& val){
-                (void)n;
-                (void)val;
+                clear();
+                if (n > _capacity)
+                    reserve(n);
+                for (size_type i = 0; i < n; i++){
+                    _alloc.construct(&_data[i], val);
+                    _size++;
+                }
             }
             void push_back (const value_type& val){
                 if (_size >= _capacity)
@@ -199,13 +224,30 @@ namespace ft {
                 (void)last;
             } // range
             iterator erase (iterator position){
-                (void)position;
-                return (begin());
+                //on decale tous les elements a partir de la position de 1
+                for (iterator it = position; it < end() - 1; it++)
+                    *it = *(it + 1);
+                _size--;
+                //on detruit le dernier element
+                _alloc.destroy(&_data[_size]);
+                return (position);
             }
             iterator erase (iterator first, iterator last){
-                (void)first;
-                (void)last;
-                return (begin());
+                size_type nb = 0;
+
+                nb = last - first;
+                if (nb == 0)
+                    return (first);
+                //on decale tous les elements a partir de la position de last - first
+                for (size_type i = first - begin(); i < _size; i++){
+                    _data[i] = _data[i + nb]; 
+                }
+                //on supprime les nb derniers elements
+                for (size_type i = _size - nb; i < _size; i++)
+                    _alloc.destroy(&_data[i]);
+                _size -= nb;
+                
+                return (first);
             }
             void swap (vector& x){
                 (void)x;
@@ -217,7 +259,7 @@ namespace ft {
             
         //*****Allocator*****
             allocator_type get_allocator() const{
-                return (_alloc);
+                return (allocator_type());
             }
             
     };

@@ -1,5 +1,5 @@
---- logs/vector/get_allocator__ft.log	2022-11-25 11:06:44.814722607 +0100
-+++ logs/vector/get_allocator__std.log	2022-11-25 11:06:45.069724121 +0100
+--- logs/vector/get_allocator__ft.log	2022-11-25 16:25:56.671468282 +0100
++++ logs/vector/get_allocator__std.log	2022-11-25 16:25:56.921469763 +0100
 @@ -1,6 +1,6 @@
  a leak is normal here
  ========================================

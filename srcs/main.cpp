@@ -34,7 +34,10 @@ int main( void ){
         myVector.push_back(-254);
         myVector.push_back(5915);
         myVector.push_back(15465);
-
+        PrintVector( myVector );
+        myVector.erase(myVector.begin(), myVector.begin());
+        PrintVector( myVector );
+        myVector.erase(myVector.begin(), myVector.end());
         PrintVector( myVector );
 
         std::cout << "Iterator:\n";
@@ -54,7 +57,10 @@ int main( void ){
         myVector.push_back(-254);
         myVector.push_back(5915);
         myVector.push_back(15465);
-
+        PrintVector( myVector );
+        myVector.erase(myVector.begin(), myVector.begin());
+        PrintVector( myVector );
+        myVector.erase(myVector.begin(), myVector.end());
         PrintVector( myVector );
 
         std::cout << "Iterator:\n";

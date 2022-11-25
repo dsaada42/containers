@@ -6,7 +6,10 @@ CPPFLAGS = -Wall -Wextra -Werror -std=c++98
 
 SRC		=	./srcs/main.cpp
 
-HEADER  =   ./includes/vector.hpp\
+HEADER  =  	./includes/equal.hpp\
+			./includes/lexicographical_compare.hpp\
+			./includes/type_traits.hpp\
+			./includes/vector.hpp\
 			./includes/vector_iterator.hpp
 
 OBJ		=	$(SRC:.cpp=.o)
