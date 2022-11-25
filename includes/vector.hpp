@@ -2,6 +2,8 @@
 # define VECTOR_HPP
 # include "vector_iterator.hpp"
 # include "type_traits.hpp"
+# include "equal.hpp"
+# include "lexicographical_compare.hpp"
 # include <iterator>
 # include <memory>
 # include <cstddef>
@@ -30,24 +32,7 @@ namespace ft {
             allocator_type       _alloc;
             size_type            _size;
             size_type            _capacity;
-            void ReAlloc( size_type newCapacity )
-            {
-                //allocate new block
-                value_type* newBlock = (value_type*) ::operator new(newCapacity * sizeof(value_type)); //next step is using allocator
-                //copy all existing elements in new allocated block (better to move)
-                if (newCapacity < _size)
-                    _size = newCapacity;
-                for (size_t i = 0 ; i < _size ; i++){
-                    newBlock[i] = _data[i];
-                }
-                //delete old block
-                for (size_t i = 0; i < _size ; i++){
-                    _data[i].~value_type();
-                }
-                ::operator delete(_data); // need to use operator delete or allocator.deallocate to avoid double free
-                _data = newBlock;
-                _capacity = newCapacity;
-            }
+
         public:
         //*****CONSTRUCTOR DESTRUCTOR*****
             //____default constructor : constructs an empty container, no elements
@@ -89,7 +74,6 @@ namespace ft {
                  _alloc = copy.get_allocator();
                  _size = copy.size();
                  _capacity = copy.capacity();
-                 //reste a copier tout le vector en accedant aux elements 1 par 1
                  for (size_type i = 0; i < _size; i++)
                     _alloc.construct(&_data[i], copy[i]);
             }
@@ -121,24 +105,41 @@ namespace ft {
             size_type               size() const{ return (_size); }
             size_type               max_size() const{ return (_alloc.max_size()); }
             void                    resize (size_type n, value_type val = value_type()){
-                // si n > size 
-                    //si n > capacity 
-                        //si n > 2 x capacity or size
-                            //-> reserve n
-                        //si capacity or size > 0
-                            //-> reserve 2 x capacity or size
-                        //sinon
-                            //->reserve 1
-                        //-> on construit les elements de _size a n
-                // si n <= size
-                    //on detruit les elements de n a _size
-                (void)n;
-                (void)val;
+                if (n > _size){
+                    if (n > _capacity){
+                        if (n > 2 * _capacity)
+                            reserve(n);
+                        else if (_capacity >= 1)
+                            reserve(2 * _capacity);
+                        else
+                            reserve(1);
+                    }
+                    for (size_type i = _size; i < n; i++)
+                        _alloc.construct(&_data[i], val);
+                }
+                else{
+                    for (size_type i = n; i < _size; i++)
+                        _alloc.destroy(&_data[i]);
+                }
+                _size = n;
             }
             size_type               capacity() const{ return (_capacity); }
             bool                    empty() const{ return (_size == 0); }
             void                    reserve (size_type n){
-                (void)n;
+                if (n > max_size())
+                {
+                    throw std::length_error("vector: trying to reserve more than maxcap");
+                }
+                if (n > _capacity){
+                    value_type* new_data = _alloc.allocate(n);
+                    for (size_type i = 0; i < _size; i++){
+                        _alloc.construct(&new_data[i], _data[i]);
+                        _alloc.destroy(&_data[i]);
+                    }
+                    _alloc.deallocate(_data, _capacity);
+                    _capacity = n;
+                    _data = new_data;
+                }
             }
 
         //*****ELEMENT ACCESS*****
@@ -170,17 +171,16 @@ namespace ft {
             }
             void push_back (const value_type& val){
                 if (_size >= _capacity)
-                {
-                    ReAlloc(_capacity + _capacity / 2);
+                    resize(_size + 1, val);
+                else{
+                    _alloc.construct(&_data[_size], val);
+                    _size++;
                 }
-                _data[_size] = val;
-                _size++;
             }
             void pop_back(){
                 if (_size > 0){
                     _size--;
-                    _data[_size].~value_type();
-                    //_alloc.destroy(_data[_size]);
+                    _alloc.destroy(&_data[_size]);
                 }
             }
             iterator insert (iterator position, const value_type& val){
@@ -225,34 +225,26 @@ namespace ft {
     //***** Non member function overloads *****
     //___Relational operators___
     template <class T, class Alloc>  bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
-        (void)lhs;
-        (void)rhs;
-        return (true);
+        return (ft::equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
     }
     template <class T, class Alloc>  bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
-        (void)lhs;
-        (void)rhs;
-        return (true);
+        return (!ft::equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
     }
     template <class T, class Alloc>  bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
-        (void)lhs;
-        (void)rhs;
-        return (true);
+        return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
     }	
     template <class T, class Alloc>  bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
-        (void)lhs;
-        (void)rhs;
-        return (true);
+        if (rhs == lhs)
+            return (true);
+        return (lhs < rhs);
     }
     template <class T, class Alloc>  bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
-        (void)lhs;
-        (void)rhs;
-        return (true);
+        return (ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));
     }	
     template <class T, class Alloc>  bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
-        (void)lhs;
-        (void)rhs;
-        return (true);
+        if (rhs == lhs)
+            return (true);
+        return (lhs > rhs);
     }
     //___Swap ( vector )
     template <class T, class Alloc>  void swap (vector<T,Alloc>& x, vector<T,Alloc>& y){

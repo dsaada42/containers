@@ -61,14 +61,14 @@ Size: 0 (file: tests/vector/insert.cpp, line: 65)
 Vector content:
 
 
-It: 0 (file: tests/vector/insert.cpp, line: 73)
+It: 9046 (file: tests/vector/insert.cpp, line: 73)
 Capacity Ok (file: tests/vector/insert.cpp, line: 74)
 Size: 0 (file: tests/vector/insert.cpp, line: 74)
 
 Vector content:
 
 
-It: 0 (file: tests/vector/insert.cpp, line: 78)
+It: 9046 (file: tests/vector/insert.cpp, line: 78)
 Capacity Ok (file: tests/vector/insert.cpp, line: 79)
 Size: 0 (file: tests/vector/insert.cpp, line: 79)
 
