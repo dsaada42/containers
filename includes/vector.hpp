@@ -28,7 +28,7 @@ namespace ft {
             typedef ptrdiff_t                                                   difference_type;
             typedef size_t                                                      size_type;
 
-        private:
+        protected:
             value_type*          _data;
             allocator_type       _alloc;
             size_type            _size;
@@ -173,9 +173,9 @@ namespace ft {
             const_reference         back() const{ return (_data[_size - 1]); }
 
         //*****MODIFIERS*****
-            template <class InputIterator>  void assign (InputIterator first, InputIterator last){
+            template <class InputIt>  void assign (InputIt first, InputIt last){
                 size_type nb = 0;
-                for( InputIterator tmp = first; tmp != last; tmp++)
+                for( InputIt tmp = first; tmp != last; tmp++)
                     nb++;
                 clear();
                 if (nb > _capacity)
@@ -215,19 +215,28 @@ namespace ft {
                 return (begin());
             } //single element
             void insert (iterator position, size_type n, const value_type& val){
+                size_type n = position - begin();
+
+                if (_size + n > _capacity)
+                    resize(_size + n);
+                
+
                 (void)position;
                 (void)n;
                 (void)val;
             } //fill
-            template <class InputIterator> void insert (iterator position, InputIterator first, InputIterator last){
+            template <class InputIt> void insert (iterator position, InputIt first, InputIt last){
                 (void)position;
                 (void)first;
                 (void)last;
             } // range
             iterator erase (iterator position){
-                //on decale tous les elements a partir de la position de 1
-                for (iterator it = position; it < end() - 1; it++)
-                    *it = *(it + 1);
+                
+                for (size_type i = position - begin(); i < _size - 1; i++)
+                    _data[i] = _data[i + 1];
+                // //on decale tous les elements a partir de la position de 1
+                // for (iterator it = position; it < end() - 1; it++) //a reecrire avec des size_type au lieu des iterateurs
+                //     *it = *(it + 1);
                 _size--;
                 //on detruit le dernier element
                 _alloc.destroy(&_data[_size]);

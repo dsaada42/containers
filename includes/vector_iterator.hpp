@@ -17,7 +17,7 @@ namespace ft{
             typedef value_type const *                                  const_pointer;
             typedef std::ptrdiff_t                                      difference_type;
             typedef std::size_t                                         size_type;
-            typedef std::bidirectional_iterator_tag                     iterator_category;
+            typedef std::random_access_iterator_tag                     iterator_category;
         
         public:
             pointer _ptr; //a changer en private + getter ?

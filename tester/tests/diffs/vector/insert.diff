@@ -1,5 +1,5 @@
---- logs/vector/insert__ft.log	2022-11-25 19:55:54.469577129 +0100
-+++ logs/vector/insert__std.log	2022-11-25 19:55:53.997576513 +0100
+--- logs/vector/insert__ft.log	2022-11-29 09:18:29.554121386 +0100
++++ logs/vector/insert__std.log	2022-11-29 09:18:29.250119568 +0100
 @@ -1,79 +1,79 @@
 -It:  (file: tests/vector/insert.cpp, line: 24)
 +It: OaxJUSm3nYN9Y8Ela7sS (file: tests/vector/insert.cpp, line: 24)
@@ -91,7 +91,7 @@
 +1tW0KWfXxeFO69tByqcE wbiAcjgojb9JOagZwyMn 0gyB2Tr42v6awMw2nK7J ATZKCzaPOqgkhPjwuGlf MOhaJs56yjOw8f6nLPRA uvg6KqtcgduR31n3ajsv OaxJUSm3nYN9Y8Ela7sS Mq4RRaeLvSAO0z2ibp8Q e6GsiLFUuoDpVFEhJKZ1 
  
 -
--It: 0 (file: tests/vector/insert.cpp, line: 73)
+-It: 2942 (file: tests/vector/insert.cpp, line: 73)
 +It: 64 (file: tests/vector/insert.cpp, line: 73)
  Capacity Ok (file: tests/vector/insert.cpp, line: 74)
 -Size: 0 (file: tests/vector/insert.cpp, line: 74)
@@ -101,7 +101,7 @@
 +64 
  
 -
--It: 0 (file: tests/vector/insert.cpp, line: 78)
+-It: 2942 (file: tests/vector/insert.cpp, line: 78)
 +It: 420 (file: tests/vector/insert.cpp, line: 78)
  Capacity Ok (file: tests/vector/insert.cpp, line: 79)
 -Size: 0 (file: tests/vector/insert.cpp, line: 79)
