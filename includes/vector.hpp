@@ -55,10 +55,10 @@ namespace ft {
                     _alloc.construct(&_data[i], val);
             } 
             //____range constructor : constructs a container with as many elements as the range [first,last)
-            template <class InputIterator> vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),	typename ft::enable_if<!ft::is_same<InputIterator, int>::boolean>::type* = 0){
+            template <class InputIt> vector (InputIt first, typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type last, const allocator_type& alloc = allocator_type()){
                 size_type nb = 0;
 
-                for ( InputIterator start = first; start != last; start++)
+                for ( InputIt start = first; start != last; start++)
                     nb++;
                 _size = nb;
                 _capacity = nb;
@@ -173,16 +173,23 @@ namespace ft {
             const_reference         back() const{ return (_data[_size - 1]); }
 
         //*****MODIFIERS*****
-            template <class InputIt>  void assign (InputIt first, InputIt last, typename ft::enable_if<!ft::is_same<InputIt, int>::boolean>::type* = 0){
-                size_type nb = 0;
-                for( InputIt tmp = first; tmp != last; tmp++)
-                    nb++;
-                clear();
-                if (nb > _capacity)
-                    reserve(nb);
-                for (size_type i = 0; i < nb; i++){
-                    _alloc.construct(&_data[i], *first);
-                    _size++;
+            template <class InputIt>  void assign (InputIt first, typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type last){
+                // if(_size)
+                //     clear();
+                // size_type nb = 0;
+                // for( InputIt tmp = first; tmp != last; tmp++)
+                //     nb++;
+                // if (nb > _capacity)
+                //     reserve(nb);
+                // for (size_type i = 0; i < nb; i++){
+                //     _alloc.construct(&_data[i], *first);
+                //     first++;
+                // }
+                // _size = nb;
+                if (_size)
+                    clear();
+                while (first != last){
+                    push_back(*first);
                     first++;
                 }
             }
@@ -214,52 +221,77 @@ namespace ft {
                 (void)val;
                 return (begin());
             } //single element
+            template <class InputIt> void insert (iterator position, InputIt first, typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type last){
+                (void)first;
+                (void)last;
+                (void)position;
+            } // range
             void insert (iterator position, size_type n, const value_type& val){
-                size_type pos = position - begin();
+                difference_type pos = position - begin();
 
-                if (_size + n > _capacity)
-                    resize(_size + n);
+                if (_size + n > _capacity){
+                    if (_size + n > 2 * _capacity)
+                            reserve(n + _size);
+                        else if (_capacity >= 1)
+                            reserve(2 * _capacity);
+                        else
+                            reserve(1);
+                }
                 for (size_type i = _size - 1; i > pos + n; i--)
                     _data[i] = _data[i - n];
                 for (size_type i = pos; i < pos + n; i++)
                     _data[i] = val;
             } //fill
-            template <class InputIt> void insert (iterator position, InputIt first, InputIt last, typename ft::enable_if<!ft::is_same<InputIt, int>::boolean>::type* = 0){
-                (void)position;
-                (void)first;
-                (void)last;
-            } // range
             iterator erase (iterator position){
-                
+                //on decale tous les elements a partir de la position de 1
                 for (size_type i = position - begin(); i < _size - 1; i++)
                     _data[i] = _data[i + 1];
-                // //on decale tous les elements a partir de la position de 1
-                // for (iterator it = position; it < end() - 1; it++) //a reecrire avec des size_type au lieu des iterateurs
-                //     *it = *(it + 1);
                 _size--;
                 //on detruit le dernier element
                 _alloc.destroy(&_data[_size]);
                 return (position);
             }
             iterator erase (iterator first, iterator last){
-                size_type nb = 0;
+                // size_type nb = 0;
 
-                nb = last - first;
-                if (nb == 0)
-                    return (first);
-                //on decale tous les elements a partir de la position de last - first
-                for (size_type i = first - begin(); i < _size; i++){
-                    _data[i] = _data[i + nb]; 
-                }
-                //on supprime les nb derniers elements
-                for (size_type i = _size - nb; i < _size; i++)
-                    _alloc.destroy(&_data[i]);
-                _size -= nb;
-                
+                // nb = last - first;
+                // if (nb == 0)
+                //     return (first);
+                // //on decale tous les elements a partir de la position de last - first
+                // for (size_type i = first - begin(); i < _size; i++){
+                //     _data[i] = _data[i + nb]; 
+                // }
+                // //on supprime les nb derniers elements
+                // for (size_type i = _size - nb; i < _size; i++)
+                //     _alloc.destroy(&_data[i]);
+                // _size -= nb;
+                // return(first);
+                iterator temp = first;
+                while( first != last--)
+                    erase(last);
                 return (first);
             }
             void swap (vector& x){
-                (void)x;
+                value_type* tmp_data;
+                Alloc       tmp_alloc;
+                size_type   tmp_size;
+                size_type   tmp_capacity;
+
+                tmp_data = x._data;
+                x._data = _data;
+                _data = tmp_data;
+
+                tmp_alloc = x._alloc;
+                x._alloc = _alloc;
+                _alloc = tmp_alloc;
+
+                tmp_size = x._size;
+                x._size = _size;
+                _size = tmp_size;
+
+                tmp_capacity = x._capacity;
+                x._capacity = _capacity;
+                _capacity = tmp_capacity;
             }
             void clear(){
                 while (_size > 0)
@@ -299,8 +331,7 @@ namespace ft {
     }
     //___Swap ( vector )
     template <class T, class Alloc>  void swap (vector<T,Alloc>& x, vector<T,Alloc>& y){
-        (void)x;
-        (void)y;
+        x.swap(y);
     }
 
 }

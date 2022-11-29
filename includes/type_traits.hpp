@@ -20,6 +20,34 @@ namespace ft{
     struct is_same { static const bool boolean = false;}; //If two different classes, return false
     template <class T>
     struct is_same<T, T> { static const bool boolean = true;}; //If twice same type, return true
+    //Is Integral
+    template <class T, T val>
+    struct integral_constant{
+        static const T                  value = val;
+        T                               value_type;
+        typedef integral_constant<T, val>  type;
+    };
+
+    typedef integral_constant<bool, true>   true_type;
+    typedef integral_constant<bool, false>  false_type;
+
+    template<class T> struct is_integral: public false_type {};
+
+    template<class T> struct is_integral< const T >             :   public is_integral<T> {};
+    template<class T> struct is_integral< volatile const T >    :   public is_integral<T> {};
+    template<class T> struct is_integral< volatile T >          :   public is_integral<T> {};
+    template<> struct is_integral< unsigned char >              :   true_type {};
+    template<> struct is_integral< unsigned int >               :   true_type {};
+    template<> struct is_integral< unsigned short >             :   true_type {};
+    template<> struct is_integral< unsigned long >              :   true_type {};
+    template<> struct is_integral< unsigned long long >         :   true_type {};
+    template<> struct is_integral< char >                       :   true_type {};
+    template<> struct is_integral< short >                      :   true_type {};
+    template<> struct is_integral< int >                        :   true_type {};
+    template<> struct is_integral< long >                       :   true_type {};
+    template<> struct is_integral< long long >                  :   true_type {};
+    template<> struct is_integral< bool >                       :   true_type {};
+
 }
 
 #endif
