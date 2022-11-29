@@ -173,7 +173,7 @@ namespace ft {
             const_reference         back() const{ return (_data[_size - 1]); }
 
         //*****MODIFIERS*****
-            template <class InputIt>  void assign (InputIt first, InputIt last){
+            template <class InputIt>  void assign (InputIt first, InputIt last, typename ft::enable_if<!ft::is_same<InputIt, int>::boolean>::type* = 0){
                 size_type nb = 0;
                 for( InputIt tmp = first; tmp != last; tmp++)
                     nb++;
@@ -215,17 +215,16 @@ namespace ft {
                 return (begin());
             } //single element
             void insert (iterator position, size_type n, const value_type& val){
-                size_type n = position - begin();
+                size_type pos = position - begin();
 
                 if (_size + n > _capacity)
                     resize(_size + n);
-                
-
-                (void)position;
-                (void)n;
-                (void)val;
+                for (size_type i = _size - 1; i > pos + n; i--)
+                    _data[i] = _data[i - n];
+                for (size_type i = pos; i < pos + n; i++)
+                    _data[i] = val;
             } //fill
-            template <class InputIt> void insert (iterator position, InputIt first, InputIt last){
+            template <class InputIt> void insert (iterator position, InputIt first, InputIt last, typename ft::enable_if<!ft::is_same<InputIt, int>::boolean>::type* = 0){
                 (void)position;
                 (void)first;
                 (void)last;
