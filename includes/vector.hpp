@@ -4,6 +4,7 @@
 # include "type_traits.hpp"
 # include "equal.hpp"
 # include "lexicographical_compare.hpp"
+# include "reverse_iterator.hpp"
 # include <iostream>
 # include <iterator>
 # include <memory>
@@ -23,8 +24,8 @@ namespace ft {
             typedef typename allocator_type::const_pointer                      const_pointer;
             typedef ft::vector_iterator<value_type, false>                      iterator;
             typedef ft::vector_iterator<value_type, true>                       const_iterator;
-            typedef std::reverse_iterator<iterator>                             reverse_iterator;
-            typedef std::reverse_iterator<const_iterator>                       const_reverse_iterator;
+            typedef ft::reverse_iterator<iterator>                              reverse_iterator;
+            typedef ft::reverse_iterator<const_iterator>                        const_reverse_iterator;
             typedef ptrdiff_t                                                   difference_type;
             typedef size_t                                                      size_type;
 
@@ -217,30 +218,54 @@ namespace ft {
                 }
             }
             iterator insert (iterator position, const value_type& val){
-                (void)position;
-                (void)val;
-                return (begin());
+                size_type pos = position - begin();
+                insert(position, 1, val);
+                return(iterator(&_data[pos]));
             } //single element
             template <class InputIt> void insert (iterator position, InputIt first, typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type last){
-                (void)first;
-                (void)last;
-                (void)position;
+                size_type		pos = position - begin();
+                size_type		n = 0;
+
+                for (InputIt cpy = first ; cpy != last && n <= max_size() ; cpy++)
+                    n++;
+
+                if (_size + n > _capacity)
+                {
+                    if (_size + n > _capacity * 2)
+                        reserve(_size + n);
+                    else if (_capacity > 0)
+                        reserve(_capacity * 2);
+                    else
+                        reserve(1);
+                }
+
+                for (size_type i = 0 ; i < n ; i++)
+                    _alloc.construct(&_data[_size + i], *first);
+                for (int i = _size - 1 ; i >= 0 && i >= (int)pos ; i--)
+                    _data[i + n] = _data[i];
+                for (size_type i = pos ; i < pos + n ; i++)
+                    _data[i] = *first++;
+                _size = _size + n;
             } // range
             void insert (iterator position, size_type n, const value_type& val){
-                difference_type pos = position - begin();
+                size_type		pos = position - begin();
 
-                if (_size + n > _capacity){
-                    if (_size + n > 2 * _capacity)
-                            reserve(n + _size);
-                        else if (_capacity >= 1)
-                            reserve(2 * _capacity);
-                        else
-                            reserve(1);
+                if (_size + n > _capacity)
+                {
+                    if (_size + n > _capacity * 2)
+                        reserve(_size + n);
+                    else if (_capacity > 0)
+                        reserve(_capacity * 2);
+                    else
+                        reserve(1);
                 }
-                for (size_type i = _size - 1; i > pos + n; i--)
-                    _data[i] = _data[i - n];
-                for (size_type i = pos; i < pos + n; i++)
+                for (size_type i = 0 ; i < n ; i++)
+                    _alloc.construct(&_data[_size + i], val);
+                for (int i = _size - 1 ; i >= 0 && i >= (int)pos ; i--)
+                    _data[i + n] = _data[i];
+                for (size_type i = pos ; i < pos + n ; i++)
                     _data[i] = val;
+                _size = _size + n;
             } //fill
             iterator erase (iterator position){
                 //on decale tous les elements a partir de la position de 1
