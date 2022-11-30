@@ -37,7 +37,7 @@ namespace ft {
 
         private:
             template <class InputIt> void __vector (InputIt first, InputIt last, typename std::input_iterator_tag){
-                //On construit un objet pour chacune des valeurs d'iterateur de la range
+                //dans ce cas on ne peut pas savoir le nombre d'elements a l'avance, on doit donc push_back un par un 
                 _size = 0;
                 _capacity = 0;
                 _data = _alloc.allocate(0);
@@ -58,6 +58,48 @@ namespace ft {
                     first++;
                 }
             }
+            template <class InputIt> void __insert (iterator position, InputIt first, InputIt last, typename std::input_iterator_tag){
+                //on doit stocker de position a end dans un vector temporaire
+                //on push back ce qu'on nous donne en parametre
+                //on push_back ce qu'on a save 
+                ft::vector<value_type> tmp(position, end());
+                iterator it = tmp.begin();
+                iterator itend = tmp.end();
+
+                erase(position, end());
+                while(first != last){
+                    push_back(*first++);
+                }
+                while(it != itend){
+                    push_back(*it++);
+                }
+            }
+            template <class InputIt> void __insert (iterator position, InputIt first, InputIt last){
+                size_type		pos = position - begin();
+                size_type		n = 0;
+
+                for (InputIt cpy = first ; cpy != last && n <= max_size() ; cpy++)
+                    n++;
+
+                if (_size + n > _capacity)
+                {
+                    if (_size + n > _capacity * 2)
+                        reserve(_size + n);
+                    else if (_capacity > 0)
+                        reserve(_capacity * 2);
+                    else
+                        reserve(1);
+                }
+
+                for (size_type i = 0 ; i < n ; i++)
+                    _alloc.construct(&_data[_size + i], *first);
+                for (int i = _size - 1 ; i >= 0 && i >= (int)pos ; i--)
+                    _data[i + n] = _data[i];
+                for (size_type i = pos ; i < pos + n ; i++)
+                    _data[i] = *first++;
+                _size = _size + n;
+            }
+
         public:
         //*****CONSTRUCTOR DESTRUCTOR*****
             //____default constructor : constructs an empty container, no elements
@@ -78,26 +120,6 @@ namespace ft {
                 for (size_type i = 0; i < n ; i++)
                     _alloc.construct(&_data[i], val);
             } 
-            //____range constructor : constructs a container with as many elements as the range [first,last)
-            // template <class InputIt> vector (InputIt first, typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type last, const allocator_type& alloc = allocator_type()){
-            //     size_type nb = 0;
-
-            //     for ( InputIt start = first; start != last; start++)
-            //         nb++;
-            //     _size = nb;
-            //     _capacity = nb;
-            //     _alloc = alloc;
-            //     _data = _alloc.allocate(nb);
-            //     //On construit un objet pour chacune des valeurs d'iterateur de la range
-            //     // (void)alloc;
-            //     // while(first != last){
-            //     //     push_back(*first++);
-            //     // }
-            //     for (size_type i = 0; i < nb; i++){
-            //         _alloc.construct(&_data[i], *first);
-            //         first++;
-            //     }
-            // }
             template <class InputIt> vector (InputIt first, typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type last, const allocator_type& alloc = allocator_type()){
                 _alloc = alloc;
                 __vector(first, last, typename std::iterator_traits<InputIt>::iterator_category() );
@@ -253,31 +275,9 @@ namespace ft {
                 insert(position, 1, val);
                 return(iterator(&_data[pos]));
             } //single element
-            template <class InputIt> void insert (iterator position, InputIt first, typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type last){
-                size_type		pos = position - begin();
-                size_type		n = 0;
-
-                for (InputIt cpy = first ; cpy != last && n <= max_size() ; cpy++)
-                    n++;
-
-                if (_size + n > _capacity)
-                {
-                    if (_size + n > _capacity * 2)
-                        reserve(_size + n);
-                    else if (_capacity > 0)
-                        reserve(_capacity * 2);
-                    else
-                        reserve(1);
-                }
-
-                for (size_type i = 0 ; i < n ; i++)
-                    _alloc.construct(&_data[_size + i], *first);
-                for (int i = _size - 1 ; i >= 0 && i >= (int)pos ; i--)
-                    _data[i + n] = _data[i];
-                for (size_type i = pos ; i < pos + n ; i++)
-                    _data[i] = *first++;
-                _size = _size + n;
-            } // range
+            template <class InputIt> void insert (iterator position, InputIt first , typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type last){
+                __insert(position, first, last, typename std::iterator_traits<InputIt>::iterator_category());
+            }
             void insert (iterator position, size_type n, const value_type& val){
                 size_type		pos = position - begin();
 
@@ -369,7 +369,7 @@ namespace ft {
         return (!ft::equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
     }
     template <class T, class Alloc>  bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
-        return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+        return (std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())); // petit probleme sur mon lexicographical compare
     }	
     template <class T, class Alloc>  bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
         if (rhs == lhs)
@@ -377,7 +377,7 @@ namespace ft {
         return (lhs < rhs);
     }
     template <class T, class Alloc>  bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
-        return (ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));
+        return (std::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));  // petit probleme sur mon lexicographical compare
     }	
     template <class T, class Alloc>  bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
         if (rhs == lhs)
