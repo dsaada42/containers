@@ -6,6 +6,7 @@
 #include <iterator>
 #include <iostream>
 #include <string>
+#include <sstream>
 
 template< typename T >
 void PrintVector( const ft::vector< T >& vector){
@@ -22,54 +23,75 @@ void PrintVector( const std::vector< T >& vector){
     std::cout << "------------------------------------" << std::endl;
 }
 
-int main( void ){
-    std::cout << std::endl << "****** My vector scope *****" << std::endl << std::endl;
+// int main( void ){
+//     std::cout << std::endl << "****** My vector scope *****" << std::endl << std::endl;
+//     {
+//         ft::vector<int>  myVector;
+
+//         myVector.push_back(125);
+//         myVector.push_back(120);
+//         PrintVector( myVector );
+//         myVector.push_back(15);
+//         myVector.push_back(-254);
+//         myVector.push_back(5915);
+//         myVector.push_back(15465);
+//         PrintVector( myVector );
+//         myVector.erase(myVector.begin(), myVector.begin());
+//         PrintVector( myVector );
+//         myVector.erase(myVector.begin(), myVector.end());
+//         PrintVector( myVector );
+
+//         std::cout << "Iterator:\n";
+//         for (ft::vector<int>::iterator it = myVector.begin(); it != myVector.end(); it++){
+//             std::cout << *it << std::endl;
+//         }
+//     }
+
+//     std::cout << std::endl << "****** True vector scope *****" << std::endl << std::endl;
+//     {
+//         std::vector<int>  myVector;
+
+//         myVector.push_back(125);
+//         myVector.push_back(120);
+//         PrintVector( myVector );
+//         myVector.push_back(15);
+//         myVector.push_back(-254);
+//         myVector.push_back(5915);
+//         myVector.push_back(15465);
+//         PrintVector( myVector );
+//         myVector.erase(myVector.begin(), myVector.begin());
+//         PrintVector( myVector );
+//         myVector.erase(myVector.begin(), myVector.end());
+//         PrintVector( myVector );
+
+//         std::cout << "Iterator:\n";
+//         for (std::vector<int>::iterator it = myVector.begin(); it != myVector.end(); it++){
+//             std::cout << *it << std::endl;
+//         }
+//     }
+
+//     std::cout << std::endl << "************ END ***************" << std::endl;
+
+//     return (0);
+// }
+
+int main(void){
+
     {
-        ft::vector<int>  myVector;
 
-        myVector.push_back(125);
-        myVector.push_back(120);
-        PrintVector( myVector );
-        myVector.push_back(15);
-        myVector.push_back(-254);
-        myVector.push_back(5915);
-        myVector.push_back(15465);
-        PrintVector( myVector );
-        myVector.erase(myVector.begin(), myVector.begin());
-        PrintVector( myVector );
-        myVector.erase(myVector.begin(), myVector.end());
-        PrintVector( myVector );
+        std::istringstream str("");
+        std::istreambuf_iterator<char> it(str), end;
 
-        std::cout << "Iterator:\n";
-        for (ft::vector<int>::iterator it = myVector.begin(); it != myVector.end(); it++){
-            std::cout << *it << std::endl;
-        }
+        ft::vector<char> v(it, end);
+        
+        PrintVector(v);
     }
-
-    std::cout << std::endl << "****** True vector scope *****" << std::endl << std::endl;
     {
-        std::vector<int>  myVector;
+        std::istringstream str("1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+        std::istreambuf_iterator<char> it(str), end;
 
-        myVector.push_back(125);
-        myVector.push_back(120);
-        PrintVector( myVector );
-        myVector.push_back(15);
-        myVector.push_back(-254);
-        myVector.push_back(5915);
-        myVector.push_back(15465);
-        PrintVector( myVector );
-        myVector.erase(myVector.begin(), myVector.begin());
-        PrintVector( myVector );
-        myVector.erase(myVector.begin(), myVector.end());
-        PrintVector( myVector );
+        ft::vector<char> v(it, end);
 
-        std::cout << "Iterator:\n";
-        for (std::vector<int>::iterator it = myVector.begin(); it != myVector.end(); it++){
-            std::cout << *it << std::endl;
-        }
+        PrintVector(v);
     }
-
-    std::cout << std::endl << "************ END ***************" << std::endl;
-
-    return (0);
 }

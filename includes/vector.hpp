@@ -57,19 +57,23 @@ namespace ft {
             } 
             //____range constructor : constructs a container with as many elements as the range [first,last)
             template <class InputIt> vector (InputIt first, typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type last, const allocator_type& alloc = allocator_type()){
-                size_type nb = 0;
+                // size_type nb = 0;
 
-                for ( InputIt start = first; start != last; start++)
-                    nb++;
-                _size = nb;
-                _capacity = nb;
-                _alloc = alloc;
-                _data = _alloc.allocate(nb);
+                // for ( InputIt start = first; start != last; start++)
+                //     nb++;
+                // _size = nb;
+                // _capacity = nb;
+                // _alloc = alloc;
+                // _data = _alloc.allocate(nb);
                 //On construit un objet pour chacune des valeurs d'iterateur de la range
-                for (size_type i = 0; i < nb; i++){
-                    _alloc.construct(&_data[i], *first);
-                    first++;
+                (void)alloc;
+                while(first != last){
+                    push_back(*first++);
                 }
+                // for (size_type i = 0; i < nb; i++){
+                //     _alloc.construct(&_data[i], *first);
+                //     first++;
+                // }
             } 
             //____copy constructor___
             vector (const vector& copy){
