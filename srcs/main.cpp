@@ -78,6 +78,13 @@ void PrintVector( const std::vector< T >& vector){
 int main(void){
 
     {
+        std::string str = "Hello World!";
+
+        ft::vector<char> v(str.begin(), str.end());
+
+        PrintVector(v);
+    }
+    {
 
         std::istringstream str("");
         std::istreambuf_iterator<char> it(str), end;

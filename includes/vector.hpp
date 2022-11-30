@@ -35,6 +35,29 @@ namespace ft {
             size_type            _size;
             size_type            _capacity;
 
+        private:
+            template <class InputIt> void __vector (InputIt first, InputIt last, typename std::input_iterator_tag){
+                //On construit un objet pour chacune des valeurs d'iterateur de la range
+                _size = 0;
+                _capacity = 0;
+                _data = _alloc.allocate(0);
+                while(first != last){
+                    push_back(*first++);
+                }
+            }
+            template <class InputIt> void __vector (InputIt first, InputIt last){
+                size_type nb = 0;
+
+                for ( InputIt start = first; start != last; start++)
+                    nb++;
+                _size = nb;
+                _capacity = nb;
+                _data = _alloc.allocate(nb);
+                for (size_type i = 0; i < nb; i++){
+                    _alloc.construct(&_data[i], *first);
+                    first++;
+                }
+            }
         public:
         //*****CONSTRUCTOR DESTRUCTOR*****
             //____default constructor : constructs an empty container, no elements
@@ -56,25 +79,29 @@ namespace ft {
                     _alloc.construct(&_data[i], val);
             } 
             //____range constructor : constructs a container with as many elements as the range [first,last)
-            template <class InputIt> vector (InputIt first, typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type last, const allocator_type& alloc = allocator_type()){
-                // size_type nb = 0;
+            // template <class InputIt> vector (InputIt first, typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type last, const allocator_type& alloc = allocator_type()){
+            //     size_type nb = 0;
 
-                // for ( InputIt start = first; start != last; start++)
-                //     nb++;
-                // _size = nb;
-                // _capacity = nb;
-                // _alloc = alloc;
-                // _data = _alloc.allocate(nb);
-                //On construit un objet pour chacune des valeurs d'iterateur de la range
-                (void)alloc;
-                while(first != last){
-                    push_back(*first++);
-                }
-                // for (size_type i = 0; i < nb; i++){
-                //     _alloc.construct(&_data[i], *first);
-                //     first++;
-                // }
-            } 
+            //     for ( InputIt start = first; start != last; start++)
+            //         nb++;
+            //     _size = nb;
+            //     _capacity = nb;
+            //     _alloc = alloc;
+            //     _data = _alloc.allocate(nb);
+            //     //On construit un objet pour chacune des valeurs d'iterateur de la range
+            //     // (void)alloc;
+            //     // while(first != last){
+            //     //     push_back(*first++);
+            //     // }
+            //     for (size_type i = 0; i < nb; i++){
+            //         _alloc.construct(&_data[i], *first);
+            //         first++;
+            //     }
+            // }
+            template <class InputIt> vector (InputIt first, typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type last, const allocator_type& alloc = allocator_type()){
+                _alloc = alloc;
+                __vector(first, last, typename std::iterator_traits<InputIt>::iterator_category() );
+            }
             //____copy constructor___
             vector (const vector& copy){
                  _alloc = copy.get_allocator();
@@ -329,9 +356,8 @@ namespace ft {
             
         //*****Allocator*****
             allocator_type get_allocator(void) const{
-                return (allocator_type());
+                return (_alloc);
             }
-            
     };
 
     //***** Non member function overloads *****
