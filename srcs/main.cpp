@@ -10,50 +10,73 @@
 #include <sstream>
 
 int main(void){
-    RBTree<int, std::string> tree;
+    // {
+    //     RBTree<int, std::string> tree;
 
-    tree.insert(8);
-    tree.printTree();
-	tree.insert(18);
-    tree.printTree();
-	tree.insert(5);
-    tree.printTree();
-	tree.insert(15);
-    tree.printTree();
+    //     tree.insert(8);
+    //     tree.printTree();
+    //     tree.insert(18);
+    //     tree.printTree();
+    //     tree.insert(5);
+    //     tree.printTree();
+    //     tree.insert(15);
+    //     tree.printTree();
 
-    //insert 17
-	tree.insert(17);
-    tree.printTree();
-    //rotate left autour de 15
-    std::cout << "rotating left on 15" << std::endl;
-    tree.leftRotateKey(15);
-    tree.printTree();
-    //rotate right autour de 18
-    std::cout << "rotating left on 18" << std::endl;
-    tree.rightRotateKey(18);
-    tree.printTree();
-    std::cout << "end of insertion of 17" << std::endl;
-	
-    tree.insert(25);
-    tree.printTree();
+    //     //insert 17
+    //     tree.insert(17);
+    //     tree.printTree();
+    //     //rotate left autour de 15
+    //     std::cout << "rotating left on 15" << std::endl;
+    //     tree.leftRotateKey(15);
+    //     tree.printTree();
+    //     //rotate right autour de 18
+    //     std::cout << "rotating left on 18" << std::endl;
+    //     tree.rightRotateKey(18);
+    //     tree.printTree();
+    //     std::cout << "end of insertion of 17" << std::endl;
+        
+    //     tree.insert(25);
+    //     tree.printTree();
 
-    //insert 40
-	tree.insert(40);
-    tree.printTree();
-    //rotate left autour de 18
-    std::cout << "rotating left on 15" << std::endl;
-    tree.leftRotateKey(18);
-    tree.printTree();
-    std::cout << "end of insertion of 40" << std::endl;
-	
-    //insert 80
-    tree.insert(80);
-    tree.printTree();
-    std::cout << "rotating left on 8" << std::endl;
-    tree.leftRotateKey(8);
-    tree.printTree();
-    std::cout << "end of insertion of 40" << std::endl;
+    //     //insert 40
+    //     tree.insert(40);
+    //     tree.printTree();
+    //     //rotate left autour de 18
+    //     std::cout << "rotating left on 15" << std::endl;
+    //     tree.leftRotateKey(18);
+    //     tree.printTree();
+    //     std::cout << "end of insertion of 40" << std::endl;
+        
+    //     //insert 80
+    //     tree.insert(80);
+    //     tree.printTree();
+    //     std::cout << "rotating left on 8" << std::endl;
+    //     tree.leftRotateKey(8);
+    //     tree.printTree();
+    //     std::cout << "end of insertion of 40" << std::endl;
+    // }
+    {
+        RBTree<int, std::string> tree;
 
+        tree.insert(8);
+        tree.printTree();
+        tree.insert(18);
+        tree.printTree();
+        tree.insert(5);
+        tree.printTree();
+        tree.insert(15);
+        tree.printTree();
+        tree.insert(17);
+        tree.printTree();
+        tree.insert(25);
+        tree.printTree();
+        tree.insert(25);
+        tree.printTree();
+        tree.insert(40);
+        tree.printTree();
+        tree.insert(80);
+        tree.printTree();
+    }
 }
 // template< typename T >
 // void PrintVector( const ft::vector< T >& vector){

@@ -67,6 +67,57 @@ class RBTree{
             }
             // cout<<root->left->data<<endl;
         }
+
+        void __repair_insert(t_node * node){
+            t_node *uncle;
+
+            while (node->parent->color == RED){
+                if (node->parent == node->parent->parent->right){
+                    uncle = node->parent->parent->left;
+
+                    if (uncle->color == RED){//cas 3.1
+                        uncle->color = BLACK;
+                        node->parent->color = BLACK;
+                        node->parent->parent->color = RED;
+                        node = node->parent->parent;
+                    }
+                    else {
+                        if (node == node->parent->left){//cas 3.2.2
+                            node = node->parent;
+                            rightRotate(node);
+                        }  
+                        //cas 3.2.1
+                        node->parent->color = BLACK;
+                        node->parent->parent->color= RED;
+                        leftRotate(node->parent->parent);
+                    }
+                }
+                else {
+                    uncle = node->parent->parent->right;
+
+                    if (uncle->color == RED){//cas 3.1
+                        uncle->color = BLACK;
+                        node->parent->color = BLACK;
+                        node->parent->parent->color = RED;
+                        node = node->parent->parent;
+                    }
+                    else {
+                        if (node == node->parent->right){//cas 3.2.2 mirror
+                            node = node->parent;
+                            leftRotate(node);
+                        }
+                        //cas 3.2.1 mirror
+                        node->parent->color = BLACK;
+                        node->parent->parent->color= RED;
+                        rightRotate(node->parent->parent);
+                    } 
+                }
+                if (node == root) {
+                    break;
+                }
+            }
+            root->color = BLACK;
+        }
     
     public:
         RBTree( void ){
@@ -76,6 +127,7 @@ class RBTree{
         }
         //----- Right Rotation -----
         void rightRotate(t_node *p){
+            std::cout << "right rotation on key "<< p->key << std::endl;
             t_node *k = p->left;
 
             k->parent = p->parent; //1
@@ -103,6 +155,7 @@ class RBTree{
         }
         //----- Left Rotation -----
         void leftRotate(t_node *p){
+            std::cout << "left rotation on key "<< p->key << std::endl;
             t_node *k = p->right;
 
             k->parent = p->parent; //1
@@ -169,8 +222,9 @@ class RBTree{
             if (node->parent->parent == 0)
                 return;
 
+            std::cout << "Fixing insert" << std::endl;
             //case 3: all other possibilities need fixing
-            //__repair_insert(node);
+            __repair_insert(node);
         }
 
         void printTree(void){
