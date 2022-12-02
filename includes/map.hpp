@@ -7,14 +7,47 @@
 # include <cstddef>
 # include "equal.hpp"
 # include "type_traits.hpp"
+# include "reverse_iterator.hpp"
 
 namespace ft {
 
     template < class Key, class T,  class Compare = std::less<Key>, class Alloc = std::allocator<ft::pair<const Key,T> > >
     class map {
+        typedef struct              s_node
+        {
+            ft::pair<const Key, T>  _pair;
+            bool                    _black;
+            s_node                  *right;
+            s_node                  *left;
+            s_node                  *parent;
+
+            s_node (ft::pair< const Key, T > pair){
+                _pair = pair;
+            }
+            const Key & key(void){ return (data.first); }
+            T &         val(void){ return(data.second); }
+        }                           t_node;
+
+        template< bool ConstB >
+        class map_iterator {
+            public:
+                typedef Key                                                                     key_type;
+                typedef T                                                                       mapped_type;
+                typedef ft::pair< const Key, T >                                                value_type;
+                typedef value_type&                                                             reference;
+                typedef value_type const &                                                      const_reference;
+                typedef value_type*                                                             pointer;
+                typedef value_type const *                                                      const_pointer;
+                typedef std::ptrdiff_t                                                          difference_type;
+                typedef std::size_t                                                             size_type;
+                typedef std::bidirectional_iterator_tag                                         iterator_category;
+ 
+            private:
+                value_type  *_ptr;
+        };
 
         public:
-            class value_compare;
+            class                                                       value_compare;
             typedef Key                                                 key_type;
             typedef T                                                   mapped_type;
             typedef ft::pair<const key_type, mapped_type>               value_type;
@@ -24,21 +57,14 @@ namespace ft {
             typedef typename allocator_type::const_reference            const_reference;
             typedef typename allocator_type::pointer                    pointer;
             typedef typename allocator_type::const_pointer              const_pointer;
-            typedef ft::map_iterator<value_type>                        iterator;
-            typedef ft::map_iterator<value_type>                        const_iterator;
+            typedef map_iterator<false>                                 iterator;
+            typedef map_iterator<true>                                  const_iterator;
             typedef ft::reverse_iterator<iterator>                      reverse_iterator;
             typedef ft::reverse_iterator<const_iterator>                const_reverse_iterator;
             typedef std::ptrdiff_t                                      difference_type; //ptrdiff_t
             typedef std::size_t                                         size_type;      
 
         protected:
-            typedef struct s_node
-            {
-                bool    black;
-                s_node  *right;
-                s_node  *left;
-                s_node  *parent;
-            }           t_node;
             
             key_compare     _comp;
             allocator_type  _alloc;
@@ -60,7 +86,8 @@ namespace ft {
                 _alloc = alloc;
             }    
             map (const map& x){
-                (void)x;
+                _comp = x._comp;
+                _alloc = x._alloc;
             }
             //___Destructor___
             ~map( void ){
@@ -68,7 +95,8 @@ namespace ft {
             }
             //___Operator= surcharge___
             map& operator= (const map& x){
-                (void)x;
+                _comp = x._comp;
+                _alloc = x._alloc;
                 return (*this);
             }
 

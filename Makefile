@@ -10,7 +10,8 @@ HEADER  =  	./includes/equal.hpp\
 			./includes/lexicographical_compare.hpp\
 			./includes/type_traits.hpp\
 			./includes/vector.hpp\
-			./includes/vector_iterator.hpp
+			./includes/vector_iterator.hpp\
+			./includes/RBTree.hpp
 
 OBJ		=	$(SRC:.cpp=.o)
 
