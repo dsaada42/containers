@@ -9,100 +9,85 @@
 #include <string>
 #include <sstream>
 
+bool isInteger( std::string str ){
+    int i = 0;
+    if (str.at(i) == '-')
+        i++;
+    while ( i < (int) str.size())
+    {
+        if (isdigit(str.at(i)))
+            i++;
+        else
+            break;
+    }
+    if (i != (int) str.size())
+        return (false);
+    return (true);
+}
+
 int main(void){
-    // {
-    //     RBTree<int, std::string> tree;
-
-    //     tree.insert(8);
-    //     tree.printTree();
-    //     tree.insert(18);
-    //     tree.printTree();
-    //     tree.insert(5);
-    //     tree.printTree();
-    //     tree.insert(15);
-    //     tree.printTree();
-
-    //     //insert 17
-    //     tree.insert(17);
-    //     tree.printTree();
-    //     //rotate left autour de 15
-    //     std::cout << "rotating left on 15" << std::endl;
-    //     tree.leftRotateKey(15);
-    //     tree.printTree();
-    //     //rotate right autour de 18
-    //     std::cout << "rotating left on 18" << std::endl;
-    //     tree.rightRotateKey(18);
-    //     tree.printTree();
-    //     std::cout << "end of insertion of 17" << std::endl;
-        
-    //     tree.insert(25);
-    //     tree.printTree();
-
-    //     //insert 40
-    //     tree.insert(40);
-    //     tree.printTree();
-    //     //rotate left autour de 18
-    //     std::cout << "rotating left on 15" << std::endl;
-    //     tree.leftRotateKey(18);
-    //     tree.printTree();
-    //     std::cout << "end of insertion of 40" << std::endl;
-        
-    //     //insert 80
-    //     tree.insert(80);
-    //     tree.printTree();
-    //     std::cout << "rotating left on 8" << std::endl;
-    //     tree.leftRotateKey(8);
-    //     tree.printTree();
-    //     std::cout << "end of insertion of 40" << std::endl;
-    // }
-    // {
-    //     RBTree<int, std::string> tree;
-
-    //     tree.insert(8);
-    //     tree.printTree();
-    //     tree.insert(18);
-    //     tree.printTree();
-    //     tree.insert(5);
-    //     tree.printTree();
-    //     tree.insert(15);
-    //     tree.printTree();
-    //     tree.insert(17);
-    //     tree.printTree();
-    //     tree.insert(25);
-    //     tree.printTree();
-    //     tree.insert(25);
-    //     tree.printTree();
-    //     tree.insert(40);
-    //     tree.printTree();
-    //     tree.insert(80);
-    //     tree.printTree();
-    // }
     {
         RBTree<int, std::string> tree;
 
-        tree.insert(8);
-        tree.printTree();
-        tree.insert(2);
-        tree.printTree();
-        tree.insert(20);
-        tree.printTree();
-        tree.insert(1);
-        tree.printTree();
-        tree.insert(5);
-        tree.printTree();
-        tree.insert(12);
-        tree.printTree();
-        tree.insert(27);
-        tree.printTree();
-        tree.insert(3);
-        tree.printTree();
-        tree.insert(4);
-        tree.printTree();
-        tree.insert(15);
-        tree.printTree();
-        tree.delete_node(20);
-        tree.printTree();
+        std::cout << "**************************************************************************************\n";
+        std::cout << "**                                                                                  **\n";
+        std::cout << "**                              RED BLACK TREE TESTER                               **\n";
+        std::cout << "**                                                                                  **\n";
+        std::cout << "**************************************************************************************\n";
+        std::cout << "**                                                                                  **\n";
+        std::cout << "**   COMMANDS:                                                                      **\n";
+        std::cout << "**                                                                                  **\n";
+        std::cout << "**     - INSERT X         (inserts int key X inside tree)                           **\n";
+        std::cout << "**     - DELETE X         (deletes int key X from tree)                             **\n";
+        std::cout << "**     - PRINT            (prints tree from root)                                   **\n";
+        std::cout << "**     - CLEAR            (clears all values inside tree)                           **\n";
+        std::cout << "**                                                                                  **\n";
+        std::cout << "**     - EXIT             (exits tester)                                            **\n";
+        std::cout << "**                                                                                  **\n";
+        std::cout << "**************************************************************************************\n";
+        std::cout << std::endl;
 
+        bool        running = true;
+        std::string str;
+        int         i;
+
+        while (running){
+            std::cout << "< RBTree Tester >:";
+            if (!std::getline(std::cin, str)){
+                std::cout << "\nSTDIN has been closed, exiting" << std::endl;
+                return (0);
+            }
+            if (!str.substr(0, 6).compare("INSERT")){
+                str = str.substr(7, str.size());
+                if (isInteger(str)){
+                    std::cout << "Inserting value" << std::endl;                   
+                    std::istringstream (str) >> i;
+                    tree.insert(i);
+                }
+            }
+            else if (!str.substr(0, 6).compare("DELETE")){
+                str = str.substr(7, str.size());
+                if (isInteger(str)){
+                    std::cout << "Inserting value" << std::endl;                   
+                    std::istringstream (str) >> i;
+                    tree.delete_node(i);
+                }
+            }
+            else if (!str.compare("PRINT")){
+                std::cout << "Printing tree" << std::endl;
+                tree.printTree();
+            }
+            else if (!str.substr(0, 5).compare("CLEAR")){
+                std::cout << "CLEARING TREE" << std::endl;
+
+            }
+            else if (!str.substr(0, 4).compare("EXIT")){
+                std::cout << "EXITING PROGRAM" << std::endl;
+
+            }
+        }
+
+        tree.insert(8);
     }
 }
 // template< typename T >

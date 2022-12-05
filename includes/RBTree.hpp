@@ -140,6 +140,23 @@ class RBTree{
                 return (node->parent->left);
         }
 
+        //----- Assign child to parent -----
+        void __assign_child_parent(t_node *node, bool left){
+            t_node  *to_assign;
+
+            if (left == LEFT)
+                to_assign = node->left;
+            else
+                to_assign = node->right;
+            to_assign->parent = node->parent;
+            if (node->parent == null_node)
+                root = to_assign;
+            else if (node == node->parent->left) // cas ou node is left child
+                node->parent->left = to_assign;
+            else                                 // cas ou node is right child
+                node->parent->right = to_assign;
+        }
+        
         //----- Repair after deletion -----
         void    __repair_delete(t_node *node){
             t_node *sibling;
@@ -148,21 +165,43 @@ class RBTree{
             //cas 0: sibling is leaf
             if (sibling == null_node){
                 //voir cas 2 -> double children black
+                sibling->color = RED;
+                if (node->parent->color == BLACK)
+                    __repair_delete(node->parent);
             }
             //cas 1: sibling black + at least one child red
             else if (sibling->color == BLACK && (sibling->left->color == RED || sibling->right->color == RED)){
-
+                //cas 1.a: LL Sibling is left child, sibling's left child is red
+                if (sibling == sibling->parent->left && sibling->left->color == RED){
+                    rightRotate(node->parent);
+                }
+                //cas 1.b: LR Sibling is left child, sibling's right child is red
+                else if (sibling == sibling->parent->left && sibling->right->color == RED){
+                    rightRotate(sibling);
+                    leftRotate(node->parent);
+                }
+                //cas 1.c: RR Sibling is right child, sibling's right child is red
+                else if (sibling == sibling->parent->right && sibling->right->color == RED){
+                    leftRotate(node->parent);
+                }
+                //cas 1.d: RL Sibling is right child, sibling's left child is red
+                else if (sibling == sibling->parent->right && sibling->left->color == RED){
+                    leftRotate(sibling);
+                    rightRotate(node->parent);
+                }
             }
             //cas 2: sibling black + double black children
             else if (sibling->color == BLACK && sibling->left->color == BLACK && sibling->right->color == BLACK){
-
+                sibling->color = RED;
+                if (node->parent->color == BLACK)
+                    __repair_delete(node->parent);
             }
             //cas 3: sibling red
             else if (sibling->color == RED){
                 if (sibling == sibling->parent->right)
-                    leftRotate(sibling);
+                    leftRotate(node->parent);
                 else
-                    rightRotate(sibling);
+                    rightRotate(node->parent);
             }
         }
     public:
@@ -254,22 +293,6 @@ class RBTree{
             __repair_insert(node);
         }
 
-        //----- Assign child to parent -----
-        void __assign_child_parent(t_node *node, bool left){
-            t_node  *to_assign;
-
-            if (left == LEFT)
-                to_assign = node->left;
-            else
-                to_assign = node->right;
-            to_assign->parent = node->parent;
-            if (node->parent == null_node)
-                root = to_assign;
-            else if (node == node->parent->left) // cas ou node is left child
-                node->parent->left = to_assign;
-            else                                 // cas ou node is right child
-                node->parent->right = to_assign;
-        }
         //----- Delete element from RBT -----
         void delete_node(int key){
             t_node  *node;
