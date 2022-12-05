@@ -55,27 +55,54 @@ int main(void){
     //     tree.printTree();
     //     std::cout << "end of insertion of 40" << std::endl;
     // }
+    // {
+    //     RBTree<int, std::string> tree;
+
+    //     tree.insert(8);
+    //     tree.printTree();
+    //     tree.insert(18);
+    //     tree.printTree();
+    //     tree.insert(5);
+    //     tree.printTree();
+    //     tree.insert(15);
+    //     tree.printTree();
+    //     tree.insert(17);
+    //     tree.printTree();
+    //     tree.insert(25);
+    //     tree.printTree();
+    //     tree.insert(25);
+    //     tree.printTree();
+    //     tree.insert(40);
+    //     tree.printTree();
+    //     tree.insert(80);
+    //     tree.printTree();
+    // }
     {
         RBTree<int, std::string> tree;
 
         tree.insert(8);
         tree.printTree();
-        tree.insert(18);
+        tree.insert(2);
+        tree.printTree();
+        tree.insert(20);
+        tree.printTree();
+        tree.insert(1);
         tree.printTree();
         tree.insert(5);
         tree.printTree();
+        tree.insert(12);
+        tree.printTree();
+        tree.insert(27);
+        tree.printTree();
+        tree.insert(3);
+        tree.printTree();
+        tree.insert(4);
+        tree.printTree();
         tree.insert(15);
         tree.printTree();
-        tree.insert(17);
+        tree.delete_node(20);
         tree.printTree();
-        tree.insert(25);
-        tree.printTree();
-        tree.insert(25);
-        tree.printTree();
-        tree.insert(40);
-        tree.printTree();
-        tree.insert(80);
-        tree.printTree();
+
     }
 }
 // template< typename T >

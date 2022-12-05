@@ -2,6 +2,8 @@
 # define RBTREE_HPP
 # define RED 1
 # define BLACK 0
+# define LEFT true
+# define RIGHT false
 
 template< class Key , class T >
 class RBTree{
@@ -48,26 +50,35 @@ class RBTree{
             return( __search_key(node->right, key) );
         }
 
-        //----- Print Tree -----
-        void __print_tree(t_node *node, std::string offset, bool end) {
-            if (node != null_node) {
-            std::cout<<offset;
-            if (end) { 
-                std::cout<<"R----";
-                offset += "     "; 
-            } 
-            else { 
-                std::cout<<"L----";
-                offset += "|    "; 
-            }
-            std::string color = node->color?"RED":"BLACK";
-            std::cout<<node->key<<"("<<color<<")"<<std::endl;
-            __print_tree(node->left, offset, false);
-            __print_tree(node->right, offset, true);
-            }
-            // cout<<root->left->data<<endl;
+        //----- Find highest of left subtree -----
+        t_node  *__highest_left(t_node *node){
+            t_node *tmp;
+
+            if (node == null_node)
+                return (null_node);
+            else if (node->left == null_node)
+                return (null_node);
+            tmp = node->left;
+            while (tmp->right != null_node)
+                tmp = tmp->right;
+            return (tmp);
         }
 
+        //----- Find lowest of right subtree -----
+        t_node  *__lowest_right(t_node *node){
+            t_node  *tmp;
+
+            if (node == null_node)
+                return (null_node);
+            else if (node->right == null_node)
+                return (null_node);
+            tmp = node->right;
+            while (tmp->left != null_node)
+                tmp = tmp->left;
+            return (tmp);
+        }
+
+        //----- Repair after insertion -----
         void __repair_insert(t_node * node){
             t_node *uncle;
 
@@ -118,7 +129,42 @@ class RBTree{
             }
             root->color = BLACK;
         }
-    
+
+        //----- Get sibling -----
+        t_node  *__get_sibling(t_node *node){
+            if (node->parent == null_node)
+                return (null_node);
+            else if (node == node->parent->left)
+                return (node->parent->right);
+            else
+                return (node->parent->left);
+        }
+
+        //----- Repair after deletion -----
+        void    __repair_delete(t_node *node){
+            t_node *sibling;
+            std::cout << "repairing deletion on node " << node->key << std::endl;
+            sibling = __get_sibling(node);
+            //cas 0: sibling is leaf
+            if (sibling == null_node){
+                //voir cas 2 -> double children black
+            }
+            //cas 1: sibling black + at least one child red
+            else if (sibling->color == BLACK && (sibling->left->color == RED || sibling->right->color == RED)){
+
+            }
+            //cas 2: sibling black + double black children
+            else if (sibling->color == BLACK && sibling->left->color == BLACK && sibling->right->color == BLACK){
+
+            }
+            //cas 3: sibling red
+            else if (sibling->color == RED){
+                if (sibling == sibling->parent->right)
+                    leftRotate(sibling);
+                else
+                    rightRotate(sibling);
+            }
+        }
     public:
         RBTree( void ){
             null_node = new t_node;
@@ -144,15 +190,6 @@ class RBTree{
                 p->left->parent = p;
         }
 
-        void rightRotateKey(Key key){
-            t_node *node;
-
-            node = __search_key(root, key);
-            if (node == null_node)
-                std::cout << "Key not found" << std::endl;
-            else
-                rightRotate(node);
-        }
         //----- Left Rotation -----
         void leftRotate(t_node *p){
             std::cout << "left rotation on key "<< p->key << std::endl;
@@ -170,16 +207,6 @@ class RBTree{
                 k->parent->left = k;
             if (p->right != null_node)
                 p->right->parent = p;
-        }
-
-        void leftRotateKey(Key key){
-            t_node *node;
-
-            node = __search_key(root, key);
-            if (node == null_node)
-                std::cout << "Key not found" << std::endl;
-            else
-                leftRotate(node);
         }
 
         //----- BST normal insertion -----
@@ -227,12 +254,131 @@ class RBTree{
             __repair_insert(node);
         }
 
+        //----- Assign child to parent -----
+        void __assign_child_parent(t_node *node, bool left){
+            t_node  *to_assign;
+
+            if (left == LEFT)
+                to_assign = node->left;
+            else
+                to_assign = node->right;
+            to_assign->parent = node->parent;
+            if (node->parent == null_node)
+                root = to_assign;
+            else if (node == node->parent->left) // cas ou node is left child
+                node->parent->left = to_assign;
+            else                                 // cas ou node is right child
+                node->parent->right = to_assign;
+        }
+        //----- Delete element from RBT -----
+        void delete_node(int key){
+            t_node  *node;
+            t_node  *to_delete;
+            t_node  *new_node;
+            int     original_color;
+
+            //recherche du noeud identified by key 
+            node = __search_key(root, key);
+            if (node == null_node)
+                return;
+            //save original color of node
+            original_color = node->color;
+            //case 1 : no left child 
+            if (node->left == null_node){
+                __assign_child_parent(node, LEFT);
+                delete node;
+            }
+            //case 2 : no right child
+            else if (node->right == null_node){
+                __assign_child_parent(node, RIGHT);
+                delete node;
+            }
+            //case 3 : both children are valid
+            else{
+                to_delete = __highest_left(node); //works also with lowest right
+                //***** A REMPLACER PAR CONSTRUCTEUR PAR COPIE t_node * new_node(to_delete)*****
+                //******************************************************************************
+                new_node = new t_node;
+                new_node->key = to_delete->key;
+                new_node->data = to_delete->data;
+                new_node->right = to_delete->right;
+                new_node->left = to_delete->left;
+                new_node->parent = to_delete->parent;
+                //******************************************************************************
+                new_node->color = original_color;
+                original_color = to_delete->color;
+                //on supprime le noeud highest left
+                delete_node(to_delete->key);
+                //on branche au child de droite
+                new_node->right = node->right;
+                new_node->right->parent = new_node;
+                //on branche au child de gauche
+                new_node->left = node->left;
+                new_node->left->parent = new_node;
+                //on branche au parent
+                new_node->parent = node->parent;
+                if (node->parent == null_node)
+                    root = node;
+                else if (node == node->parent->left)
+                    new_node->parent->left = new_node;
+                else
+                    new_node->parent->right = new_node;
+                //on supprime l'ancien noeud
+                delete node;
+                node = new_node;
+            }
+            // si la couleur du noeud supprime est RED, aucun risque de desequilibre
+            if (original_color == BLACK)
+                __repair_delete(node); //sinon repair
+        }
+
+
+    //*****************  TESTING ****************************
+        //----- Print Tree -----
+        void __print_tree(t_node *node, std::string offset, bool end) {
+            if (node != null_node) {
+            std::cout<<offset;
+            if (end) { 
+                std::cout<<"R----";
+                offset += "     "; 
+            } 
+            else { 
+                std::cout<<"L----";
+                offset += "|    "; 
+            }
+            std::string color = node->color?"RED":"BLACK";
+            std::cout<<node->key<<"("<<color<<")"<<std::endl;
+            __print_tree(node->left, offset, false);
+            __print_tree(node->right, offset, true);
+            }
+        }
+
         void printTree(void){
             if (root)
                 __print_tree(root, "", true);
             else
                 std::cout << "Empty tree" << std::endl;
             std::cout << std::endl;
+        }
+
+        void leftRotateKey(Key key){
+            t_node *node;
+
+            node = __search_key(root, key);
+            if (node == null_node)
+                std::cout << "Key not found" << std::endl;
+            else
+                leftRotate(node);
+        }
+
+        void rightRotateKey(Key key){
+            t_node *node;
+
+            node = __search_key(root, key);
+            if (node == null_node)
+                std::cout << "Key not found" << std::endl;
+            else
+                rightRotate(node);
         }
 };
 
