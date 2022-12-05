@@ -156,21 +156,25 @@ class RBTree{
             else                                 // cas ou node is right child
                 node->parent->right = to_assign;
         }
-        
+
         //----- Repair after deletion -----
         void    __repair_delete(t_node *node){
             t_node *sibling;
             std::cout << "repairing deletion on node " << node->key << std::endl;
+            if (node == root)
+                return;
+
             sibling = __get_sibling(node);
             //cas 0: sibling is leaf
             if (sibling == null_node){
-                //voir cas 2 -> double children black
                 sibling->color = RED;
                 if (node->parent->color == BLACK)
                     __repair_delete(node->parent);
             }
             //cas 1: sibling black + at least one child red
             else if (sibling->color == BLACK && (sibling->left->color == RED || sibling->right->color == RED)){
+
+                std::cout << "node " << node->key << ": Cas 1 -> S Black + 1 or more Red children" << std::endl;
                 //cas 1.a: LL Sibling is left child, sibling's left child is red
                 if (sibling == sibling->parent->left && sibling->left->color == RED){
                     rightRotate(node->parent);
@@ -195,13 +199,20 @@ class RBTree{
                 sibling->color = RED;
                 if (node->parent->color == BLACK)
                     __repair_delete(node->parent);
+                else
+                    node->parent->color = BLACK;
             }
             //cas 3: sibling red
-            else if (sibling->color == RED){
-                if (sibling == sibling->parent->right)
+            else if (sibling->color == RED){ //on recolore sibling(black) et parent(red) 
+                sibling->color = BLACK;
+                node->parent->color = RED;
+                if (sibling == sibling->parent->right){// apres la rotation on se retrouve dans le cas 1 ou 2
                     leftRotate(node->parent);
-                else
+                }
+                else{
                     rightRotate(node->parent);
+                }
+                __repair_delete(node);
             }
         }
     public:
@@ -295,6 +306,7 @@ class RBTree{
 
         //----- Delete element from RBT -----
         void delete_node(int key){
+            std::cout << "deleting node " << key << std::endl;
             t_node  *node;
             t_node  *to_delete;
             t_node  *new_node;
@@ -309,16 +321,15 @@ class RBTree{
             //case 1 : no left child 
             if (node->left == null_node){
                 __assign_child_parent(node, LEFT);
-                delete node;
             }
             //case 2 : no right child
             else if (node->right == null_node){
                 __assign_child_parent(node, RIGHT);
-                delete node;
             }
             //case 3 : both children are valid
             else{
                 to_delete = __highest_left(node); //works also with lowest right
+                std::cout << "--> deleting highest left node key: " << to_delete->key << std::endl;
                 //***** A REMPLACER PAR CONSTRUCTEUR PAR COPIE t_node * new_node(to_delete)*****
                 //******************************************************************************
                 new_node = new t_node;
@@ -330,7 +341,7 @@ class RBTree{
                 //******************************************************************************
                 new_node->color = original_color;
                 original_color = to_delete->color;
-                //on supprime le noeud highest left
+                //on supprime le noeud highest left (probleme car key a ete modifie)
                 delete_node(to_delete->key);
                 //on branche au child de droite
                 new_node->right = node->right;
@@ -350,9 +361,21 @@ class RBTree{
                 delete node;
                 node = new_node;
             }
+            printTree();
             // si la couleur du noeud supprime est RED, aucun risque de desequilibre
             if (original_color == BLACK)
                 __repair_delete(node); //sinon repair
+        }
+
+        void    clear(void){
+            while( root->left != null_node ){
+                delete_node(__highest_left(root)->key);
+            }
+            while( root->right != null_node){
+                delete_node(__lowest_right(root)->key);
+            }
+            std::cout << "Only node left is root" << std::endl;
+            delete_node(root->key);
         }
 
 

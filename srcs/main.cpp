@@ -28,67 +28,93 @@ bool isInteger( std::string str ){
 int main(void){
     {
         RBTree<int, std::string> tree;
-
-        std::cout << "**************************************************************************************\n";
-        std::cout << "**                                                                                  **\n";
-        std::cout << "**                              RED BLACK TREE TESTER                               **\n";
-        std::cout << "**                                                                                  **\n";
-        std::cout << "**************************************************************************************\n";
-        std::cout << "**                                                                                  **\n";
-        std::cout << "**   COMMANDS:                                                                      **\n";
-        std::cout << "**                                                                                  **\n";
-        std::cout << "**     - INSERT X         (inserts int key X inside tree)                           **\n";
-        std::cout << "**     - DELETE X         (deletes int key X from tree)                             **\n";
-        std::cout << "**     - PRINT            (prints tree from root)                                   **\n";
-        std::cout << "**     - CLEAR            (clears all values inside tree)                           **\n";
-        std::cout << "**                                                                                  **\n";
-        std::cout << "**     - EXIT             (exits tester)                                            **\n";
-        std::cout << "**                                                                                  **\n";
-        std::cout << "**************************************************************************************\n";
-        std::cout << std::endl;
-
-        bool        running = true;
-        std::string str;
-        int         i;
-
-        while (running){
-            std::cout << "< RBTree Tester >:";
-            if (!std::getline(std::cin, str)){
-                std::cout << "\nSTDIN has been closed, exiting" << std::endl;
-                return (0);
-            }
-            if (!str.substr(0, 6).compare("INSERT")){
-                str = str.substr(7, str.size());
-                if (isInteger(str)){
-                    std::cout << "Inserting value" << std::endl;                   
-                    std::istringstream (str) >> i;
-                    tree.insert(i);
-                }
-            }
-            else if (!str.substr(0, 6).compare("DELETE")){
-                str = str.substr(7, str.size());
-                if (isInteger(str)){
-                    std::cout << "Inserting value" << std::endl;                   
-                    std::istringstream (str) >> i;
-                    tree.delete_node(i);
-                }
-            }
-            else if (!str.compare("PRINT")){
-                std::cout << "Printing tree" << std::endl;
-                tree.printTree();
-            }
-            else if (!str.substr(0, 5).compare("CLEAR")){
-                std::cout << "CLEARING TREE" << std::endl;
-
-            }
-            else if (!str.substr(0, 4).compare("EXIT")){
-                std::cout << "EXITING PROGRAM" << std::endl;
-
-            }
-        }
-
+        tree.insert(5);
+        tree.insert(12);
         tree.insert(8);
+        tree.insert(11);
+        tree.insert(25);
+        tree.insert(17);
+        tree.printTree();
+        tree.delete_node(8);
+
     }
+    // {
+    //     RBTree<int, std::string> tree;
+
+    //     std::cout << "**************************************************************************************\n";
+    //     std::cout << "**                                                                                  **\n";
+    //     std::cout << "**                              RED BLACK TREE TESTER                               **\n";
+    //     std::cout << "**                                                                                  **\n";
+    //     std::cout << "**************************************************************************************\n";
+    //     std::cout << "**                                                                                  **\n";
+    //     std::cout << "**   COMMANDS:                                                                      **\n";
+    //     std::cout << "**                                                                                  **\n";
+    //     std::cout << "**     - INSERT X         (inserts int key X inside tree)                           **\n";
+    //     std::cout << "**     - DELETE X         (deletes int key X from tree)                             **\n";
+    //     std::cout << "**     - PRINT            (prints tree from root)                                   **\n";
+    //     std::cout << "**     - AUTOPRINT        (auto prints tree after each operation, reuse to disable) **\n";
+    //     std::cout << "**     - CLEAR            (clears all values inside tree)                           **\n";
+    //     std::cout << "**                                                                                  **\n";
+    //     std::cout << "**     - EXIT             (exits tester)                                            **\n";
+    //     std::cout << "**                                                                                  **\n";
+    //     std::cout << "**************************************************************************************\n";
+    //     std::cout << std::endl;
+
+    //     bool        running = true;
+    //     bool        autoprint = false;
+    //     std::string str;
+    //     int         i;
+
+    //     while (running){
+    //         std::cout << "< RBTree Tester >:";
+    //         if (!std::getline(std::cin, str)){
+    //             std::cout << "\nSTDIN has been closed, exiting" << std::endl;
+    //             return (0);
+    //         }
+    //         if (!str.substr(0, 6).compare("INSERT")){
+    //             str = str.substr(7, str.size());
+    //             if (isInteger(str)){
+    //                 std::cout << "Inserting value" << std::endl;                   
+    //                 std::istringstream (str) >> i;
+    //                 tree.insert(i);
+    //             }
+    //         }
+    //         else if (!str.substr(0, 6).compare("DELETE")){
+    //             str = str.substr(7, str.size());
+    //             if (isInteger(str)){
+    //                 std::cout << "Deleting value" << std::endl;                   
+    //                 std::istringstream (str) >> i;
+    //                 tree.delete_node(i);
+    //             }
+    //         }
+    //         else if (!str.compare("PRINT")){
+    //             std::cout << "Printing tree" << std::endl;
+    //             tree.printTree();
+    //         }
+    //         else if (!str.substr(0, 5).compare("CLEAR")){
+    //             std::cout << "CLEARING TREE" << std::endl;
+    //             tree.clear();
+    //         }
+    //         else if (!str.substr(0, 4).compare("EXIT")){
+    //             std::cout << "EXITING PROGRAM" << std::endl;
+    //             running = false;
+    //         }
+    //         else if (!str.compare("AUTOPRINT")){
+    //             if (autoprint){
+    //                 std::cout << "Autoprint Off" << std::endl;
+    //                 autoprint = false;
+    //             }
+    //             else{
+    //                 std::cout << "Autoprint On" << std::endl;
+    //                 autoprint = true;
+    //             }
+    //         }
+    //         if (autoprint){
+    //             tree.printTree();
+    //         }
+    //     }
+    //     tree.clear();
+    // }
 }
 // template< typename T >
 // void PrintVector( const ft::vector< T >& vector){
