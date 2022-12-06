@@ -6,7 +6,7 @@
 /*   By: dsaada <dsaada@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 12:46:40 by dsaada            #+#    #+#             */
-/*   Updated: 2022/12/06 13:09:28 by dsaada           ###   ########.fr       */
+/*   Updated: 2022/12/06 13:44:45 by dsaada           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -327,7 +327,6 @@ class RBTree{
             if (node->parent->color == BLACK)
                 return;
 
-            printTree();
             std::cout << "Fixing insert" << std::endl;
             __repair_insert(node);
         }
@@ -378,11 +377,8 @@ class RBTree{
                     new_node->parent->left = new_node;
                 else
                     new_node->parent->right = new_node;
-                std::cout << "On supprime le node to delete" << std::endl;
-                printNode(new_node);
                 //Le nouveau noeud a ete branche aux noeuds de l'ancien node, on va maintenant supprimer le noeud a supprimer
                 if (to_delete->left != null_node){ //dans le cas ou le highest left a un membre de gauche non null_node
-                    std::cout << "node to delete has left child" << std::endl;
                     //si le parent de to_delete est node
                     if (to_delete->parent == node){ //on branche le child de gauche de to_delete a parent->left egal a new_node->left 
                         to_delete->left->parent = to_delete->parent;
@@ -394,13 +390,11 @@ class RBTree{
                     }
                 }
                 else {//meme chose pour un noeud null
-                    std::cout << "node to delete has no left child" << std::endl;
                     if (to_delete->parent == new_node)
                         new_node->left = null_node;
                     else
                         to_delete->parent->right = null_node;
                 }
-                printNode(new_node);
                 new_node->color = original_color;
                 original_color = to_delete->color;
                 //on supprime l'ancien noeud
