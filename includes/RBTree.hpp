@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   RBTree.hpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dsaada <dsaada@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/06 12:46:40 by dsaada            #+#    #+#             */
+/*   Updated: 2022/12/06 13:09:28 by dsaada           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef RBTREE_HPP
 # define RBTREE_HPP
 # define RED 1
@@ -89,7 +101,7 @@ class RBTree{
             }
 
             parent = node->parent;
-            if (parent == root)
+            if (parent->color == BLACK)
                 return;
             //cas 1: parent is left
             if (parent == parent->parent->left){
@@ -142,57 +154,6 @@ class RBTree{
                 }
             }
         }
-        // //----- Repair after insertion -----
-        // void __repair_insert(t_node * node){
-        //     t_node *uncle;
-
-        //     while (node->parent->color == RED){
-        //         if (node->parent == node->parent->parent->right){
-        //             uncle = node->parent->parent->left;
-
-        //             if (uncle->color == RED){//cas 3.1
-        //                 uncle->color = BLACK;
-        //                 node->parent->color = BLACK;
-        //                 node->parent->parent->color = RED;
-        //                 node = node->parent->parent;
-        //             }
-        //             else {
-        //                 if (node == node->parent->left){//cas 3.2.2
-        //                     node = node->parent;
-        //                     rightRotate(node);
-        //                 }  
-        //                 //cas 3.2.1
-        //                 node->parent->color = BLACK;
-        //                 node->parent->parent->color= RED;
-        //                 leftRotate(node->parent->parent);
-        //             }
-        //         }
-        //         else {
-        //             uncle = node->parent->parent->right;
-
-        //             if (uncle->color == RED){//cas 3.1
-        //                 uncle->color = BLACK;
-        //                 node->parent->color = BLACK;
-        //                 node->parent->parent->color = RED;
-        //                 node = node->parent->parent;
-        //             }
-        //             else {
-        //                 if (node == node->parent->right){//cas 3.2.2 mirror
-        //                     node = node->parent;
-        //                     leftRotate(node);
-        //                 }
-        //                 //cas 3.2.1 mirror
-        //                 node->parent->color = BLACK;
-        //                 node->parent->parent->color= RED;
-        //                 rightRotate(node->parent->parent);
-        //             }
-        //         }
-        //         if (node == root) {
-        //             break;
-        //         }
-        //     }
-        //     root->color = BLACK;
-        // }
 
         //----- Get sibling -----
         t_node  *__get_sibling(t_node *node){
@@ -403,26 +364,25 @@ class RBTree{
                 new_node->key = to_delete->key;
                 new_node->data = to_delete->data;
                 //******************************************************************************
-                std::cout << "On branche au child de droite" << std::endl;
                 //on branche au child de droite
                 new_node->right = node->right;
                 new_node->right->parent = new_node;
-                std::cout << "On branche au child de gauche" << std::endl;
                 //on branche au child de gauche
                 new_node->left = node->left;
                 new_node->left->parent = new_node;
-                std::cout << "On branche au parent" << std::endl;
                 //on branche au parent
                 new_node->parent = node->parent;
-                if (node->parent == null_node)
-                    root = node;
+                if (node->parent == null_node)  
+                    root = new_node;
                 else if (node == node->parent->left)
                     new_node->parent->left = new_node;
                 else
                     new_node->parent->right = new_node;
                 std::cout << "On supprime le node to delete" << std::endl;
+                printNode(new_node);
                 //Le nouveau noeud a ete branche aux noeuds de l'ancien node, on va maintenant supprimer le noeud a supprimer
                 if (to_delete->left != null_node){ //dans le cas ou le highest left a un membre de gauche non null_node
+                    std::cout << "node to delete has left child" << std::endl;
                     //si le parent de to_delete est node
                     if (to_delete->parent == node){ //on branche le child de gauche de to_delete a parent->left egal a new_node->left 
                         to_delete->left->parent = to_delete->parent;
@@ -434,11 +394,13 @@ class RBTree{
                     }
                 }
                 else {//meme chose pour un noeud null
-                    if (to_delete->parent == node)
+                    std::cout << "node to delete has no left child" << std::endl;
+                    if (to_delete->parent == new_node)
                         new_node->left = null_node;
                     else
                         to_delete->parent->right = null_node;
                 }
+                printNode(new_node);
                 new_node->color = original_color;
                 original_color = to_delete->color;
                 //on supprime l'ancien noeud
@@ -489,6 +451,20 @@ class RBTree{
             else
                 std::cout << "Empty tree" << std::endl;
             std::cout << std::endl;
+        }
+
+        void printNode(t_node *node){
+            std::cout << "*******************************************************************" << std::endl;
+            std::cout << "*     Key = " << node->key << std::endl;
+            std::cout << "*     color = ";
+            if (node->color == BLACK)
+                std::cout << "BLACK" << std::endl;
+            else
+                std::cout << "RED" << std::endl;
+            std::cout << "*     Parent = " << node->parent->key << std::endl;
+            std::cout << "*     Left = " << node->left->key << std::endl;
+            std::cout << "*     Right = " << node->right->key << std::endl;
+            std::cout << "*******************************************************************" << std::endl;
         }
 
         void leftRotateKey(Key key){

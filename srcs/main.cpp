@@ -41,6 +41,7 @@ int main(void){
         tree.insert(17);
         tree.printTree();
         tree.delete_node(8);
+        tree.printTree();
 
     }
     // {
