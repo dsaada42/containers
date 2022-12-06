@@ -32,10 +32,10 @@ class RBTree{
         t_node *null_node;
 
         //----- Init node to be root or leaf -----
-        void __null_node(t_node *parent, t_node *node){
+        void __null_node(t_node *node){
             node->key = Key();
             node->data = T();
-            node->parent = parent;
+            node->parent = 0;
             node->left = 0;
             node->right = 0;
             node->color = BLACK;
@@ -78,57 +78,121 @@ class RBTree{
             return (tmp);
         }
 
-        //----- Repair after insertion -----
-        void __repair_insert(t_node * node){
+        void __repair_insert(t_node *node){
             t_node *uncle;
+            t_node *parent;
 
-            while (node->parent->color == RED){
-                if (node->parent == node->parent->parent->right){
-                    uncle = node->parent->parent->left;
+            std::cout << "repairing insert on node " << node->key << std::endl;
+            if (node == root){
+                root->color = BLACK;
+                return;
+            }
 
-                    if (uncle->color == RED){//cas 3.1
-                        uncle->color = BLACK;
-                        node->parent->color = BLACK;
-                        node->parent->parent->color = RED;
-                        node = node->parent->parent;
-                    }
-                    else {
-                        if (node == node->parent->left){//cas 3.2.2
-                            node = node->parent;
-                            rightRotate(node);
-                        }  
-                        //cas 3.2.1
-                        node->parent->color = BLACK;
-                        node->parent->parent->color= RED;
-                        leftRotate(node->parent->parent);
-                    }
+            parent = node->parent;
+            if (parent == root)
+                return;
+            //cas 1: parent is left
+            if (parent == parent->parent->left){
+                uncle = parent->parent->right;
+                //cas 1.1: uncle is right red
+                if (uncle->color == RED){
+                    uncle->color = BLACK; //uncle becomes black
+                    parent->color = BLACK; //parent becomes black
+                    parent->parent->color = RED; //gp becomes red
+                    __repair_insert(parent->parent); //recursive on gp
                 }
-                else {
-                    uncle = node->parent->parent->right;
-
-                    if (uncle->color == RED){//cas 3.1
-                        uncle->color = BLACK;
-                        node->parent->color = BLACK;
-                        node->parent->parent->color = RED;
-                        node = node->parent->parent;
+                //cas 1.2: uncle is right black
+                else{
+                    //cas 1.2.1: LL parent is red left, node is red left 
+                    if (node == parent->left){
+                        parent->color = BLACK; //parent becomes black
+                        parent->parent->color = RED; // gp becomes red
+                        rightRotate(parent->parent);// rotate right sur gp                        
                     }
-                    else {
-                        if (node == node->parent->right){//cas 3.2.2 mirror
-                            node = node->parent;
-                            leftRotate(node);
-                        }
-                        //cas 3.2.1 mirror
-                        node->parent->color = BLACK;
-                        node->parent->parent->color= RED;
-                        rightRotate(node->parent->parent);
-                    } 
-                }
-                if (node == root) {
-                    break;
+                    //cas 1.2.2: LR parent is red left, node is red right
+                    else{
+                        leftRotate(parent);
+                        __repair_insert(parent);
+                    }
                 }
             }
-            root->color = BLACK;
+            //cas 2: parent is right
+            else{
+                uncle = parent->parent->left;
+                //cas 2.1: uncle is left red
+                if (uncle->color == RED){
+                    uncle->color = BLACK; //uncle becomes black
+                    parent->color = BLACK; //parent becomes black
+                    parent->parent->color = RED; //gp becomes red
+                    __repair_insert(parent->parent); //recursive on gp
+                }
+                //cas 2.2: uncle is left black
+                else{
+                    //cas 2.2.1: RR parent is red right, node is red right
+                    if (node == parent->right){
+                        parent->color = BLACK; //parent becomes black
+                        parent->parent->color = RED; // gp becomes red
+                        leftRotate(parent->parent); // rotate left sur gp
+                    }
+                    //cas 2.2.2: RL parent is red right, node is red left
+                    else{
+                        rightRotate(parent);
+                        __repair_insert(parent);
+                    }
+                }
+            }
         }
+        // //----- Repair after insertion -----
+        // void __repair_insert(t_node * node){
+        //     t_node *uncle;
+
+        //     while (node->parent->color == RED){
+        //         if (node->parent == node->parent->parent->right){
+        //             uncle = node->parent->parent->left;
+
+        //             if (uncle->color == RED){//cas 3.1
+        //                 uncle->color = BLACK;
+        //                 node->parent->color = BLACK;
+        //                 node->parent->parent->color = RED;
+        //                 node = node->parent->parent;
+        //             }
+        //             else {
+        //                 if (node == node->parent->left){//cas 3.2.2
+        //                     node = node->parent;
+        //                     rightRotate(node);
+        //                 }  
+        //                 //cas 3.2.1
+        //                 node->parent->color = BLACK;
+        //                 node->parent->parent->color= RED;
+        //                 leftRotate(node->parent->parent);
+        //             }
+        //         }
+        //         else {
+        //             uncle = node->parent->parent->right;
+
+        //             if (uncle->color == RED){//cas 3.1
+        //                 uncle->color = BLACK;
+        //                 node->parent->color = BLACK;
+        //                 node->parent->parent->color = RED;
+        //                 node = node->parent->parent;
+        //             }
+        //             else {
+        //                 if (node == node->parent->right){//cas 3.2.2 mirror
+        //                     node = node->parent;
+        //                     leftRotate(node);
+        //                 }
+        //                 //cas 3.2.1 mirror
+        //                 node->parent->color = BLACK;
+        //                 node->parent->parent->color= RED;
+        //                 rightRotate(node->parent->parent);
+        //             }
+        //         }
+        //         if (node == root) {
+        //             break;
+        //         }
+        //     }
+        //     root->color = BLACK;
+        // }
 
         //----- Get sibling -----
         t_node  *__get_sibling(t_node *node){
@@ -165,33 +229,37 @@ class RBTree{
                 return;
 
             sibling = __get_sibling(node);
-            //cas 0: sibling is leaf
-            if (sibling == null_node){
-                sibling->color = RED;
+            //cas 0: sibling is leaf 
+            if (sibling == null_node){ // a revoir
                 if (node->parent->color == BLACK)
                     __repair_delete(node->parent);
+                else
+                    node->parent->color = BLACK;
             }
             //cas 1: sibling black + at least one child red
             else if (sibling->color == BLACK && (sibling->left->color == RED || sibling->right->color == RED)){
-
                 std::cout << "node " << node->key << ": Cas 1 -> S Black + 1 or more Red children" << std::endl;
                 //cas 1.a: LL Sibling is left child, sibling's left child is red
                 if (sibling == sibling->parent->left && sibling->left->color == RED){
+                    sibling->left->color = sibling->color;
+                    sibling->color = node->parent->color;
                     rightRotate(node->parent);
                 }
                 //cas 1.b: LR Sibling is left child, sibling's right child is red
                 else if (sibling == sibling->parent->left && sibling->right->color == RED){
-                    rightRotate(sibling);
-                    leftRotate(node->parent);
+                    leftRotate(sibling);
+                    rightRotate(node->parent);
                 }
                 //cas 1.c: RR Sibling is right child, sibling's right child is red
                 else if (sibling == sibling->parent->right && sibling->right->color == RED){
+                    sibling->right->color = sibling->color;
+                    sibling->color = node->parent->color;
                     leftRotate(node->parent);
                 }
                 //cas 1.d: RL Sibling is right child, sibling's left child is red
                 else if (sibling == sibling->parent->right && sibling->left->color == RED){
-                    leftRotate(sibling);
-                    rightRotate(node->parent);
+                    rightRotate(sibling);
+                    leftRotate(node->parent);
                 }
             }
             //cas 2: sibling black + double black children
@@ -218,7 +286,7 @@ class RBTree{
     public:
         RBTree( void ){
             null_node = new t_node;
-            __null_node( 0, null_node);
+            __null_node(null_node);
             root = null_node;
         }
         //----- Right Rotation -----
@@ -230,7 +298,7 @@ class RBTree{
             p->parent = k; //2 
             p->left = k->right; //3
             k->right = p;//4
-            if (k->parent == 0) // case parent == root    //5         
+            if (k->parent == null_node) // case parent == root    //5         
                 root = k;
             else if (p == k->parent->right) // si p etait right child
                 k->parent->right = k;
@@ -249,7 +317,7 @@ class RBTree{
             p->parent = k; //2 
             p->right = k->left; //3
             k->left = p;//4
-            if (k->parent == 0) // case parent == root    //5         
+            if (k->parent == null_node) // case parent == root //5         
                 root = k;
             else if (p == k->parent->right) // si p etait right child
                 k->parent->right = k;
@@ -265,42 +333,41 @@ class RBTree{
             t_node *p = 0;
             t_node *node = new t_node;
 
+            //********** A REMPLACER PAR CONSTRUCTEUR  node(key, data) **********
             node->parent = 0;
             node->left = null_node;
             node->right = null_node;
             node->key = key;
             node->data = T();
             node->color = RED;
+            //*******************************************************************
 
+            if (root == null_node){// case 1: tree is empty, node becomes black root
+                node->parent = null_node;
+                node->color = BLACK;
+                root = node;
+                return;
+            }
             //we search for the right spot for our key
             while (tmp != null_node){
                 p = tmp;
-                if (node->key < tmp->key)
+                if (key < tmp->key)
                     tmp = tmp->left; 
                 else
                     tmp = tmp->right;
             }
-
+            //assign child to parent (left or right)
             node->parent = p;
-            if (p == 0)
-                root = node;
-            else if (node->key < p->key)
+            if (key < p->key)
                 p->left = node;
             else
                 p->right = node;
 
-            //case 1: tree was empty, node = root
-            if (node->parent == 0){
-                node->color = BLACK;
-                return;
-            }
-
-            //case 2: granparent is root, insert successful
-            if (node->parent->parent == 0)
+            if (node->parent->color == BLACK)
                 return;
 
+            printTree();
             std::cout << "Fixing insert" << std::endl;
-            //case 3: all other possibilities need fixing
             __repair_insert(node);
         }
 
@@ -328,27 +395,23 @@ class RBTree{
             }
             //case 3 : both children are valid
             else{
-                to_delete = __highest_left(node); //works also with lowest right
+                to_delete = __highest_left(node);
                 std::cout << "--> deleting highest left node key: " << to_delete->key << std::endl;
                 //***** A REMPLACER PAR CONSTRUCTEUR PAR COPIE t_node * new_node(to_delete)*****
                 //******************************************************************************
                 new_node = new t_node;
                 new_node->key = to_delete->key;
                 new_node->data = to_delete->data;
-                new_node->right = to_delete->right;
-                new_node->left = to_delete->left;
-                new_node->parent = to_delete->parent;
                 //******************************************************************************
-                new_node->color = original_color;
-                original_color = to_delete->color;
-                //on supprime le noeud highest left (probleme car key a ete modifie)
-                delete_node(to_delete->key);
+                std::cout << "On branche au child de droite" << std::endl;
                 //on branche au child de droite
                 new_node->right = node->right;
                 new_node->right->parent = new_node;
+                std::cout << "On branche au child de gauche" << std::endl;
                 //on branche au child de gauche
                 new_node->left = node->left;
                 new_node->left->parent = new_node;
+                std::cout << "On branche au parent" << std::endl;
                 //on branche au parent
                 new_node->parent = node->parent;
                 if (node->parent == null_node)
@@ -357,6 +420,27 @@ class RBTree{
                     new_node->parent->left = new_node;
                 else
                     new_node->parent->right = new_node;
+                std::cout << "On supprime le node to delete" << std::endl;
+                //Le nouveau noeud a ete branche aux noeuds de l'ancien node, on va maintenant supprimer le noeud a supprimer
+                if (to_delete->left != null_node){ //dans le cas ou le highest left a un membre de gauche non null_node
+                    //si le parent de to_delete est node
+                    if (to_delete->parent == node){ //on branche le child de gauche de to_delete a parent->left egal a new_node->left 
+                        to_delete->left->parent = to_delete->parent;
+                        to_delete->parent->left = new_node->left;
+                    }
+                    else{ //sinon
+                        to_delete->left->parent = to_delete->parent; //dans tous les autres cas on branche le child de gauche de to_delete a 
+                        to_delete->parent->right = to_delete->right;
+                    }
+                }
+                else {//meme chose pour un noeud null
+                    if (to_delete->parent == node)
+                        new_node->left = null_node;
+                    else
+                        to_delete->parent->right = null_node;
+                }
+                new_node->color = original_color;
+                original_color = to_delete->color;
                 //on supprime l'ancien noeud
                 delete node;
                 node = new_node;
@@ -386,11 +470,11 @@ class RBTree{
             std::cout<<offset;
             if (end) { 
                 std::cout<<"R----";
-                offset += "     "; 
-            } 
-            else { 
+                offset += "     ";
+            }
+            else {
                 std::cout<<"L----";
-                offset += "|    "; 
+                offset += "|    ";
             }
             std::string color = node->color?"RED":"BLACK";
             std::cout<<node->key<<"("<<color<<")"<<std::endl;

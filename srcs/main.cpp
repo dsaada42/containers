@@ -29,10 +29,15 @@ int main(void){
     {
         RBTree<int, std::string> tree;
         tree.insert(5);
+        tree.printTree();
         tree.insert(12);
+        tree.printTree();
         tree.insert(8);
+        tree.printTree();
         tree.insert(11);
+        tree.printTree();
         tree.insert(25);
+        tree.printTree();
         tree.insert(17);
         tree.printTree();
         tree.delete_node(8);
