@@ -6,7 +6,7 @@
 /*   By: dsaada <dsaada@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 12:46:40 by dsaada            #+#    #+#             */
-/*   Updated: 2022/12/06 13:44:45 by dsaada           ###   ########.fr       */
+/*   Updated: 2022/12/07 11:36:24 by dsaada           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,23 +165,6 @@ class RBTree{
                 return (node->parent->left);
         }
 
-        //----- Assign child to parent -----
-        void __assign_child_parent(t_node *node, bool left){
-            t_node  *to_assign;
-
-            if (left == LEFT)
-                to_assign = node->left;
-            else
-                to_assign = node->right;
-            to_assign->parent = node->parent;
-            if (node->parent == null_node)
-                root = to_assign;
-            else if (node == node->parent->left) // cas ou node is left child
-                node->parent->left = to_assign;
-            else                                 // cas ou node is right child
-                node->parent->right = to_assign;
-        }
-
         //----- Repair after deletion -----
         void    __repair_delete(t_node *node){
             t_node *sibling;
@@ -331,6 +314,24 @@ class RBTree{
             __repair_insert(node);
         }
 
+        //----- Assign child to parent -----
+        t_node *__assign_child_parent(t_node *node, bool left){
+            t_node  *to_assign;
+
+            if (left == LEFT)
+                to_assign = node->left;
+            else
+                to_assign = node->right;
+            to_assign->parent = node->parent;
+            if (node->parent == null_node)
+                root = to_assign;
+            else if (node == node->parent->left) // cas ou node is left child
+                node->parent->left = to_assign;
+            else                                 // cas ou node is right child
+                node->parent->right = to_assign;
+            return (to_assign);
+        }
+        
         //----- Delete element from RBT -----
         void delete_node(int key){
             std::cout << "deleting node " << key << std::endl;
@@ -345,14 +346,40 @@ class RBTree{
                 return;
             //save original color of node
             original_color = node->color;
+            //************************* RASSEMBLER CES DEUX CAS *******************************
             //case 1 : no left child 
             if (node->left == null_node){
-                __assign_child_parent(node, LEFT);
+                new_node = __assign_child_parent(node, RIGHT);
+                if (original_color == RED)// le noeud a supprimer etait rouge, OK
+                    return;
+                if (original_color == BLACK){// le noeud etait noir
+                    if (new_node->color == RED){// l enfant etait rouge , good
+                        new_node->color = BLACK;
+                        return;   
+                    }
+                    else{// l enfant etait noir 
+                        __repair_delete(new_node); //il faut repair double black
+                        return;
+                    }
+                }
             }
             //case 2 : no right child
             else if (node->right == null_node){
-                __assign_child_parent(node, RIGHT);
+                new_node = __assign_child_parent(node, LEFT);
+                if (original_color == RED)// le noeud a supprimer etait rouge, OK
+                    return;
+                if (original_color == BLACK){// le noeud etait noir
+                    if (new_node->color == RED){// l enfant etait rouge , good
+                        new_node->color = BLACK;
+                        return;   
+                    }
+                    else{// l enfant etait noir 
+                        __repair_delete(new_node); //il faut repair double black
+                        return;
+                    }
+                }
             }
+            //*************************************************************************************
             //case 3 : both children are valid
             else{
                 to_delete = __highest_left(node);

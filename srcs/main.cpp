@@ -26,24 +26,99 @@ bool isInteger( std::string str ){
 }
 
 int main(void){
+   
+//SIMPLE DELETION TEST
     {
+        std::cout << "********************************************" << std::endl;
+        std::cout << "*   Node to delete is red, no children     *" << std::endl;
+        std::cout << "********************************************" << std::endl << std::endl;
+
         RBTree<int, std::string> tree;
-        tree.insert(5);
-        tree.printTree();
-        tree.insert(12);
-        tree.printTree();
-        tree.insert(8);
-        tree.printTree();
+        tree.insert(7);
+        tree.insert(6);
+        tree.insert(10);
         tree.insert(11);
         tree.printTree();
-        tree.insert(25);
+        tree.delete_node(11); // node is red no children (leaf) 
         tree.printTree();
-        tree.insert(17);
-        tree.printTree();
-        tree.delete_node(8);
-        tree.printTree();
-
+        //**** OK *****
     }
+    {
+        std::cout << "********************************************" << std::endl;
+        std::cout << "*   Node to delete is black, no children    *" << std::endl;
+        std::cout << "********************************************" << std::endl << std::endl;
+        
+        RBTree<int, std::string> tree;
+        tree.insert(5);
+        tree.insert(8);
+        tree.insert(7);
+        tree.insert(4);
+        tree.printTree();
+        tree.delete_node(8); // node is black, no left child (no right child also, so right child is null_node and will replace node)
+        tree.printTree();
+        //**** OK *****
+    }
+    {
+        std::cout << "********************************************" << std::endl;
+        std::cout << "* Node to delete is black, has right child *" << std::endl;
+        std::cout << "********************************************" << std::endl << std::endl;
+        
+        RBTree<int, std::string> tree;
+        tree.insert(5);
+        tree.insert(8);
+        tree.insert(7);
+        tree.insert(6);
+        tree.printTree();
+        tree.delete_node(5); // node is black, no left child but right child
+        tree.printTree();
+        //**** OK *****
+    }
+    {
+        std::cout << "********************************************" << std::endl;
+        std::cout << "*  Node to delete is black, has left child *" << std::endl;
+        std::cout << "********************************************" << std::endl << std::endl;
+        
+        RBTree<int, std::string> tree;
+        tree.insert(5);
+        tree.insert(8);
+        tree.insert(4);
+        tree.insert(9);
+        tree.insert(3);
+        tree.printTree();
+        tree.delete_node(4); // node is black, has left child
+        tree.printTree();
+        //**** OK *****
+    }
+//COMPLEX DELETION TESTS
+    {
+        std::cout << "********************************************" << std::endl;
+        std::cout << "*  Node to delete is black, has 2 children *" << std::endl;
+        std::cout << "********************************************" << std::endl << std::endl;
+
+        RBTree<int, std::string> tree;
+        tree.insert(5);
+        tree.insert(8);
+        tree.insert(12);
+        tree.insert(7);
+        tree.insert(15);
+        tree.insert(27);
+        tree.insert(-7);
+        tree.insert(147);
+        tree.insert(64);
+        tree.insert(29);
+        tree.insert(35);
+        tree.insert(19);
+        tree.printTree();
+        /*
+        tree.insert(11);
+        tree.printTree();
+        tree.delete_node(15);//delete with 2 valid children and 1 left child on max subleft
+        */
+        tree.delete_node(15); // delete with 2 valid children and no child on max subleft
+        tree.printTree();
+    }
+
+//RED BLACK TREE INTERACTIVE TESTER
     // {
     //     RBTree<int, std::string> tree;
 
@@ -122,97 +197,3 @@ int main(void){
     //     tree.clear();
     // }
 }
-// template< typename T >
-// void PrintVector( const ft::vector< T >& vector){
-//     std::cout << "Printing vector of size " << vector.size() << std::endl;
-//     for (size_t i = 0; i < vector.size() ; i++)
-//         std::cout << "Vector elem " << i << " = " << vector[i] << std::endl;
-//     std::cout << "------------------------------------" << std::endl;
-// }
-// template< typename T >
-// void PrintVector( const std::vector< T >& vector){
-//     std::cout << "Printing vector of size " << vector.size() << std::endl;
-//     for (size_t i = 0; i < vector.size() ; i++)
-//         std::cout << "Vector elem " << i << " = " << vector[i] << std::endl;
-//     std::cout << "------------------------------------" << std::endl;
-// }
-
-// int main( void ){
-//     std::cout << std::endl << "****** My vector scope *****" << std::endl << std::endl;
-//     {
-//         ft::vector<int>  myVector;
-
-//         myVector.push_back(125);
-//         myVector.push_back(120);
-//         PrintVector( myVector );
-//         myVector.push_back(15);
-//         myVector.push_back(-254);
-//         myVector.push_back(5915);
-//         myVector.push_back(15465);
-//         PrintVector( myVector );
-//         myVector.erase(myVector.begin(), myVector.begin());
-//         PrintVector( myVector );
-//         myVector.erase(myVector.begin(), myVector.end());
-//         PrintVector( myVector );
-
-//         std::cout << "Iterator:\n";
-//         for (ft::vector<int>::iterator it = myVector.begin(); it != myVector.end(); it++){
-//             std::cout << *it << std::endl;
-//         }
-//     }
-
-//     std::cout << std::endl << "****** True vector scope *****" << std::endl << std::endl;
-//     {
-//         std::vector<int>  myVector;
-
-//         myVector.push_back(125);
-//         myVector.push_back(120);
-//         PrintVector( myVector );
-//         myVector.push_back(15);
-//         myVector.push_back(-254);
-//         myVector.push_back(5915);
-//         myVector.push_back(15465);
-//         PrintVector( myVector );
-//         myVector.erase(myVector.begin(), myVector.begin());
-//         PrintVector( myVector );
-//         myVector.erase(myVector.begin(), myVector.end());
-//         PrintVector( myVector );
-
-//         std::cout << "Iterator:\n";
-//         for (std::vector<int>::iterator it = myVector.begin(); it != myVector.end(); it++){
-//             std::cout << *it << std::endl;
-//         }
-//     }
-
-//     std::cout << std::endl << "************ END ***************" << std::endl;
-
-//     return (0);
-// }
-
-// int main(void){
-
-//     {
-//         std::string str = "Hello World!";
-
-//         ft::vector<char> v(str.begin(), str.end());
-
-//         PrintVector(v);
-//     }
-//     {
-
-//         std::istringstream str("");
-//         std::istreambuf_iterator<char> it(str), end;
-
-//         ft::vector<char> v(it, end);
-        
-//         PrintVector(v);
-//     }
-//     {
-//         std::istringstream str("1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-//         std::istreambuf_iterator<char> it(str), end;
-
-//         ft::vector<char> v(it, end);
-
-//         PrintVector(v);
-//     }
-// }
