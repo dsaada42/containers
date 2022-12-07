@@ -93,6 +93,7 @@ int main(void){
     {
         std::cout << "********************************************" << std::endl;
         std::cout << "*  Node to delete is black, has 2 children *" << std::endl;
+        std::cout << "*       Left child has children            *" << std::endl;
         std::cout << "********************************************" << std::endl << std::endl;
 
         RBTree<int, std::string> tree;
@@ -116,6 +117,23 @@ int main(void){
         */
         tree.delete_node(15); // delete with 2 valid children and no child on max subleft
         tree.printTree();
+    }
+    {
+        std::cout << "********************************************" << std::endl;
+        std::cout << "*  Node to delete is black, has 2 children *" << std::endl;
+        std::cout << "*      Left child has no children          *" << std::endl;
+        std::cout << "********************************************" << std::endl << std::endl;
+
+        RBTree<int, std::string> tree;
+        tree.insert(8);
+        tree.insert(5);
+        tree.insert(12);
+        tree.insert(11);
+        tree.insert(25);
+        tree.insert(17);
+        tree.printTree();
+        tree.delete_node(8); // delete node with 2 valid children, left child is only child
+
     }
 
 //RED BLACK TREE INTERACTIVE TESTER
