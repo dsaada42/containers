@@ -110,14 +110,15 @@ int main(void){
         tree.insert(35);
         tree.insert(19);
         tree.printTree();
-        /*
-        tree.insert(11);
-        tree.printTree();
-        tree.delete_node(15);//delete with 2 valid children and 1 left child on max subleft
-        */
+        
+        // tree.insert(11);
+        // tree.printTree();
+        // tree.delete_node(15);//delete with 2 valid children and 1 left child on max subleft
+        //**** OK ****
+
         tree.delete_node(15); // delete with 2 valid children and no child on max subleft
         tree.printTree();
-    }
+    }   //**** OK ****
     {
         std::cout << "********************************************" << std::endl;
         std::cout << "*  Node to delete is black, has 2 children *" << std::endl;
@@ -133,8 +134,9 @@ int main(void){
         tree.insert(17);
         tree.printTree();
         tree.delete_node(8); // delete node with 2 valid children, left child is only child
+        tree.printTree();
 
-    }
+    }   //**** OK ****
 
 //RED BLACK TREE INTERACTIVE TESTER
     // {

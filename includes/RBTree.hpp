@@ -53,15 +53,6 @@ class RBTree{
             node->color = BLACK;
         }
 
-        //----- Search node by key -----
-        t_node *__search_key(t_node *node, int key){
-            if (node == null_node || key == node->key)
-                return( node );
-            if (key < node->key)
-                return( __search_key(node->left, key) );
-            return( __search_key(node->right, key) );
-        }
-
         //----- Find highest of left subtree -----
         t_node  *__highest_left(t_node *node){
             t_node *tmp;
@@ -168,6 +159,7 @@ class RBTree{
         //----- Repair after deletion -----
         void    __repair_delete(t_node *node){
             t_node *sibling;
+            printTree();
             std::cout << "repairing deletion on node " << node->key << std::endl;
             if (node == root)
                 return;
@@ -185,29 +177,34 @@ class RBTree{
                 std::cout << "node " << node->key << ": Cas 1 -> S Black + 1 or more Red children" << std::endl;
                 //cas 1.a: LL Sibling is left child, sibling's left child is red
                 if (sibling == sibling->parent->left && sibling->left->color == RED){
+                    std::cout << "cas 1.a: LL Sibling is left child, sibling's left child is red" << std::endl;
                     sibling->left->color = sibling->color;
                     sibling->color = node->parent->color;
                     rightRotate(node->parent);
                 }
                 //cas 1.b: LR Sibling is left child, sibling's right child is red
                 else if (sibling == sibling->parent->left && sibling->right->color == RED){
+                    std::cout << "cas 1.b: LR Sibling is left child, sibling's right child is red" << std::endl;
                     leftRotate(sibling);
                     rightRotate(node->parent);
                 }
                 //cas 1.c: RR Sibling is right child, sibling's right child is red
                 else if (sibling == sibling->parent->right && sibling->right->color == RED){
+                    std::cout << "cas 1.c: RR Sibling is right child, sibling's right child is red" << std::endl;
                     sibling->right->color = sibling->color;
                     sibling->color = node->parent->color;
                     leftRotate(node->parent);
                 }
                 //cas 1.d: RL Sibling is right child, sibling's left child is red
                 else if (sibling == sibling->parent->right && sibling->left->color == RED){
+                    std::cout << "cas 1.d: RL Sibling is right child, sibling's left child is red" << std::endl;
                     rightRotate(sibling);
                     leftRotate(node->parent);
                 }
             }
             //cas 2: sibling black + double black children
             else if (sibling->color == BLACK && sibling->left->color == BLACK && sibling->right->color == BLACK){
+                std::cout << "cas 2: sibling black + double black children" << std::endl;
                 sibling->color = RED;
                 if (node->parent->color == BLACK)
                     __repair_delete(node->parent);
@@ -216,6 +213,7 @@ class RBTree{
             }
             //cas 3: sibling red
             else if (sibling->color == RED){ //on recolore sibling(black) et parent(red) 
+                std::cout << "cas 3: sibling red" << std::endl;
                 sibling->color = BLACK;
                 node->parent->color = RED;
                 if (sibling == sibling->parent->right){// apres la rotation on se retrouve dans le cas 1 ou 2
@@ -272,7 +270,7 @@ class RBTree{
         }
 
         //----- BST normal insertion -----
-        void insert(int key){            
+        void insert(Key key){            
             t_node *tmp = root;
             t_node *p = 0;
             t_node *node = new t_node;
@@ -310,7 +308,6 @@ class RBTree{
             if (node->parent->color == BLACK)
                 return;
 
-            std::cout << "Fixing insert" << std::endl;
             __repair_insert(node);
         }
 
@@ -332,8 +329,35 @@ class RBTree{
             return (to_assign);
         }
         
+        //----- Search node by key -----
+        t_node *__search_key(t_node *node, Key key){
+            if (node == null_node || key == node->key)
+                return( node );
+            if (key < node->key)
+                return( __search_key(node->left, key) );
+            return( __search_key(node->right, key) );
+        }
+        
+        //----- Search last occurence of key -----
+        t_node *__search_last_key(Key key){
+            t_node  *current;
+            t_node  *node;
+
+            node = null_node;
+            current = root;
+            while (current != null_node){
+                if (current->key == key)
+                    node = current;
+                if (key <= current->key)
+                    current = current->left;
+                else
+                    current = current->right;
+            }
+            return (node);
+        }
+
         //----- Delete element from RBT -----
-        void delete_node(int key){
+        void delete_node(Key key){
             std::cout << "deleting node " << key << std::endl;
             t_node  *node;
             t_node  *to_delete;
@@ -341,9 +365,11 @@ class RBTree{
             int     original_color;
 
             //recherche du noeud identified by key 
-            node = __search_key(root, key);
+            node = __search_last_key(key);
             if (node == null_node)
                 return;
+            printNode(node);
+
             //save original color of node
             original_color = node->color;
             //************************* RASSEMBLER CES DEUX CAS *******************************
@@ -404,34 +430,31 @@ class RBTree{
                     new_node->parent->left = new_node;
                 else
                     new_node->parent->right = new_node;
-                //Le nouveau noeud a ete branche aux noeuds de l'ancien node, on va maintenant supprimer le noeud a supprimer
-                if (to_delete->left != null_node){ //dans le cas ou le highest left a un membre de gauche non null_node
-                    //si le parent de to_delete est node
-                    if (to_delete->parent == node){ //on branche le child de gauche de to_delete a parent->left egal a new_node->left 
-                        to_delete->left->parent = to_delete->parent;
-                        to_delete->parent->left = new_node->left;
-                    }
-                    else{ //sinon
-                        to_delete->left->parent = to_delete->parent; //dans tous les autres cas on branche le child de gauche de to_delete a 
-                        to_delete->parent->right = to_delete->right;
-                    }
-                }
-                else {//meme chose pour un noeud null
-                    if (to_delete->parent == new_node)
-                        new_node->left = null_node;
-                    else
-                        to_delete->parent->right = null_node;
-                }
+                // //Le nouveau noeud a ete branche aux noeuds de l'ancien node, on va maintenant supprimer le noeud a supprimer
+                // if (to_delete->left != null_node){ //dans le cas ou le highest left a un membre de gauche non null_node
+                //     //si le parent de to_delete est node
+                //     if (to_delete->parent == node){ //on branche le child de gauche de to_delete a parent->left egal a new_node->left 
+                //         to_delete->left->parent = to_delete->parent;
+                //         to_delete->parent->left = new_node->left;
+                //     }
+                //     else{ //sinon
+                //         to_delete->left->parent = to_delete->parent; //dans tous les autres cas on branche le child de gauche de to_delete a 
+                //         to_delete->parent->right = to_delete->right;
+                //     }
+                // }
+                // else {//meme chose pour un noeud null
+                //     if (to_delete->parent == new_node)
+                //         new_node->left = null_node;
+                //     else
+                //         to_delete->parent->right = null_node;
+                // }
                 new_node->color = original_color;
                 original_color = to_delete->color;
                 //on supprime l'ancien noeud
                 delete node;
                 node = new_node;
+                delete_node(to_delete->key);
             }
-            printTree();
-            // si la couleur du noeud supprime est RED, aucun risque de desequilibre
-            if (original_color == BLACK)
-                __repair_delete(node); //sinon repair
         }
 
         void    clear(void){
