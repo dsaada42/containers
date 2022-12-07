@@ -166,7 +166,7 @@ class RBTree{
 
             sibling = __get_sibling(node);
             //cas 0: sibling is leaf 
-            if (sibling == null_node){ // a revoir
+            if (sibling == null_node){
                 if (node->parent->color == BLACK)
                     __repair_delete(node->parent);
                 else
@@ -224,6 +224,7 @@ class RBTree{
                 }
                 __repair_delete(node);
             }
+            root->color = BLACK;
         }
     public:
         RBTree( void ){
@@ -368,7 +369,6 @@ class RBTree{
             node = __search_last_key(key);
             if (node == null_node)
                 return;
-            printNode(node);
 
             //save original color of node
             original_color = node->color;
@@ -376,6 +376,7 @@ class RBTree{
             //case 1 : no left child 
             if (node->left == null_node){
                 new_node = __assign_child_parent(node, RIGHT);
+                delete node;
                 if (original_color == RED)// le noeud a supprimer etait rouge, OK
                     return;
                 if (original_color == BLACK){// le noeud etait noir
@@ -392,6 +393,7 @@ class RBTree{
             //case 2 : no right child
             else if (node->right == null_node){
                 new_node = __assign_child_parent(node, LEFT);
+                delete node;
                 if (original_color == RED)// le noeud a supprimer etait rouge, OK
                     return;
                 if (original_color == BLACK){// le noeud etait noir
@@ -430,24 +432,6 @@ class RBTree{
                     new_node->parent->left = new_node;
                 else
                     new_node->parent->right = new_node;
-                // //Le nouveau noeud a ete branche aux noeuds de l'ancien node, on va maintenant supprimer le noeud a supprimer
-                // if (to_delete->left != null_node){ //dans le cas ou le highest left a un membre de gauche non null_node
-                //     //si le parent de to_delete est node
-                //     if (to_delete->parent == node){ //on branche le child de gauche de to_delete a parent->left egal a new_node->left 
-                //         to_delete->left->parent = to_delete->parent;
-                //         to_delete->parent->left = new_node->left;
-                //     }
-                //     else{ //sinon
-                //         to_delete->left->parent = to_delete->parent; //dans tous les autres cas on branche le child de gauche de to_delete a 
-                //         to_delete->parent->right = to_delete->right;
-                //     }
-                // }
-                // else {//meme chose pour un noeud null
-                //     if (to_delete->parent == new_node)
-                //         new_node->left = null_node;
-                //     else
-                //         to_delete->parent->right = null_node;
-                // }
                 new_node->color = original_color;
                 original_color = to_delete->color;
                 //on supprime l'ancien noeud
@@ -458,6 +442,8 @@ class RBTree{
         }
 
         void    clear(void){
+            if (root == null_node)
+                return;
             while( root->left != null_node ){
                 delete_node(__highest_left(root)->key);
             }
