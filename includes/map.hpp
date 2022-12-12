@@ -6,6 +6,7 @@
 # include <memory>
 # include <cstddef>
 # include "equal.hpp"
+# include "RBTree.hpp"
 # include "type_traits.hpp"
 # include "reverse_iterator.hpp"
 
@@ -13,21 +14,6 @@ namespace ft {
 
     template < class Key, class T,  class Compare = std::less<Key>, class Alloc = std::allocator<ft::pair<const Key,T> > >
     class map {
-        typedef struct              s_node
-        {
-            ft::pair<const Key, T>  _pair;
-            bool                    _black;
-            s_node                  *right;
-            s_node                  *left;
-            s_node                  *parent;
-
-            s_node (ft::pair< const Key, T > pair){
-                _pair = pair;
-            }
-            const Key & key(void){ return (data.first); }
-            T &         val(void){ return(data.second); }
-        }                           t_node;
-
         template< bool ConstB >
         class map_iterator {
             public:
@@ -66,37 +52,40 @@ namespace ft {
 
         protected:
             
-            key_compare     _comp;
-            allocator_type  _alloc;
-            size_type       _size;
-            t_node          *_root;
+            key_compare             _comp;
+            allocator_type          _alloc;
+            ft::RBTree<value_type>  _tree;
 
         //***** MEMBER FUNCTIONS *****
             //___Constructors___
             explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()){
                 _comp = comp;
                 _alloc = alloc;
-                _size = 0;
+                _tree = RBTree();
             }
             template <class InputIt>  map (InputIt first, InputIt last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()){
-                _size = 0;
-                (void)first;
-                (void)last;
                 _comp = comp;
                 _alloc = alloc;
+                _tree = RBTree();
+                while (first != last){
+                    _tree.insert(first*);
+                    first++;
+                }
             }    
             map (const map& x){
                 _comp = x._comp;
                 _alloc = x._alloc;
+                _tree = x._tree;
             }
             //___Destructor___
             ~map( void ){
-                
+                //nothing to do , tree destructor handles it 
             }
             //___Operator= surcharge___
             map& operator= (const map& x){
                 _comp = x._comp;
                 _alloc = x._alloc;
+                _tree = x._alloc;
                 return (*this);
             }
 
@@ -129,7 +118,7 @@ namespace ft {
 
         //***** CAPACITY *****
             bool empty() const{
-                return (_size == 0);
+                return (_tree.empty());
             }
             size_type size() const{
                 return (_size);

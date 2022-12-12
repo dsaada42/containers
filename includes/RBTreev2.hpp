@@ -1,17 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   RBTree.hpp                                         :+:      :+:    :+:   */
+/*   RBTreev2.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dsaada <dsaada@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 12:46:40 by dsaada            #+#    #+#             */
-/*   Updated: 2022/12/12 10:25:13 by dsaada           ###   ########.fr       */
+/*   Updated: 2022/12/12 11:54:32 by dsaada           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RBTREE_HPP
 # define RBTREE_HPP
+# include <iostream>
+# include <iterator>
+# include <memory>
+# include <cstddef>
+# include "RBTree_iterator.hpp"
+# include "reverse_iterator.hpp"
 # define RED 1
 # define BLACK 0
 # define LEFT true
@@ -19,29 +25,24 @@
 
 namespace ft {
     
-    template< class Key , class T >
+    template< class Pair, class Compare = std::less< Pair >, class Alloc = std::allocator<Pair> >
     class RBTree{
         
         public:
-            typedef T               value_type;
+            typedef Pair                                                value_type;
+            typedef Alloc                                               allocator_type;
+            typedef Compare                                             value_compare;
+            typedef typename allocator_type::reference                  reference;
+            typedef typename allocator_type::const_reference            const_reference;
+            typedef typename allocator_type::pointer                    pointer;
+            typedef typename allocator_type::const_pointer              const_pointer;
+            typedef ft::RBTree_iterator<value_type, false>              iterator;
+            typedef ft::RBTree_iterator<value_type, true>               const_iterator;
+            typedef ft::reverse_iterator<iterator>                      reverse_iterator;
+            typedef ft::reverse_iterator<const_iterator>                const_reverse_iterator;
+            typedef std::ptrdiff_t                                      difference_type; //ptrdiff_t
+            typedef std::size_t                                         size_type;      
             
-        typedef struct  s_node {
-            Key         key; // holds the key   (data.first as pair)
-            T           data; //holds the data  (data.second as pair)
-            s_node      *parent; // pointer to the parent
-            s_node      *left; // pointer to left child
-            s_node      *right; // pointer to right child
-            int         color; // 1 -> Red, 0 -> Black
-
-            // s_node (Key newKey, T newT ) { 
-            //     key = newKey;
-            //     data = newT;
-            // }
-            // const Key & key(){ return(key); }
-            // T &         val(void){ return(data.second); }
-
-        }               t_node;
-
         private:
             //the root of our tree
             t_node *root;
@@ -502,26 +503,6 @@ namespace ft {
                 std::cout << "*     Left = " << node->left->key << std::endl;
                 std::cout << "*     Right = " << node->right->key << std::endl;
                 std::cout << "*******************************************************************" << std::endl;
-            }
-
-            void leftRotateKey(Key key){
-                t_node *node;
-
-                node = __search_key(root, key);
-                if (node == null_node)
-                    std::cout << "Key not found" << std::endl;
-                else
-                    leftRotate(node);
-            }
-
-            void rightRotateKey(Key key){
-                t_node *node;
-
-                node = __search_key(root, key);
-                if (node == null_node)
-                    std::cout << "Key not found" << std::endl;
-                else
-                    rightRotate(node);
             }
     };
 

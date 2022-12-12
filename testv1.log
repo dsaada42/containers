@@ -1,0 +1,193 @@
+********************************************
+*   Node to delete is red, no children     *
+********************************************
+
+repairing insert on node 11
+repairing insert on node 7
+R----7(BLACK)
+     L----6(BLACK)
+     R----10(BLACK)
+          R----11(RED)
+
+deleting node 11
+R----7(BLACK)
+     L----6(BLACK)
+     R----10(BLACK)
+
+********************************************
+*   Node to delete is black, no children    *
+********************************************
+
+repairing insert on node 7
+right rotation on key 8
+repairing insert on node 8
+left rotation on key 5
+repairing insert on node 4
+repairing insert on node 7
+R----7(BLACK)
+     L----5(BLACK)
+     |    L----4(RED)
+     R----8(BLACK)
+
+deleting node 8
+R----7(BLACK)
+     L----5(BLACK)
+     |    L----4(RED)
+
+repairing deletion on node 0
+node 0: Cas 1 -> S Black + 1 or more Red children
+cas 1.a: LL Sibling is left child, sibling's left child is red
+right rotation on key 7
+R----5(BLACK)
+     L----4(BLACK)
+     R----7(BLACK)
+
+********************************************
+* Node to delete is black, has right child *
+********************************************
+
+repairing insert on node 7
+right rotation on key 8
+repairing insert on node 8
+left rotation on key 5
+repairing insert on node 6
+repairing insert on node 7
+R----7(BLACK)
+     L----5(BLACK)
+     |    R----6(RED)
+     R----8(BLACK)
+
+deleting node 5
+R----7(BLACK)
+     L----6(BLACK)
+     R----8(BLACK)
+
+********************************************
+*  Node to delete is black, has left child *
+********************************************
+
+repairing insert on node 9
+repairing insert on node 5
+R----5(BLACK)
+     L----4(BLACK)
+     |    L----3(RED)
+     R----8(BLACK)
+          R----9(RED)
+
+deleting node 4
+R----5(BLACK)
+     L----3(BLACK)
+     R----8(BLACK)
+          R----9(RED)
+
+********************************************
+*  Node to delete is black, has 2 children *
+*       Left child has children            *
+********************************************
+
+repairing insert on node 12
+left rotation on key 5
+repairing insert on node 7
+repairing insert on node 8
+repairing insert on node 27
+left rotation on key 12
+repairing insert on node 147
+repairing insert on node 15
+repairing insert on node 64
+right rotation on key 147
+repairing insert on node 147
+left rotation on key 27
+repairing insert on node 29
+repairing insert on node 64
+left rotation on key 8
+repairing insert on node 35
+left rotation on key 27
+repairing insert on node 19
+repairing insert on node 29
+repairing insert on node 15
+R----15(BLACK)
+     L----8(BLACK)
+     |    L----5(BLACK)
+     |    |    L-----7(RED)
+     |    |    R----7(RED)
+     |    R----12(BLACK)
+     R----64(BLACK)
+          L----29(RED)
+          |    L----27(BLACK)
+          |    |    L----19(RED)
+          |    R----35(BLACK)
+          R----147(BLACK)
+
+deleting node 15
+--> deleting highest left node key: 12
+deleting node 12
+R----12(BLACK)
+     L----8(BLACK)
+     |    L----5(BLACK)
+     |    |    L-----7(RED)
+     |    |    R----7(RED)
+     R----64(BLACK)
+          L----29(RED)
+          |    L----27(BLACK)
+          |    |    L----19(RED)
+          |    R----35(BLACK)
+          R----147(BLACK)
+
+repairing deletion on node 0
+node 0: Cas 1 -> S Black + 1 or more Red children
+cas 1.a: LL Sibling is left child, sibling's left child is red
+right rotation on key 8
+R----12(BLACK)
+     L----5(BLACK)
+     |    L-----7(BLACK)
+     |    R----8(BLACK)
+     |         L----7(RED)
+     R----64(BLACK)
+          L----29(RED)
+          |    L----27(BLACK)
+          |    |    L----19(RED)
+          |    R----35(BLACK)
+          R----147(BLACK)
+
+********************************************
+*  Node to delete is black, has 2 children *
+*      Left child has no children          *
+********************************************
+
+repairing insert on node 11
+repairing insert on node 8
+repairing insert on node 17
+repairing insert on node 12
+R----8(BLACK)
+     L----5(BLACK)
+     R----12(RED)
+          L----11(BLACK)
+          R----25(BLACK)
+               L----17(RED)
+
+deleting node 8
+--> deleting highest left node key: 5
+deleting node 5
+R----5(BLACK)
+     R----12(RED)
+          L----11(BLACK)
+          R----25(BLACK)
+               L----17(RED)
+
+repairing deletion on node 0
+cas 3: sibling red
+left rotation on key 5
+R----12(BLACK)
+     L----5(RED)
+     |    R----11(BLACK)
+     R----25(BLACK)
+          L----17(RED)
+
+repairing deletion on node 0
+cas 2: sibling black + double black children
+R----12(BLACK)
+     L----5(BLACK)
+     |    R----11(RED)
+     R----25(BLACK)
+          L----17(RED)
+
