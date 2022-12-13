@@ -6,7 +6,7 @@
 /*   By: dsaada <dsaada@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 12:46:40 by dsaada            #+#    #+#             */
-/*   Updated: 2022/12/12 11:54:32 by dsaada           ###   ########.fr       */
+/*   Updated: 2022/12/13 10:59:25 by dsaada           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <cstddef>
 # include "RBTree_iterator.hpp"
 # include "reverse_iterator.hpp"
+# include "pair.hpp"
 # define RED 1
 # define BLACK 0
 # define LEFT true
@@ -25,11 +26,11 @@
 
 namespace ft {
     
-    template< class Pair, class Compare = std::less< Pair >, class Alloc = std::allocator<Pair> >
+    template< class T, class Compare = std::less< T >, class Alloc = std::allocator< T > >
     class RBTree{
         
         public:
-            typedef Pair                                                value_type;
+            typedef T                                                   value_type;
             typedef Alloc                                               allocator_type;
             typedef Compare                                             value_compare;
             typedef typename allocator_type::reference                  reference;
@@ -40,19 +41,20 @@ namespace ft {
             typedef ft::RBTree_iterator<value_type, true>               const_iterator;
             typedef ft::reverse_iterator<iterator>                      reverse_iterator;
             typedef ft::reverse_iterator<const_iterator>                const_reverse_iterator;
+            typedef ft::RBTree_node< value_type >                       node_type;
             typedef std::ptrdiff_t                                      difference_type; //ptrdiff_t
             typedef std::size_t                                         size_type;      
             
         private:
             //the root of our tree
-            t_node *root;
+            node_type       *root;
             //any leaf of our tree
-            t_node *null_node;
+            node_type       *null_node;
+            value_compare   _comp;
 
             //----- Init node to be root or leaf -----
-            void __null_node(t_node *node){
-                node->key = Key();
-                node->data = T();
+            void __null_node(node_type *node){
+                node->data = pair_type();
                 node->parent = 0;
                 node->left = 0;
                 node->right = 0;
@@ -60,8 +62,8 @@ namespace ft {
             }
 
             //----- Find highest of left subtree -----
-            t_node  *__highest_left(t_node *node){
-                t_node *tmp;
+            node_type  *__highest_left(node_type *node){
+                node_type *tmp;
 
                 if (node == null_node)
                     return (null_node);
@@ -74,8 +76,8 @@ namespace ft {
             }
 
             //----- Find lowest of right subtree -----
-            t_node  *__lowest_right(t_node *node){
-                t_node  *tmp;
+            node_type  *__lowest_right(node_type *node){
+                node_type  *tmp;
 
                 if (node == null_node)
                     return (null_node);
@@ -87,16 +89,15 @@ namespace ft {
                 return (tmp);
             }
 
-            void __repair_insert(t_node *node){
-                t_node *uncle;
-                t_node *parent;
+            void __repair_insert(node_type *node){
+                node_type *uncle;
+                node_type *parent;
 
-                std::cout << "repairing insert on node " << node->key << std::endl;
+                std::cout << "repairing insert on node " << node->data.first << std::endl;
                 if (node == root){
                     root->color = BLACK;
                     return;
                 }
-
                 parent = node->parent;
                 if (parent->color == BLACK)
                     return;
@@ -153,7 +154,7 @@ namespace ft {
             }
 
             //----- Get sibling -----
-            t_node  *__get_sibling(t_node *node){
+            node_type  *__get_sibling(node_type *node){
                 if (node->parent == null_node)
                     return (null_node);
                 else if (node == node->parent->left)
@@ -163,10 +164,10 @@ namespace ft {
             }
 
             //----- Repair after deletion -----
-            void    __repair_delete(t_node *node){
-                t_node *sibling;
+            void    __repair_delete(node_type *node){
+                node_type *sibling;
                 printTree();
-                std::cout << "repairing deletion on node " << node->key << std::endl;
+                std::cout << "repairing deletion on node " << node->data.first << std::endl;
                 if (node == root)
                     return;
 
@@ -180,7 +181,7 @@ namespace ft {
                 }
                 //cas 1: sibling black + at least one child red
                 else if (sibling->color == BLACK && (sibling->left->color == RED || sibling->right->color == RED)){
-                    std::cout << "node " << node->key << ": Cas 1 -> S Black + 1 or more Red children" << std::endl;
+                    std::cout << "node " << node->data.first << ": Cas 1 -> S Black + 1 or more Red children" << std::endl;
                     //cas 1.a: LL Sibling is left child, sibling's left child is red
                     if (sibling == sibling->parent->left && sibling->left->color == RED){
                         std::cout << "cas 1.a: LL Sibling is left child, sibling's left child is red" << std::endl;
@@ -234,8 +235,8 @@ namespace ft {
             }
             
             //----- Assign child to parent -----
-            t_node *__assign_child_parent(t_node *node, bool left){
-                t_node  *to_assign;
+            node_type *__assign_child_parent(node_type *node, bool left){
+                node_type  *to_assign;
 
                 if (left == LEFT)
                     to_assign = node->left;
@@ -252,42 +253,43 @@ namespace ft {
             }
             
             //----- Search node by key -----
-            t_node *__search_key(t_node *node, Key key){
-                if (node == null_node || key == node->key)
+            node_type *__search_val(node_type *node, value_type val){
+                if (node == null_node || key == node->data.first)
                     return( node );
-                if (key < node->key)
-                    return( __search_key(node->left, key) );
-                return( __search_key(node->right, key) );
+                if (_comp(val , node->data)
+                    return( __search_val(node->left, val) );
+                return( __search_val(node->right, val) );
             }
             
             //----- Search last occurence of key -----
-            t_node *__search_last_key(Key key){
-                t_node  *current;
-                t_node  *node;
+            node_type *__search_last_val(value_type val){
+                node_type  *current;
+                node_type  *node;
 
                 node = null_node;
                 current = root;
                 while (current != null_node){
-                    if (current->key == key)
+                    if (current->data == val)
                         node = current;
-                    if (key <= current->key)
+                    if (val <= current->data)
                         current = current->left;
                     else
                         current = current->right;
                 }
                 return (node);
             }
-
+            
         public:
             RBTree( void ){
-                null_node = new t_node;
+                null_node = new node_type;
                 __null_node(null_node);
                 root = null_node;
+                _comp = value_compare();
             }
             //----- Right Rotation -----
-            void rightRotate(t_node *p){
-                std::cout << "right rotation on key "<< p->key << std::endl;
-                t_node *k = p->left;
+            void rightRotate(node_type *p){
+                std::cout << "right rotation on key "<< p->data.first << std::endl;
+                node_type *k = p->left;
 
                 k->parent = p->parent; //1
                 p->parent = k; //2 
@@ -304,9 +306,9 @@ namespace ft {
             }
 
             //----- Left Rotation -----
-            void leftRotate(t_node *p){
-                std::cout << "left rotation on key "<< p->key << std::endl;
-                t_node *k = p->right;
+            void leftRotate(node_type *p){
+                std::cout << "left rotation on key "<< p->data.first << std::endl;
+                node_type *k = p->right;
 
                 k->parent = p->parent; //1
                 p->parent = k; //2 
@@ -323,17 +325,16 @@ namespace ft {
             }
 
             //----- BST normal insertion -----
-            void insert(Key key){            
-                t_node *tmp = root;
-                t_node *p = 0;
-                t_node *node = new t_node;
+            void insert(const value_type &val){            
+                node_type *tmp = root;
+                node_type *p = 0;
+                node_type *node = new node_type;
 
                 //********** A REMPLACER PAR CONSTRUCTEUR  node(key, data) **********
                 node->parent = 0;
                 node->left = null_node;
                 node->right = null_node;
-                node->key = key;
-                node->data = T();
+                node->data = val;
                 node->color = RED;
                 //*******************************************************************
 
@@ -346,14 +347,14 @@ namespace ft {
                 //we search for the right spot for our key
                 while (tmp != null_node){
                     p = tmp;
-                    if (key < tmp->key)
+                    if (_comp(node->data , tmp->data)) //node->data.first < tmp->data.first
                         tmp = tmp->left; 
                     else
                         tmp = tmp->right;
                 }
                 //assign child to parent (left or right)
                 node->parent = p;
-                if (key < p->key)
+                if (_comp(node->data , p->data)) // node->data.first <  p->data.first
                     p->left = node;
                 else
                     p->right = node;
@@ -365,16 +366,17 @@ namespace ft {
             }
 
             
+            //===============================A MODIFIER=================================================
             //----- Delete element from RBT -----
-            void delete_node(Key key){ 
-                std::cout << "deleting node " << key << std::endl;
-                t_node  *node;
-                t_node  *to_delete;
-                t_node  *new_node;
+            void delete_node(value_type val){ 
+                // std::cout << "deleting node " << key << std::endl;
+                node_type  *node;
+                node_type  *to_delete;
+                node_type  *new_node;
                 int     original_color;
 
                 //recherche du noeud identified by key 
-                node = __search_last_key(key);
+                node = __search_last_val(val);
                 if (node == null_node)
                     return;
 
@@ -419,12 +421,10 @@ namespace ft {
                 //case 3 : both children are valid
                 else{
                     to_delete = __highest_left(node);
-                    std::cout << "--> deleting highest left node key: " << to_delete->key << std::endl;
-                    //***** A REMPLACER PAR CONSTRUCTEUR PAR COPIE t_node * new_node(to_delete)*****
+                    // std::cout << "--> deleting highest left node key: " << to_delete->data.first << std::endl;
+                    //***** A REMPLACER PAR CONSTRUCTEUR PAR COPIE node_type * new_node(to_delete)*****
                     //******************************************************************************
-                    new_node = new t_node;
-                    new_node->key = to_delete->key;
-                    new_node->data = to_delete->data;
+                    new_node = new node_type(to_delete->data);
                     //******************************************************************************
                     //on branche au child de droite
                     new_node->right = node->right;
@@ -445,27 +445,28 @@ namespace ft {
                     //on supprime l'ancien noeud
                     delete node;
                     node = new_node;
-                    delete_node(to_delete->key);
+                    delete_node(to_delete->data);
                 }
             }
-
+            //========================================================================================================
+            
             void    clear(void){
                 if (root == null_node)
                     return;
                 while( root->left != null_node ){
-                    delete_node(__highest_left(root)->key);
+                    delete_node(__highest_left(root)->data);
                 }
                 while( root->right != null_node){
-                    delete_node(__lowest_right(root)->key);
+                    delete_node(__lowest_right(root)->data);
                 }
                 std::cout << "Only node left is root" << std::endl;
-                delete_node(root->key);
+                delete_node(root->data);
             }
 
 
         //*****************  TESTING ****************************
             //----- Print Tree -----
-            void __print_tree(t_node *node, std::string offset, bool end) {
+            void __print_tree(node_type *node, std::string offset, bool end) {
                 if (node != null_node) {
                 std::cout<<offset;
                 if (end) { 
@@ -477,7 +478,8 @@ namespace ft {
                     offset += "|    ";
                 }
                 std::string color = node->color?"RED":"BLACK";
-                std::cout<<node->key<<"("<<color<<")"<<std::endl;
+                std::cout<<node->data.first<<"("<<color<<")";
+                std::cout<<" -> "<<node->data.second<<std::endl;
                 __print_tree(node->left, offset, false);
                 __print_tree(node->right, offset, true);
                 }
@@ -491,17 +493,18 @@ namespace ft {
                 std::cout << std::endl;
             }
 
-            void printNode(t_node *node){
+            void printNode(node_type *node){
                 std::cout << "*******************************************************************" << std::endl;
-                std::cout << "*     Key = " << node->key << std::endl;
+                std::cout << "*     Key = " << node->data.first << std::endl;
+                std::cout << "*     Value = " << node->data.second << std::endl;
                 std::cout << "*     color = ";
                 if (node->color == BLACK)
                     std::cout << "BLACK" << std::endl;
                 else
                     std::cout << "RED" << std::endl;
-                std::cout << "*     Parent = " << node->parent->key << std::endl;
-                std::cout << "*     Left = " << node->left->key << std::endl;
-                std::cout << "*     Right = " << node->right->key << std::endl;
+                std::cout << "*     Parent = " << node->parent->data.first << std::endl;
+                std::cout << "*     Left = " << node->left->data.first << std::endl;
+                std::cout << "*     Right = " << node->right->data.first << std::endl;
                 std::cout << "*******************************************************************" << std::endl;
             }
     };

@@ -7,6 +7,7 @@
 # include <cstddef>
 # include "equal.hpp"
 # include "RBTree.hpp"
+# include "RBTree_iterator.hpp"
 # include "type_traits.hpp"
 # include "reverse_iterator.hpp"
 
@@ -14,26 +15,7 @@ namespace ft {
 
     template < class Key, class T,  class Compare = std::less<Key>, class Alloc = std::allocator<ft::pair<const Key,T> > >
     class map {
-        template< bool ConstB >
-        class map_iterator {
-            public:
-                typedef Key                                                                     key_type;
-                typedef T                                                                       mapped_type;
-                typedef ft::pair< const Key, T >                                                value_type;
-                typedef value_type&                                                             reference;
-                typedef value_type const &                                                      const_reference;
-                typedef value_type*                                                             pointer;
-                typedef value_type const *                                                      const_pointer;
-                typedef std::ptrdiff_t                                                          difference_type;
-                typedef std::size_t                                                             size_type;
-                typedef std::bidirectional_iterator_tag                                         iterator_category;
- 
-            private:
-                value_type  *_ptr;
-        };
-
         public:
-            class                                                       value_compare;
             typedef Key                                                 key_type;
             typedef T                                                   mapped_type;
             typedef ft::pair<const key_type, mapped_type>               value_type;
@@ -43,8 +25,8 @@ namespace ft {
             typedef typename allocator_type::const_reference            const_reference;
             typedef typename allocator_type::pointer                    pointer;
             typedef typename allocator_type::const_pointer              const_pointer;
-            typedef map_iterator<false>                                 iterator;
-            typedef map_iterator<true>                                  const_iterator;
+            typedef ft::RBTree_iterator<value_type, false>              iterator;
+            typedef ft::RBTree_iterator<value_type, true>               const_iterator;
             typedef ft::reverse_iterator<iterator>                      reverse_iterator;
             typedef ft::reverse_iterator<const_iterator>                const_reverse_iterator;
             typedef std::ptrdiff_t                                      difference_type; //ptrdiff_t
@@ -54,7 +36,7 @@ namespace ft {
             
             key_compare             _comp;
             allocator_type          _alloc;
-            ft::RBTree<value_type>  _tree;
+            ft::RBTree<value_type, compare_func>  _tree;
 
         //***** MEMBER FUNCTIONS *****
             //___Constructors___
