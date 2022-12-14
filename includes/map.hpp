@@ -32,8 +32,22 @@ namespace ft {
             typedef std::ptrdiff_t                                      difference_type; //ptrdiff_t
             typedef std::size_t                                         size_type;      
 
+            class value_compare{
+                friend class map;
+                protected:
+                    Compare comp;
+                    value_compare (Compare c) : comp(c) {}  // constructed with map's comparison object
+                public:
+                    typedef bool result_type;
+                    typedef value_type first_argument_type;
+                    typedef value_type second_argument_type;
+                    bool operator() (const value_type& x, const value_type& y) const
+                    {
+                        return comp(x.first, y.first);
+                    }
+            };
+
         protected:
-            
             key_compare             _comp;
             allocator_type          _alloc;
             ft::RBTree<value_type, compare_func>  _tree;

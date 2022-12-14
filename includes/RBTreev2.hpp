@@ -6,7 +6,7 @@
 /*   By: dsaada <dsaada@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 12:46:40 by dsaada            #+#    #+#             */
-/*   Updated: 2022/12/13 10:59:25 by dsaada           ###   ########.fr       */
+/*   Updated: 2022/12/14 10:18:54 by dsaada           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,18 @@ namespace ft {
             //any leaf of our tree
             node_type       *null_node;
             value_compare   _comp;
+            allocator_type  _alloc;
 
+            //----- Helper function to find out if a  == b -----
+            bool    __value_equal(value_type a, value_type b){
+                if (_comp(a, b) == _comp(b, a))
+                    return (true);
+                return (false);
+            }
+            
             //----- Init node to be root or leaf -----
-            void __null_node(node_type *node){
-                node->data = pair_type();
+            void    __null_node(node_type *node){
+                node->data = value_type();
                 node->parent = 0;
                 node->left = 0;
                 node->right = 0;
@@ -89,11 +97,11 @@ namespace ft {
                 return (tmp);
             }
 
+            //----- Repair tree properties after insertion ----- 
             void __repair_insert(node_type *node){
                 node_type *uncle;
                 node_type *parent;
 
-                std::cout << "repairing insert on node " << node->data.first << std::endl;
                 if (node == root){
                     root->color = BLACK;
                     return;
@@ -117,11 +125,11 @@ namespace ft {
                         if (node == parent->left){
                             parent->color = BLACK; //parent becomes black
                             parent->parent->color = RED; // gp becomes red
-                            rightRotate(parent->parent);// rotate right sur gp                        
+                            __right_rotate(parent->parent);// rotate right sur gp                        
                         }
                         //cas 1.2.2: LR parent is red left, node is red right
                         else{
-                            leftRotate(parent);
+                            __left_rotate(parent);
                             __repair_insert(parent);
                         }
                     }
@@ -142,11 +150,11 @@ namespace ft {
                         if (node == parent->right){
                             parent->color = BLACK; //parent becomes black
                             parent->parent->color = RED; // gp becomes red
-                            leftRotate(parent->parent); // rotate left sur gp
+                            __left_rotate(parent->parent); // rotate left sur gp
                         }
                         //cas 2.2.2: RL parent is red right, node is red left
                         else{
-                            rightRotate(parent);
+                            __right_rotate(parent);
                             __repair_insert(parent);
                         }
                     }
@@ -167,7 +175,6 @@ namespace ft {
             void    __repair_delete(node_type *node){
                 node_type *sibling;
                 printTree();
-                std::cout << "repairing deletion on node " << node->data.first << std::endl;
                 if (node == root)
                     return;
 
@@ -187,26 +194,26 @@ namespace ft {
                         std::cout << "cas 1.a: LL Sibling is left child, sibling's left child is red" << std::endl;
                         sibling->left->color = sibling->color;
                         sibling->color = node->parent->color;
-                        rightRotate(node->parent);
+                        __right_rotate(node->parent);
                     }
                     //cas 1.b: LR Sibling is left child, sibling's right child is red
                     else if (sibling == sibling->parent->left && sibling->right->color == RED){
                         std::cout << "cas 1.b: LR Sibling is left child, sibling's right child is red" << std::endl;
-                        leftRotate(sibling);
-                        rightRotate(node->parent);
+                        __left_rotate(sibling);
+                        __right_rotate(node->parent);
                     }
                     //cas 1.c: RR Sibling is right child, sibling's right child is red
                     else if (sibling == sibling->parent->right && sibling->right->color == RED){
                         std::cout << "cas 1.c: RR Sibling is right child, sibling's right child is red" << std::endl;
                         sibling->right->color = sibling->color;
                         sibling->color = node->parent->color;
-                        leftRotate(node->parent);
+                        __left_rotate(node->parent);
                     }
                     //cas 1.d: RL Sibling is right child, sibling's left child is red
                     else if (sibling == sibling->parent->right && sibling->left->color == RED){
                         std::cout << "cas 1.d: RL Sibling is right child, sibling's left child is red" << std::endl;
-                        rightRotate(sibling);
-                        leftRotate(node->parent);
+                        __right_rotate(sibling);
+                        __left_rotate(node->parent);
                     }
                 }
                 //cas 2: sibling black + double black children
@@ -224,10 +231,10 @@ namespace ft {
                     sibling->color = BLACK;
                     node->parent->color = RED;
                     if (sibling == sibling->parent->right){// apres la rotation on se retrouve dans le cas 1 ou 2
-                        leftRotate(node->parent);
+                        __left_rotate(node->parent);
                     }
                     else{
-                        rightRotate(node->parent);
+                        __right_rotate(node->parent);
                     }
                     __repair_delete(node);
                 }
@@ -254,9 +261,9 @@ namespace ft {
             
             //----- Search node by key -----
             node_type *__search_val(node_type *node, value_type val){
-                if (node == null_node || key == node->data.first)
-                    return( node );
-                if (_comp(val , node->data)
+                if (node == null_node || __value_equal(val, node->data)) // if val == node->data
+                    return(node);
+                if (_comp(val , node->data)) // if val < node->data
                     return( __search_val(node->left, val) );
                 return( __search_val(node->right, val) );
             }
@@ -269,9 +276,9 @@ namespace ft {
                 node = null_node;
                 current = root;
                 while (current != null_node){
-                    if (current->data == val)
+                    if (__value_equal(current->data, val)) //if val == current->data
                         node = current;
-                    if (val <= current->data)
+                    if (!_comp(current->data , val)) // if val <= current->data
                         current = current->left;
                     else
                         current = current->right;
@@ -279,16 +286,8 @@ namespace ft {
                 return (node);
             }
             
-        public:
-            RBTree( void ){
-                null_node = new node_type;
-                __null_node(null_node);
-                root = null_node;
-                _comp = value_compare();
-            }
-            //----- Right Rotation -----
-            void rightRotate(node_type *p){
-                std::cout << "right rotation on key "<< p->data.first << std::endl;
+            //----- Rotate right on node p -----
+            void __right_rotate(node_type *p){
                 node_type *k = p->left;
 
                 k->parent = p->parent; //1
@@ -305,9 +304,8 @@ namespace ft {
                     p->left->parent = p;
             }
 
-            //----- Left Rotation -----
-            void leftRotate(node_type *p){
-                std::cout << "left rotation on key "<< p->data.first << std::endl;
+            //----- Rotate left on node p -----
+            void __left_rotate(node_type *p){
                 node_type *k = p->right;
 
                 k->parent = p->parent; //1
@@ -323,7 +321,163 @@ namespace ft {
                 if (p->right != null_node)
                     p->right->parent = p;
             }
+        
+        public:
+            explicit RBTree( const value_compare& comp = value_compare(), const allocator_type& alloc = allocator_type() ){
+                null_node = new node_type;
+                __null_node(null_node);
+                root = null_node;
+                _comp = comp;
+                _alloc = alloc;
+            }
+            
+            RBTree (const RBTree& x){
+                null_node = new node_type;
+                __null_node(null_node);
+                root = null_node;
+                _comp = x._comp;
+                _alloc = x._alloc;
+                //insert all elements of x into tree
+            }
+            
+            //___Destructor___
+            ~RBTree( void ){
+                
+            }
+            
+            //___Operator= surcharge___
+            RBTree& operator= (const RBTree& x){
+                clear();
+                _comp = x._comp;
+                _alloc = x._alloc;
+                //insert all elements of x into tree
+                return (*this);
+            }
 
+        // //***** ITERATORS *****
+        //     iterator begin(){
+        //         return (iterator());
+        //     }
+        //     const_iterator begin() const{
+        //         return (const_iterator());
+        //     }
+        //     iterator end(){
+        //         return (iterator());
+        //     }
+        //     const_iterator end() const{
+        //         return (const_iterator());
+        //     }
+        //     reverse_iterator rbegin(){
+        //         return (reverse_iterator());
+        //     }
+        //     const_reverse_iterator rbegin() const{
+        //         return (const_reverse_iterator());
+        //     }
+        //     reverse_iterator rend(){
+        //         return (reverse_iterator());
+        //     }
+        //     const_reverse_iterator rend() const{
+        //         return (const_reverse_iterator());
+        //     }
+        
+        //***** CAPACITY *****
+            // bool empty() const{
+            //     return (root == null_node);
+            // }
+            // size_type size() const{
+            //     return (0);
+            // }
+            // size_type max_size() const{
+            //     return (_alloc.max_size());
+            // }
+        
+        //***** ELEMENT ACCESS *****
+            // mapped_type& operator[] (const key_type& k){
+            //     (void)k;
+            //     return(mapped_type());
+            // }
+            // mapped_type& at (const key_type& k){
+            //     (void)k;
+            //     return(mapped_type());
+            // }
+            // const mapped_type& at (const key_type& k) const{
+            //     (void)k;
+            //     return(mapped_type());
+            // }
+        
+        //***** MODIFIERS *****
+            // pair<iterator,bool> insert (const value_type& val){
+            //     (void)val;
+            //     return(make_pair(key_type(), mapped_type()));
+            // }
+            // iterator insert (iterator position, const value_type& val){
+            //     (void)position;
+            //     (void)val;
+            //     return (begin());
+            // }
+            // template <class InputIterator>  void insert (InputIterator first, InputIterator last){
+            //     (void)first;
+            //     (void)last;
+            // }
+            // void erase (iterator position){
+            //     (void)position;
+            // }
+            // size_type erase (const key_type& k){
+            //     (void)k;
+            //     return(0);
+            // }
+            // void erase (iterator first, iterator last){
+            //     (void)first;
+            //     (void)last;
+            // }
+            // void swap (map& x){
+            //     (void)x;
+            // }
+            // void clear( void ){}
+
+        //***** OPERATIONS *****
+            // iterator find (const key_type& k){
+            //     (void)k;
+            //     return(begin());
+            // }
+            // const_iterator find (const key_type& k) const{
+            //     (void)k;
+            //     return(begin());
+            // }
+            // size_type count (const key_type& k) const{
+            //     (void)k;
+            //     return(0);
+            // }
+            // iterator lower_bound (const key_type& k){
+            //     (void)k;
+            //     return(begin());
+            // }
+            // const_iterator lower_bound (const key_type& k) const{
+            //     (void)k;
+            //     return(begin());
+            // }
+            // iterator upper_bound (const key_type& k){
+            //     (void)k;
+            //     return(begin());
+            // }
+            // const_iterator upper_bound (const key_type& k) const{
+            //     (void)k;
+            //     return(begin());
+            // }
+            // pair<const_iterator,const_iterator> equal_range (const key_type& k) const{
+            //     (void)k;
+            //     return(make_pair(key_type(), mapped_type()));
+            // }
+            // pair<iterator,iterator> equal_range (const key_type& k){
+            //     (void)k;
+            //     return(make_pair(key_type(), mapped_type()));
+            // }
+
+        //***** ALLOCATOR *****
+            // allocator_type get_allocator() const{
+            //     return (allocator_type());
+            // }
+            
             //----- BST normal insertion -----
             void insert(const value_type &val){            
                 node_type *tmp = root;
@@ -365,11 +519,8 @@ namespace ft {
                 __repair_insert(node);
             }
 
-            
-            //===============================A MODIFIER=================================================
             //----- Delete element from RBT -----
             void delete_node(value_type val){ 
-                // std::cout << "deleting node " << key << std::endl;
                 node_type  *node;
                 node_type  *to_delete;
                 node_type  *new_node;
@@ -417,15 +568,10 @@ namespace ft {
                         }
                     }
                 }
-                //*************************************************************************************
                 //case 3 : both children are valid
                 else{
                     to_delete = __highest_left(node);
-                    // std::cout << "--> deleting highest left node key: " << to_delete->data.first << std::endl;
-                    //***** A REMPLACER PAR CONSTRUCTEUR PAR COPIE node_type * new_node(to_delete)*****
-                    //******************************************************************************
                     new_node = new node_type(to_delete->data);
-                    //******************************************************************************
                     //on branche au child de droite
                     new_node->right = node->right;
                     new_node->right->parent = new_node;
@@ -448,7 +594,6 @@ namespace ft {
                     delete_node(to_delete->data);
                 }
             }
-            //========================================================================================================
             
             void    clear(void){
                 if (root == null_node)
@@ -459,7 +604,6 @@ namespace ft {
                 while( root->right != null_node){
                     delete_node(__lowest_right(root)->data);
                 }
-                std::cout << "Only node left is root" << std::endl;
                 delete_node(root->data);
             }
 

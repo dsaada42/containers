@@ -11,21 +11,21 @@ namespace ft{
     template< class T >
     class RBTree_node {
         public:
-            T        data;
+            T           data;
             RBTree_node *parent; // pointer to the parent
             RBTree_node *left; // pointer to left child
             RBTree_node *right; // pointer to right child
             int         color; // 1 -> Red, 0 -> Black
 
             RBTree_node (void){
-                data = Pair();
+                data = T();
                 parent = 0;
                 left = 0;
                 right = 0;
                 color = RED;
             }
-            RBTree_node (Pair pair ) { 
-                data = pair;
+            RBTree_node (T value ) { 
+                data = value;
                 parent = 0;
                 left = 0;
                 right = 0;

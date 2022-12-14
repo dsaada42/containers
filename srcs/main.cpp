@@ -11,6 +11,16 @@
 #include <string>
 #include <sstream>
 
+
+class value_compare{
+    public:
+        value_compare( void ){};
+        typedef ft::pair<int, std::string>  value_type;
+        bool operator() (const value_type& x, const value_type& y) const{
+            return (x.first < y.first);
+        }
+};
+
 bool isInteger( std::string str ){
     int i = 0;
     if (str.at(i) == '-')
@@ -27,6 +37,7 @@ bool isInteger( std::string str ){
     return (true);
 }
 
+
 int main(void){
 //SIMPLE DELETION TEST
     {
@@ -34,13 +45,13 @@ int main(void){
         std::cout << "*   Node to delete is red, no children     *" << std::endl;
         std::cout << "********************************************" << std::endl << std::endl;
 
-        ft::RBTree<int, std::string> tree;
+        ft::RBTree<ft::pair<int, std::string>, value_compare >tree;
         tree.insert(ft::make_pair(7, "test7"));
         tree.insert(ft::make_pair(6, "test6"));
         tree.insert(ft::make_pair(10, "test10"));
         tree.insert(ft::make_pair(11, "test11"));
         tree.printTree();
-        tree.delete_node(11); // node is red no children (leaf) 
+        tree.delete_node(ft::make_pair(11, "")); // node is red no children (leaf) 
         tree.printTree();
         //**** OK *****
     }
@@ -49,13 +60,13 @@ int main(void){
         std::cout << "*   Node to delete is black, no children    *" << std::endl;
         std::cout << "********************************************" << std::endl << std::endl;
         
-        ft::RBTree<int, std::string> tree;
+        ft::RBTree<ft::pair<int, std::string>, value_compare >tree;
         tree.insert(ft::make_pair(5, "test5"));
         tree.insert(ft::make_pair(8, "test8"));
         tree.insert(ft::make_pair(7, "test7"));
         tree.insert(ft::make_pair(4, "test4"));
         tree.printTree();
-        tree.delete_node(8); // node is black, no left child (no right child also, so right child is null_node and will replace node)
+        tree.delete_node(ft::make_pair(8, "")); // node is black, no left child (no right child also, so right child is null_node and will replace node)
         tree.printTree();
         //**** OK *****
     }
@@ -64,13 +75,13 @@ int main(void){
         std::cout << "* Node to delete is black, has right child *" << std::endl;
         std::cout << "********************************************" << std::endl << std::endl;
         
-        ft::RBTree<int, std::string> tree;
+        ft::RBTree<ft::pair<int, std::string>, value_compare >tree;
         tree.insert(ft::make_pair(5, "test5"));
         tree.insert(ft::make_pair(8, "test8"));
         tree.insert(ft::make_pair(7, "test7"));
         tree.insert(ft::make_pair(6, "test6"));
         tree.printTree();
-        tree.delete_node(5); // node is black, no left child but right child
+        tree.delete_node(ft::make_pair(5, "")); // node is black, no left child but right child
         tree.printTree();
         //**** OK *****
     }
@@ -79,14 +90,14 @@ int main(void){
         std::cout << "*  Node to delete is black, has left child *" << std::endl;
         std::cout << "********************************************" << std::endl << std::endl;
         
-        ft::RBTree<int, std::string> tree;
+        ft::RBTree<ft::pair<int, std::string>, value_compare >tree;
         tree.insert(ft::make_pair(5, "test5"));
         tree.insert(ft::make_pair(8, "test8"));
         tree.insert(ft::make_pair(4, "test4"));
         tree.insert(ft::make_pair(9, "test9"));
         tree.insert(ft::make_pair(3, "test3"));
         tree.printTree();
-        tree.delete_node(4); // node is black, has left child
+        tree.delete_node(ft::make_pair(4, "")); // node is black, has left child
         tree.printTree();
         //**** OK *****
     }
@@ -97,7 +108,7 @@ int main(void){
         std::cout << "*       Left child has children            *" << std::endl;
         std::cout << "********************************************" << std::endl << std::endl;
 
-        ft::RBTree<int, std::string> tree;
+        ft::RBTree<ft::pair<int, std::string>, value_compare >tree;
         tree.insert(ft::make_pair(5, "test5"));
         tree.insert(ft::make_pair(8, "test8"));
         tree.insert(ft::make_pair(12, "test12"));
@@ -117,7 +128,7 @@ int main(void){
         // tree.delete_node(15);//delete with 2 valid children and 1 left child on max subleft
         //**** OK ****
 
-        tree.delete_node(15); // delete with 2 valid children and no child on max subleft
+        tree.delete_node(ft::make_pair(15, "")); // delete with 2 valid children and no child on max subleft
         tree.printTree();
     }   //**** OK ****
     {
@@ -126,7 +137,7 @@ int main(void){
         std::cout << "*      Left child has no children          *" << std::endl;
         std::cout << "********************************************" << std::endl << std::endl;
 
-        ft::RBTree<int, std::string> tree;
+        ft::RBTree<ft::pair<int, std::string>, value_compare >tree;
         tree.insert(ft::make_pair(8, "test8"));
         tree.insert(ft::make_pair(5, "test5"));
         tree.insert(ft::make_pair(12, "test12"));
@@ -134,14 +145,14 @@ int main(void){
         tree.insert(ft::make_pair(25, "test25"));
         tree.insert(ft::make_pair(17, "test17"));
         tree.printTree();
-        tree.delete_node(8); // delete node with 2 valid children, left child is only child
+        tree.delete_node(ft::make_pair(8, "")); // delete node with 2 valid children, left child is only child
         tree.printTree();
 
     }   //**** OK ****
 
 //RED BLACK TREE INTERACTIVE TESTER
     {
-        ft::RBTree<int, std::string> tree;
+        ft::RBTree<ft::pair<int, std::string>, value_compare >tree;
 
         std::cout << "**************************************************************************************\n";
         std::cout << "**                                                                                  **\n";
@@ -186,7 +197,7 @@ int main(void){
                 if (isInteger(str)){
                     std::cout << "Deleting value" << std::endl;                   
                     std::istringstream (str) >> i;
-                    tree.delete_node(i);
+                    tree.delete_node(ft::make_pair(i, ""));
                 }
             }
             else if (!str.compare("PRINT")){
