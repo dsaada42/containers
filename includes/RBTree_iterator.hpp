@@ -80,8 +80,13 @@ namespace ft{
             }
             virtual ~RBTree_iterator( void ){}
 		    template <bool B>
-            RBTree_iterator(RBTree_iterator<T, B> const & rhs, typename ft::enable_if<!B>::type* = 0)	{ node_ptr = rhs.node_ptr; }
-            friend RBTree_iterator	    operator+(int n, const RBTree_iterator & rhs){ return (rhs.node_ptr + n); }    
+            RBTree_iterator(RBTree_iterator<T, B> const & rhs, typename ft::enable_if<!B>::type* = 0)	{
+                node_ptr = rhs.node_ptr;
+                null_node = rhs.null_node;
+            }
+            // friend RBTree_iterator	    operator+(int n, const RBTree_iterator & rhs){
+            //     return (rhs.node_ptr + n);
+            // }    
         //***** INCREMENT / DECREMENT *****
             RBTree_iterator&    operator++(){
                 RBTree_iterator node = *this;

@@ -67,10 +67,10 @@ int main( void ){
     std::cout << "**************3***7***********16********************" << std::endl;
     std::cout << "****************************************************" << std::endl;
 
-    // it = test.end();
-    // std::cout << "end it    = " << *it << std::endl;
-    it = test.begin();
-    std::cout << "begin it    = " << *it << std::endl;
+    it = test.end();
+    std::cout << "end it    = " << *it << std::endl;
+    // it = test.begin();
+    // std::cout << "begin it    = " << *it << std::endl;
     std::cout << "==>   it--    <==" << std::endl;
     it--;
     std::cout << "it        = " << *it << std::endl;
