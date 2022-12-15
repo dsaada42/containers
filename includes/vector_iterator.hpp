@@ -26,15 +26,12 @@ namespace ft{
         //***** CONSTRUCTORS / DESTRUCTOR / OPERATOR= *****
             vector_iterator(){ _ptr = NULL; }
             vector_iterator(pointer ptr){ _ptr = ptr; }
-            vector_iterator(vector_iterator const & copy){ _ptr = copy._ptr; }
-            vector_iterator &   operator=(vector_iterator const & copy){ _ptr = copy._ptr; return (*this); }
+            vector_iterator(vector_iterator const & rhs){ _ptr = rhs._ptr; }
+            vector_iterator &   operator=(vector_iterator const & rhs){ _ptr = rhs._ptr; return (*this); }
             virtual ~vector_iterator( void ){}
-//========================= NOT MY CODE ===========================
-            // Const stuff
 		    template <bool B>
-            vector_iterator(const vector_iterator<T, B> & x, typename ft::enable_if<!B>::type* = 0)	{ _ptr = x._ptr; }
-            friend vector_iterator	    operator+(int n, const vector_iterator & x){ return (x._ptr + n); }
-//=================================================================
+            vector_iterator(vector_iterator<T, B> const & rhs, typename ft::enable_if<!B>::type* = 0)	{ _ptr = rhs._ptr; }
+            friend vector_iterator	    operator+(int n, const vector_iterator & rhs){ return (rhs._ptr + n); }
         //***** ADD / SUBSTRACT *****
             vector_iterator&    operator+=(int rhs ){ _ptr += rhs; return (*this); }
             vector_iterator&    operator-=(int rhs ){ _ptr -= rhs; return (*this); }
