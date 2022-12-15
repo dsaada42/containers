@@ -57,13 +57,27 @@ namespace ft{
 
         private:
             node *node_ptr;
+            node *null_node;
 
         public:
         //***** CONSTRUCTORS / DESTRUCTOR / OPERATOR= *****
-            RBTree_iterator(){ node_ptr = NULL; }
-            RBTree_iterator(node * ptr){ node_ptr = ptr; }
-            RBTree_iterator(RBTree_iterator const & rhs){ node_ptr = rhs.node_ptr; }
-            RBTree_iterator &   operator=(RBTree_iterator const & rhs){ node_ptr = rhs.node_ptr; return (*this); }
+            RBTree_iterator(){
+                node_ptr = NULL;
+                null_node = NULL
+            }
+            RBTree_iterator(node * ptr, node * leaf){
+                node_ptr = ptr;
+                null_node = leaf;
+            }
+            RBTree_iterator(RBTree_iterator const & rhs){
+                node_ptr = rhs.node_ptr;
+                null_node = rhs.null_node;
+            }
+            RBTree_iterator &   operator=(RBTree_iterator const & rhs){
+                node_ptr = rhs.node_ptr;
+                null_node = rhs.null_node;
+                return (*this);
+            }
             virtual ~RBTree_iterator( void ){}
 		    template <bool B>
             RBTree_iterator(RBTree_iterator<T, B> const & rhs, typename ft::enable_if<!B>::type* = 0)	{ node_ptr = rhs.node_ptr; }
@@ -87,7 +101,24 @@ namespace ft{
                     return (*this);
                 }
             }
-            RBTree_iterator&    operator--(){ node_ptr--; return (*this); }
+            RBTree_iterator&    operator--(){
+                RBTree_iterator node = *this;
+                //cas 1: has left child, return left child
+                if (node->left != null_node){
+                    node_ptr = node->left;
+                    return (*this);
+                }
+                //cas 2: is lowest left
+                //cas 3: has no left child, return first parent with right child
+                if (node->left == null_node){
+                    node = node->parent;
+                    while (node->right == null_node){
+                        node = node->parent;
+                    }
+                }
+                node_ptr = node;
+                return (*this);
+            }
             RBTree_iterator     operator++(int){ RBTree_iterator it = *this; ++(*this); return (it); }
             RBTree_iterator     operator--(int){ RBTree_iterator it = *this; --(*this); return (it); }
         //***** ACCESS / DEREFERENCE *****

@@ -21,6 +21,7 @@ class value_compare{
         }
 };
 
+
 bool isInteger( std::string str ){
     int i = 0;
     if (str.at(i) == '-')
@@ -38,6 +39,7 @@ bool isInteger( std::string str ){
 }
 
 int main( void ){
+    
     std::set<int> test;
 
     test.insert(10);

@@ -57,7 +57,7 @@ namespace ft{
             template <bool B > bool   operator>(const vector_iterator<T, B> & rhs ) const{ return (_ptr > rhs._ptr); }
             template <bool B > bool   operator<=(const vector_iterator<T, B> & rhs ) const{ return (_ptr <= rhs._ptr); }
             template <bool B > bool   operator>=(const vector_iterator<T, B> & rhs ) const{ return (_ptr >= rhs._ptr); }
-    };
+    }; 
 }
 
 #endif
