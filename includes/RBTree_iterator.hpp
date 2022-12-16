@@ -16,20 +16,8 @@ namespace ft{
             RBTree_node *right; // pointer to right child
             int         color; // 1 -> Red, 0 -> Black
 
-            RBTree_node (void){
-                data = T();
-                parent = 0;
-                left = 0;
-                right = 0;
-                color = RED;
-            }
-            RBTree_node (T value ) { 
-                data = value;
-                parent = 0;
-                left = 0;
-                right = 0;
-                color = RED;
-            }
+            RBTree_node (void) : data(T()), parent(0), left(0), right(0), color(RED){}
+            RBTree_node (T const & value ) : data(value), parent(0), left(0), right(0), color(RED) {}
             RBTree_node& operator= ( RBTree_node const & rhs )
             {
                 data = rhs.data;

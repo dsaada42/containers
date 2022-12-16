@@ -6,7 +6,7 @@
 /*   By: dsaada <dsaada@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 12:46:40 by dsaada            #+#    #+#             */
-/*   Updated: 2022/12/16 15:48:38 by dsaada           ###   ########.fr       */
+/*   Updated: 2022/12/16 17:37:32 by dsaada           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,17 +46,15 @@ namespace ft {
             typedef std::size_t                                         size_type;      
         
         public:
-            explicit RBTree( const value_compare& comp, const allocator_type& alloc): _comp(comp), _alloc(alloc){
+            explicit RBTree( const value_compare& comp = value_compare(), const allocator_type& alloc = allocator_type()): _comp(comp), _alloc(alloc){
                 null_node = new node_type;
                 __null_node(null_node);
                 root = null_node;
             }
-            RBTree (const RBTree& x){
+            RBTree (const RBTree& x): _comp(x._comp), _alloc(x._alloc){
                 null_node = new node_type;
                 __null_node(null_node);
                 root = null_node;
-                _comp = x._comp;
-                _alloc = x._alloc;
                 insert(x.begin(), x.end());
             }
             ~RBTree( void ){
@@ -135,14 +133,10 @@ namespace ft {
             ft::pair<iterator, bool> insert(const value_type &val){            
                 node_type *tmp = root;
                 node_type *p = 0;
-                node_type *node = new node_type;
+                node_type *node = new node_type(val);
 
-                //********** A REMPLACER PAR CONSTRUCTEUR  node(key, data) **********
-                node->parent = 0;
                 node->left = null_node;
                 node->right = null_node;
-                node->data = val;
-                node->color = RED;
 
                 if (root == null_node){// case 1: tree is empty, node becomes black root
                     node->parent = null_node;
@@ -362,7 +356,6 @@ namespace ft {
             }
             //----- Init node to be root or leaf -----
             void    __null_node(node_type *node){
-                node->data = value_type();
                 node->parent = 0;
                 node->left = 0;
                 node->right = 0;

@@ -6,8 +6,12 @@ namespace ft {
     template < class T1, class T2 >
     class pair{
         public:
-            typedef T1          first_type;
-            typedef T2          second_type;
+            typedef T1                                  first_type;
+            typedef T2                                  second_type;
+            typedef first_type &                        reference;
+            typedef first_type const &                  const_reference;
+            typedef first_type*                         pointer;
+            typedef first_type const *                  const_pointer;
 
             first_type  first;
             second_type second;
