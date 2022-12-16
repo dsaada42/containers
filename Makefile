@@ -4,7 +4,7 @@ NAME	=	containers
 
 CPPFLAGS = -Wall -Wextra -Werror -std=c++98
 
-SRC		=	./srcs/main.cpp
+SRC		=	./srcs/main_map_compile.cpp
 
 HEADER  =  	./includes/equal.hpp\
 			./includes/lexicographical_compare.hpp\

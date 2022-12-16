@@ -11,10 +11,10 @@ namespace ft{
     class RBTree_node {
         public:
             T           data;
-            RBTree_node *parent; // pointer to the parent
-            RBTree_node *left; // pointer to left child
-            RBTree_node *right; // pointer to right child
-            int         color; // 1 -> Red, 0 -> Black
+            RBTree_node *parent; 
+            RBTree_node *left; 
+            RBTree_node *right; 
+            int         color; 
 
             RBTree_node (void) : data(T()), parent(0), left(0), right(0), color(RED){}
             RBTree_node (T const & value ) : data(value), parent(0), left(0), right(0), color(RED) {}
