@@ -63,7 +63,7 @@ namespace ft{
         //***** CONSTRUCTORS / DESTRUCTOR / OPERATOR= *****
             RBTree_iterator(){
                 node_ptr = NULL;
-                null_node = NULL
+                null_node = NULL;
             }
             RBTree_iterator(node * ptr, node * leaf){
                 node_ptr = ptr;

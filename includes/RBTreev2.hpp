@@ -6,7 +6,7 @@
 /*   By: dsaada <dsaada@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 12:46:40 by dsaada            #+#    #+#             */
-/*   Updated: 2022/12/15 17:15:49 by dsaada           ###   ########.fr       */
+/*   Updated: 2022/12/16 09:46:51 by dsaada           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ namespace ft {
             }
             //___Destructor___
             ~RBTree( void ){
-                clear();
+                //clear();
             }
             //___Operator= surcharge___
             RBTree& operator= (const RBTree& x){
@@ -145,13 +145,81 @@ namespace ft {
             //     (void)first;
             //     (void)last;
             // }
-            // void erase (iterator position){
-            //     (void)position;
-            // }
-            // size_type erase (const key_type& k){
-            //     (void)k;
-            //     return(0);
-            // }
+            size_type erase(const value_type & val){
+                node_type  *node;
+                
+                node = __search_last_val(val);
+                if (node != null_node)
+                    erase(node);
+                return (1);
+            }
+            void erase(node_type *node){ 
+                node_type  *to_delete;
+                node_type  *new_node;
+                int     original_color;
+
+                //save original color of node
+                original_color = node->color;
+                //************************* RASSEMBLER CES DEUX CAS *******************************
+                //case 1 : no left child 
+                if (node->left == null_node){
+                    new_node = __assign_child_parent(node, RIGHT);
+                    delete node;
+                    if (original_color == RED)// le noeud a supprimer etait rouge, OK
+                        return;
+                    if (original_color == BLACK){// le noeud etait noir
+                        if (new_node->color == RED){// l enfant etait rouge , good
+                            new_node->color = BLACK;
+                            return;   
+                        }
+                        else{// l enfant etait noir 
+                            __repair_delete(new_node); //il faut repair double black
+                            return;
+                        }
+                    }
+                }
+                //case 2 : no right child
+                else if (node->right == null_node){
+                    new_node = __assign_child_parent(node, LEFT);
+                    delete node;
+                    if (original_color == RED)// le noeud a supprimer etait rouge, OK
+                        return;
+                    if (original_color == BLACK){// le noeud etait noir
+                        if (new_node->color == RED){// l enfant etait rouge , good
+                            new_node->color = BLACK;
+                            return;   
+                        }
+                        else{// l enfant etait noir 
+                            __repair_delete(new_node); //il faut repair double black
+                            return;
+                        }
+                    }
+                }
+                //case 3 : both children are valid
+                else{
+                    to_delete = __highest_left(node);
+                    new_node = new node_type(to_delete->data);
+                    //on branche au child de droite
+                    new_node->right = node->right;
+                    new_node->right->parent = new_node;
+                    //on branche au child de gauche
+                    new_node->left = node->left;
+                    new_node->left->parent = new_node;
+                    //on branche au parent
+                    new_node->parent = node->parent;
+                    if (node->parent == null_node)  
+                        root = new_node;
+                    else if (node == node->parent->left)
+                        new_node->parent->left = new_node;
+                    else
+                        new_node->parent->right = new_node;
+                    new_node->color = original_color;
+                    original_color = to_delete->color;
+                    //on supprime l'ancien noeud
+                    delete node;
+                    erase(to_delete);
+                }
+            }
             // void erase (iterator first, iterator last){
             //     (void)first;
             //     (void)last;
@@ -243,92 +311,18 @@ namespace ft {
                 __repair_insert(node);
             }
 
-            //----- Delete element from RBT -----
-            void delete_node(value_type val){ 
-                node_type  *node;
-                node_type  *to_delete;
-                node_type  *new_node;
-                int     original_color;
-
-                //recherche du noeud identified by key 
-                node = __search_last_val(val);
-                if (node == null_node)
-                    return;
-
-                //save original color of node
-                original_color = node->color;
-                //************************* RASSEMBLER CES DEUX CAS *******************************
-                //case 1 : no left child 
-                if (node->left == null_node){
-                    new_node = __assign_child_parent(node, RIGHT);
-                    delete node;
-                    if (original_color == RED)// le noeud a supprimer etait rouge, OK
-                        return;
-                    if (original_color == BLACK){// le noeud etait noir
-                        if (new_node->color == RED){// l enfant etait rouge , good
-                            new_node->color = BLACK;
-                            return;   
-                        }
-                        else{// l enfant etait noir 
-                            __repair_delete(new_node); //il faut repair double black
-                            return;
-                        }
-                    }
-                }
-                //case 2 : no right child
-                else if (node->right == null_node){
-                    new_node = __assign_child_parent(node, LEFT);
-                    delete node;
-                    if (original_color == RED)// le noeud a supprimer etait rouge, OK
-                        return;
-                    if (original_color == BLACK){// le noeud etait noir
-                        if (new_node->color == RED){// l enfant etait rouge , good
-                            new_node->color = BLACK;
-                            return;   
-                        }
-                        else{// l enfant etait noir 
-                            __repair_delete(new_node); //il faut repair double black
-                            return;
-                        }
-                    }
-                }
-                //case 3 : both children are valid
-                else{
-                    to_delete = __highest_left(node);
-                    new_node = new node_type(to_delete->data);
-                    //on branche au child de droite
-                    new_node->right = node->right;
-                    new_node->right->parent = new_node;
-                    //on branche au child de gauche
-                    new_node->left = node->left;
-                    new_node->left->parent = new_node;
-                    //on branche au parent
-                    new_node->parent = node->parent;
-                    if (node->parent == null_node)  
-                        root = new_node;
-                    else if (node == node->parent->left)
-                        new_node->parent->left = new_node;
-                    else
-                        new_node->parent->right = new_node;
-                    new_node->color = original_color;
-                    original_color = to_delete->color;
-                    //on supprime l'ancien noeud
-                    delete node;
-                    node = new_node;
-                    delete_node(to_delete->data);
-                }
-            }
+            
             
             void    clear(void){
                 if (root == null_node)
                     return;
                 while( root->left != null_node ){
-                    delete_node(__highest_left(root)->data);
+                    erase(__highest_left(root)->data);
                 }
                 while( root->right != null_node){
-                    delete_node(__lowest_right(root)->data);
+                    erase(__lowest_right(root)->data);
                 }
-                delete_node(root->data);
+                erase(root->data);
             }
 
 
