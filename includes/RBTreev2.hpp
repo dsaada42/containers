@@ -6,7 +6,7 @@
 /*   By: dsaada <dsaada@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 12:46:40 by dsaada            #+#    #+#             */
-/*   Updated: 2022/12/16 09:46:51 by dsaada           ###   ########.fr       */
+/*   Updated: 2022/12/16 09:55:41 by dsaada           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ namespace ft {
         
         //***** CAPACITY *****
             bool empty() const{ return (root == null_node); }
-            size_type size() const{ return (0); }
+            size_type size() const{ return (0); } //should return height of tree
             size_type max_size() const{ return (_alloc.max_size()); }
         
         //***** ELEMENT ACCESS *****
@@ -158,42 +158,34 @@ namespace ft {
                 node_type  *new_node;
                 int     original_color;
 
-                //save original color of node
                 original_color = node->color;
-                //************************* RASSEMBLER CES DEUX CAS *******************************
                 //case 1 : no left child 
                 if (node->left == null_node){
                     new_node = __assign_child_parent(node, RIGHT);
                     delete node;
-                    if (original_color == RED)// le noeud a supprimer etait rouge, OK
-                        return;
                     if (original_color == BLACK){// le noeud etait noir
                         if (new_node->color == RED){// l enfant etait rouge , good
                             new_node->color = BLACK;
                             return;   
                         }
-                        else{// l enfant etait noir 
-                            __repair_delete(new_node); //il faut repair double black
-                            return;
-                        }
+                        else// l enfant etait noir 
+                            return (__repair_delete(new_node)); //il faut repair double black
                     }
+                    return;
                 }
                 //case 2 : no right child
                 else if (node->right == null_node){
                     new_node = __assign_child_parent(node, LEFT);
                     delete node;
-                    if (original_color == RED)// le noeud a supprimer etait rouge, OK
-                        return;
                     if (original_color == BLACK){// le noeud etait noir
                         if (new_node->color == RED){// l enfant etait rouge , good
                             new_node->color = BLACK;
                             return;   
                         }
-                        else{// l enfant etait noir 
-                            __repair_delete(new_node); //il faut repair double black
-                            return;
-                        }
+                        else// l enfant etait noir 
+                            return (__repair_delete(new_node)); //il faut repair double black
                     }
+                    return;
                 }
                 //case 3 : both children are valid
                 else{
@@ -220,14 +212,24 @@ namespace ft {
                     erase(to_delete);
                 }
             }
-            // void erase (iterator first, iterator last){
-            //     (void)first;
-            //     (void)last;
-            // }
+            void erase (iterator first, iterator last){
+                while (first != last)
+                    insert(*first++);
+            }
             // void swap (map& x){
             //     (void)x;
             // }
-            // void clear( void ){}
+            void    clear(void){
+                if (root == null_node)
+                    return;
+                while( root->left != null_node ){
+                    erase(__highest_left(root)->data);
+                }
+                while( root->right != null_node){
+                    erase(__lowest_right(root)->data);
+                }
+                erase(root->data);
+            }
 
         //***** OPERATIONS *****
             // iterator find (const key_type& k){
@@ -310,21 +312,6 @@ namespace ft {
 
                 __repair_insert(node);
             }
-
-            
-            
-            void    clear(void){
-                if (root == null_node)
-                    return;
-                while( root->left != null_node ){
-                    erase(__highest_left(root)->data);
-                }
-                while( root->right != null_node){
-                    erase(__lowest_right(root)->data);
-                }
-                erase(root->data);
-            }
-
 
         //*****************  TESTING ****************************
             //----- Print Tree -----
