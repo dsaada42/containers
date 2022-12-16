@@ -6,7 +6,7 @@
 /*   By: dsaada <dsaada@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 12:46:40 by dsaada            #+#    #+#             */
-/*   Updated: 2022/12/16 11:50:23 by dsaada           ###   ########.fr       */
+/*   Updated: 2022/12/16 15:48:38 by dsaada           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,10 @@ namespace ft {
             typedef std::size_t                                         size_type;      
         
         public:
-            explicit RBTree( const value_compare& comp, const allocator_type& alloc){
+            explicit RBTree( const value_compare& comp, const allocator_type& alloc): _comp(comp), _alloc(alloc){
                 null_node = new node_type;
                 __null_node(null_node);
                 root = null_node;
-                _comp = comp;
-                _alloc = alloc;
             }
             RBTree (const RBTree& x){
                 null_node = new node_type;
