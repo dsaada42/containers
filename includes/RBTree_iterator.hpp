@@ -89,7 +89,7 @@ namespace ft{
             // }    
         //***** INCREMENT / DECREMENT *****
             RBTree_iterator&    operator++(){
-                RBTree_iterator node = *this;
+                node *node = node_ptr;
                 //cas 1: has right child, return right child
                 if (node->right != null_node){
                     node_ptr = node->right;
@@ -107,7 +107,7 @@ namespace ft{
                 }
             }
             RBTree_iterator&    operator--(){
-                RBTree_iterator node = *this;
+                node *node = node_ptr;
                 //cas 1: has left child, return left child
                 if (node->left != null_node){
                     node_ptr = node->left;

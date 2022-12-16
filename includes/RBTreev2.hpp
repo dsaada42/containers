@@ -6,7 +6,7 @@
 /*   By: dsaada <dsaada@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 12:46:40 by dsaada            #+#    #+#             */
-/*   Updated: 2022/12/16 09:55:41 by dsaada           ###   ########.fr       */
+/*   Updated: 2022/12/16 11:50:23 by dsaada           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ namespace ft {
             typedef std::size_t                                         size_type;      
         
         public:
-            explicit RBTree( const value_compare& comp = value_compare(), const allocator_type& alloc = allocator_type() ){
+            explicit RBTree( const value_compare& comp, const allocator_type& alloc){
                 null_node = new node_type;
                 __null_node(null_node);
                 root = null_node;
@@ -61,11 +61,9 @@ namespace ft {
                 _alloc = x._alloc;
                 insert(x.begin(), x.end());
             }
-            //___Destructor___
             ~RBTree( void ){
-                //clear();
+                clear();
             }
-            //___Operator= surcharge___
             RBTree& operator= (const RBTree& x){
                 clear();
                 _comp = x._comp;
@@ -75,7 +73,7 @@ namespace ft {
             }
 
         //***** ITERATORS *****
-            iterator begin(){
+            iterator                begin(){
                 node_type *tmp = root;
                 if (tmp != null_node){
                     while (tmp->left != null_node)
@@ -83,7 +81,7 @@ namespace ft {
                 }
                 return (iterator(tmp, null_node));
             }
-            const_iterator begin() const{
+            const_iterator          begin() const{
                 node_type *tmp = root;
                 if (tmp != null_node){
                     while (tmp->left != null_node)
@@ -91,7 +89,7 @@ namespace ft {
                 }
                 return (const_iterator(tmp, null_node));
             }
-            iterator end(){
+            iterator                end(){
                 node_type *tmp = root;
                 if (tmp != null_node){
                     while (tmp->right != null_node)
@@ -99,7 +97,7 @@ namespace ft {
                 }
                 return (iterator(tmp, null_node));
             }
-            const_iterator end() const{
+            const_iterator          end() const{
                 node_type *tmp = root;
                 if (tmp != null_node){
                     while (tmp->right != null_node)
@@ -107,15 +105,15 @@ namespace ft {
                 }
                 return (const_iterator(tmp, null_node));
             }
-            reverse_iterator rbegin(){ return (reverse_iterator(end())); }
-            const_reverse_iterator rbegin() const{ return (const_reverse_iterator(end())); }
-            reverse_iterator rend(){ return (reverse_iterator(begin())); }
-            const_reverse_iterator rend() const{ return (const_reverse_iterator(begin())); }
+            reverse_iterator        rbegin(){ return (reverse_iterator(end())); }
+            const_reverse_iterator  rbegin() const{ return (const_reverse_iterator(end())); }
+            reverse_iterator        rend(){ return (reverse_iterator(begin())); }
+            const_reverse_iterator  rend() const{ return (const_reverse_iterator(begin())); }
         
         //***** CAPACITY *****
-            bool empty() const{ return (root == null_node); }
-            size_type size() const{ return (0); } //should return height of tree
-            size_type max_size() const{ return (_alloc.max_size()); }
+            bool                    empty() const{ return (root == null_node); }
+            size_type               size() const{ return (0); } //should return height of tree
+            size_type               max_size() const{ return (_alloc.max_size()); }
         
         //***** ELEMENT ACCESS *****
             // mapped_type& operator[] (const key_type& k){
@@ -132,19 +130,57 @@ namespace ft {
             // }
         
         //***** MODIFIERS *****
-            // pair<iterator,bool> insert (const value_type& val){
-            //     (void)val;
-            //     return(make_pair(key_type(), mapped_type()));
-            // }
-            // iterator insert (iterator position, const value_type& val){
-            //     (void)position;
-            //     (void)val;
-            //     return (begin());
-            // }
-            // template <class InputIterator>  void insert (InputIterator first, InputIterator last){
-            //     (void)first;
-            //     (void)last;
-            // }
+            iterator insert (iterator position, const value_type& val){
+                (void)position;
+                return (insert(val).first);
+            }
+            ft::pair<iterator, bool> insert(const value_type &val){            
+                node_type *tmp = root;
+                node_type *p = 0;
+                node_type *node = new node_type;
+
+                //********** A REMPLACER PAR CONSTRUCTEUR  node(key, data) **********
+                node->parent = 0;
+                node->left = null_node;
+                node->right = null_node;
+                node->data = val;
+                node->color = RED;
+
+                if (root == null_node){// case 1: tree is empty, node becomes black root
+                    node->parent = null_node;
+                    node->color = BLACK;
+                    root = node;
+                    return (ft::make_pair(iterator(root, null_node), true));
+                }
+                //we search for the right spot for our key
+                while (tmp != null_node){
+                    p = tmp;
+                    if (_comp(node->data , tmp->data)) //node->data.first < tmp->data.first
+                        tmp = tmp->left; 
+                    else
+                        tmp = tmp->right;
+                }
+                //assign child to parent (left or right)
+                node->parent = p;
+                if (_comp(node->data , p->data)) // node->data.first <  p->data.first
+                    p->left = node;
+                else if (_comp(p->data, node->data))
+                    p->right = node;
+                else // already in the tree
+                    return (ft::make_pair(iterator(node, null_node), false));
+
+                if (node->parent->color == BLACK)
+                    return (ft::make_pair(iterator(node, null_node), true));
+
+                __repair_insert(node);
+                return (ft::make_pair(iterator(node, null_node), true));
+            }
+            template <class InputIterator>  void insert (InputIterator first, InputIterator last){
+                while( first != last){
+                    insert(*first);
+                    first++;
+                }
+            }
             size_type erase(const value_type & val){
                 node_type  *node;
                 
@@ -214,7 +250,7 @@ namespace ft {
             }
             void erase (iterator first, iterator last){
                 while (first != last)
-                    insert(*first++);
+                    erase(*first++);
             }
             // void swap (map& x){
             //     (void)x;
@@ -272,47 +308,6 @@ namespace ft {
         //***** ALLOCATOR *****
             allocator_type get_allocator() const{ return (_alloc); }
             
-            //----- BST normal insertion -----
-            void insert(const value_type &val){            
-                node_type *tmp = root;
-                node_type *p = 0;
-                node_type *node = new node_type;
-
-                //********** A REMPLACER PAR CONSTRUCTEUR  node(key, data) **********
-                node->parent = 0;
-                node->left = null_node;
-                node->right = null_node;
-                node->data = val;
-                node->color = RED;
-                //*******************************************************************
-
-                if (root == null_node){// case 1: tree is empty, node becomes black root
-                    node->parent = null_node;
-                    node->color = BLACK;
-                    root = node;
-                    return;
-                }
-                //we search for the right spot for our key
-                while (tmp != null_node){
-                    p = tmp;
-                    if (_comp(node->data , tmp->data)) //node->data.first < tmp->data.first
-                        tmp = tmp->left; 
-                    else
-                        tmp = tmp->right;
-                }
-                //assign child to parent (left or right)
-                node->parent = p;
-                if (_comp(node->data , p->data)) // node->data.first <  p->data.first
-                    p->left = node;
-                else
-                    p->right = node;
-
-                if (node->parent->color == BLACK)
-                    return;
-
-                __repair_insert(node);
-            }
-
         //*****************  TESTING ****************************
             //----- Print Tree -----
             void __print_tree(node_type *node, std::string offset, bool end) {
@@ -476,7 +471,7 @@ namespace ft {
             //----- Repair after deletion -----
             void    __repair_delete(node_type *node){
                 node_type *sibling;
-                printTree();
+                // printTree();
                 if (node == root)
                     return;
 
@@ -490,37 +485,37 @@ namespace ft {
                 }
                 //cas 1: sibling black + at least one child red
                 else if (sibling->color == BLACK && (sibling->left->color == RED || sibling->right->color == RED)){
-                    std::cout << "node " << node->data.first << ": Cas 1 -> S Black + 1 or more Red children" << std::endl;
+                    // std::cout << "node " << node->data.first << ": Cas 1 -> S Black + 1 or more Red children" << std::endl;
                     //cas 1.a: LL Sibling is left child, sibling's left child is red
                     if (sibling == sibling->parent->left && sibling->left->color == RED){
-                        std::cout << "cas 1.a: LL Sibling is left child, sibling's left child is red" << std::endl;
+                        // std::cout << "cas 1.a: LL Sibling is left child, sibling's left child is red" << std::endl;
                         sibling->left->color = sibling->color;
                         sibling->color = node->parent->color;
                         __right_rotate(node->parent);
                     }
                     //cas 1.b: LR Sibling is left child, sibling's right child is red
                     else if (sibling == sibling->parent->left && sibling->right->color == RED){
-                        std::cout << "cas 1.b: LR Sibling is left child, sibling's right child is red" << std::endl;
+                        // std::cout << "cas 1.b: LR Sibling is left child, sibling's right child is red" << std::endl;
                         __left_rotate(sibling);
                         __right_rotate(node->parent);
                     }
                     //cas 1.c: RR Sibling is right child, sibling's right child is red
                     else if (sibling == sibling->parent->right && sibling->right->color == RED){
-                        std::cout << "cas 1.c: RR Sibling is right child, sibling's right child is red" << std::endl;
+                        // std::cout << "cas 1.c: RR Sibling is right child, sibling's right child is red" << std::endl;
                         sibling->right->color = sibling->color;
                         sibling->color = node->parent->color;
                         __left_rotate(node->parent);
                     }
                     //cas 1.d: RL Sibling is right child, sibling's left child is red
                     else if (sibling == sibling->parent->right && sibling->left->color == RED){
-                        std::cout << "cas 1.d: RL Sibling is right child, sibling's left child is red" << std::endl;
+                        // std::cout << "cas 1.d: RL Sibling is right child, sibling's left child is red" << std::endl;
                         __right_rotate(sibling);
                         __left_rotate(node->parent);
                     }
                 }
                 //cas 2: sibling black + double black children
                 else if (sibling->color == BLACK && sibling->left->color == BLACK && sibling->right->color == BLACK){
-                    std::cout << "cas 2: sibling black + double black children" << std::endl;
+                    // std::cout << "cas 2: sibling black + double black children" << std::endl;
                     sibling->color = RED;
                     if (node->parent->color == BLACK)
                         __repair_delete(node->parent);
@@ -529,7 +524,7 @@ namespace ft {
                 }
                 //cas 3: sibling red
                 else if (sibling->color == RED){ //on recolore sibling(black) et parent(red) 
-                    std::cout << "cas 3: sibling red" << std::endl;
+                    // std::cout << "cas 3: sibling red" << std::endl;
                     sibling->color = BLACK;
                     node->parent->color = RED;
                     if (sibling == sibling->parent->right){// apres la rotation on se retrouve dans le cas 1 ou 2
