@@ -76,36 +76,66 @@ namespace ft{
         //***** INCREMENT / DECREMENT *****
             RBTree_iterator&    operator++(){
                 node *node = node_ptr;
+                //cas 0: node is null_node
+                if (node == null_node){ //case end()
+                    //on souhaite renvoyer vers le max qui sera identifie comme null_node -> parent
+                    node_ptr = null_node->parent;
+                }
                 //cas 1: has right child, return right child
-                if (node->right != null_node){
+                else if (node->right != null_node){
+                    std::cout << "iterator++ : has right child" << std::endl;
                     node_ptr = node->right;
                 }
                 //cas 2: is highest right
-                //cas 3: has no right child, return first parent with left child
-                else if (node->right == null_node){
-                    node = node->parent;
-                    while (node->left == null_node){
-                        node = node->parent;
-                    }
+                else if (__is_rightest(node) == true){
+                    std::cout << "iterator++ : is highest right" << std::endl;
+                    node_ptr = null_node; // on renvoie vers le null node (end)
                 }
-                node_ptr = node;
+                //cas 3: has no right child, return first parent with node/node->parent as left child
+                else if (node->right == null_node){
+                    std::cout << "iterator++ : has no right child" << std::endl;
+                    //cas 3.1: no right child, is left child
+                    if (node == node->parent->left)
+                        node_ptr = node->parent;
+                    //cas 3.2: no right child, is right child
+                    else{
+                        while (node == node->parent->right){
+                            node = node->parent;
+                        }
+                        node_ptr = node->parent; //this node is left child of his parent
+                    }   
+                }
                 return (*this);
             }
             RBTree_iterator&    operator--(){
                 node *node = node_ptr;
+                //cas 0: node is null_node
+                if (node == null_node){ //case end()
+                    //on souhaite renvoyer vers le max qui sera identifie comme null_node -> parent
+                    node_ptr = null_node->parent;
+                }
                 //cas 1: has left child, return left child
-                if (node->left != null_node){
+                else if (node->left != null_node){
                     node_ptr = node->left;
                 }
                 //cas 2: is lowest left
-                //cas 3: has no left child, return first parent with right child
-                else if (node->left == null_node){
-                    node = node->parent;
-                    while (node->right == null_node){
-                        node = node->parent;
-                    }
+                else if (__is_leftest(node) == true){
+                    node_ptr = null_node;
                 }
-                node_ptr = node;
+                //cas 3: has no left child, return first parent with node/node->parent as right child
+                else if (node->left == null_node){
+                    std::cout << "iterator++ : has no left child" << std::endl;
+                    //cas 3.1: no left child, is left child
+                    if (node == node->parent->right)
+                        node_ptr = node->parent;
+                    //cas 3.2: no left child, is left child
+                    else{
+                        while (node == node->parent->left){
+                            node = node->parent;
+                        }
+                        node_ptr = node->parent; //this node is left child of his parent
+                    }   
+                }
                 return (*this);
             }
             RBTree_iterator     operator++(int){ RBTree_iterator it = *this; ++(*this); return (it); }
@@ -118,6 +148,28 @@ namespace ft{
         //***** COMPARISON *****
             template <bool B > bool   operator==(const RBTree_iterator<T, B> & rhs ) const{ return (node_ptr == rhs.node_ptr); }
             template <bool B > bool   operator!=(const RBTree_iterator<T, B> & rhs ) const{ return (node_ptr != rhs.node_ptr); }
+
+        private:
+            bool __is_leftest(node * node){
+                if (node->parent == null_node){
+                    return(true);//we are root, end of recursivity 
+                }
+                else if (node == node->parent->left){
+                    return(__is_leftest(node->parent)); //node is left child, check for parent
+                }
+                else
+                    return(false);//node is right child, cannot be leftest
+            }
+            bool __is_rightest(node *node){
+                if (node->parent == null_node){
+                    return(true);//we are root, end of recursivity 
+                }
+                else if (node == node->parent->right){
+                    return(__is_rightest(node->parent)); //node is right child, check for parent
+                }
+                else
+                    return(false);//node is right child, cannot be rightest
+            }
     };    
 
 }

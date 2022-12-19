@@ -64,7 +64,7 @@ namespace ft {
                 clear();
                 _comp = x._comp;
                 _alloc = x._alloc;
-                insert(x.begin(), x.end());
+                insert(x.begin(), x.end()); // a remplacer
                 return (*this);
             }
 
@@ -88,7 +88,7 @@ namespace ft {
             iterator                end(){
                 node_type *tmp = root;
                 if (tmp != null_node){
-                    while (tmp->right != null_node)
+                    while (tmp != null_node) // tmp_>right != null_node ?
                         tmp = tmp->right;
                 }
                 return (iterator(tmp, null_node));
@@ -96,7 +96,7 @@ namespace ft {
             const_iterator          end() const{
                 node_type *tmp = root;
                 if (tmp != null_node){
-                    while (tmp->right != null_node)
+                    while (tmp != null_node) // tmp->right != null_node ?
                         tmp = tmp->right;
                 }
                 return (const_iterator(tmp, null_node));
@@ -169,8 +169,7 @@ namespace ft {
             }
             template <class InputIterator>  void insert (InputIterator first, InputIterator last){
                 while( first != last){
-                    insert(*first);
-                    first++;
+                    insert(*first++);
                 }
             }
             size_type erase(const value_type & val){
