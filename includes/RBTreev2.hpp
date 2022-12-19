@@ -142,6 +142,7 @@ namespace ft {
                     node->parent = null_node;
                     node->color = BLACK;
                     root = node;
+                    __update_null_node();
                     return (ft::make_pair(iterator(root, null_node), true));
                 }
                 //we search for the right spot for our key
@@ -161,10 +162,13 @@ namespace ft {
                 else // already in the tree
                     return (ft::make_pair(iterator(node, null_node), false));
 
-                if (node->parent->color == BLACK)
+                if (node->parent->color == BLACK){
+                    __update_null_node();
                     return (ft::make_pair(iterator(node, null_node), true));
+                }
 
                 __repair_insert(node);
+                __update_null_node();
                 return (ft::make_pair(iterator(node, null_node), true));
             }
             template <class InputIterator>  void insert (InputIterator first, InputIterator last){
@@ -191,28 +195,22 @@ namespace ft {
                     new_node = __assign_child_parent(node, RIGHT);
                     delete node;
                     if (original_color == BLACK){// le noeud etait noir
-                        if (new_node->color == RED){// l enfant etait rouge , good
+                        if (new_node->color == RED)// l enfant etait rouge , good
                             new_node->color = BLACK;
-                            return;   
-                        }
                         else// l enfant etait noir 
-                            return (__repair_delete(new_node)); //il faut repair double black
+                            __repair_delete(new_node); //il faut repair double black
                     }
-                    return;
                 }
                 //case 2 : no right child
                 else if (node->right == null_node){
                     new_node = __assign_child_parent(node, LEFT);
                     delete node;
                     if (original_color == BLACK){// le noeud etait noir
-                        if (new_node->color == RED){// l enfant etait rouge , good
+                        if (new_node->color == RED)// l enfant etait rouge , good
                             new_node->color = BLACK;
-                            return;   
-                        }
                         else// l enfant etait noir 
-                            return (__repair_delete(new_node)); //il faut repair double black
+                            __repair_delete(new_node); //il faut repair double black
                     }
-                    return;
                 }
                 //case 3 : both children are valid
                 else{
@@ -238,6 +236,7 @@ namespace ft {
                     delete node;
                     erase(to_delete);
                 }
+                __update_null_node();
             }
             void erase (iterator first, iterator last){
                 while (first != last)
@@ -347,6 +346,21 @@ namespace ft {
             value_compare   _comp;
             allocator_type  _alloc;
 
+            //---- Helper function to prevent overflow on iterator or out of bound -----
+            void    __update_null_node(void){
+                node_type * current;
+                current = root;
+
+                if (current == null_node){
+                    null_node->parent = null_node;
+                }
+                else{
+                    while (current->right != null_node){
+                        current = current->right;
+                    }
+                    null_node->parent = current;
+                }
+            }
             //----- Helper function to find out if a  == b -----
             bool    __value_equal(value_type a, value_type b){
                 if (_comp(a, b) == _comp(b, a))
@@ -526,6 +540,7 @@ namespace ft {
                     __repair_delete(node);
                 }
                 root->color = BLACK;
+                __update_null_node();
             }
             //----- Assign child to parent -----
             node_type *__assign_child_parent(node_type *node, bool left){

@@ -76,7 +76,6 @@ namespace ft {
                 _comp = x._comp;
                 _alloc = x._alloc;
                 _tree = x._tree;
-                _tree.printTree();
                 return (*this);
             }
 

@@ -84,13 +84,14 @@ int main( void ){
         temp._tree.printTree();
 
         std::cout << "testing ++ behavior" << std::endl;
-        for (it = temp.begin(); it != temp.end(); it++){
+        for (it = temp.begin(); it != temp.end() ; it++){
             std::cout << "Element " << (*it).first << "= " << (*it).second << std::endl;
             sleep(1);
         }
+        std::cout << std::endl;
 
         std::cout << "testing -- behavior" << std::endl;
-        for (it = temp.end(); it != temp.begin(); it--){
+        for (it = temp.end(); it != temp.begin() ; it--){
             std::cout << "Element " << (*it).first << "= " << (*it).second << std::endl;
             sleep(1);
         }

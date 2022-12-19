@@ -81,19 +81,18 @@ namespace ft{
                     //on souhaite renvoyer vers le max qui sera identifie comme null_node -> parent
                     node_ptr = null_node->parent;
                 }
-                //cas 1: has right child, return right child
+                //cas 1: has right child, return lowest right child
                 else if (node->right != null_node){
-                    std::cout << "iterator++ : has right child" << std::endl;
                     node_ptr = node->right;
+                    while (node_ptr->left != null_node)
+                        node_ptr = node_ptr->left;
                 }
                 //cas 2: is highest right
                 else if (__is_rightest(node) == true){
-                    std::cout << "iterator++ : is highest right" << std::endl;
                     node_ptr = null_node; // on renvoie vers le null node (end)
                 }
                 //cas 3: has no right child, return first parent with node/node->parent as left child
                 else if (node->right == null_node){
-                    std::cout << "iterator++ : has no right child" << std::endl;
                     //cas 3.1: no right child, is left child
                     if (node == node->parent->left)
                         node_ptr = node->parent;
@@ -103,7 +102,7 @@ namespace ft{
                             node = node->parent;
                         }
                         node_ptr = node->parent; //this node is left child of his parent
-                    }   
+                    }
                 }
                 return (*this);
             }
@@ -114,9 +113,11 @@ namespace ft{
                     //on souhaite renvoyer vers le max qui sera identifie comme null_node -> parent
                     node_ptr = null_node->parent;
                 }
-                //cas 1: has left child, return left child
+                //cas 1: has left child, return highest left child
                 else if (node->left != null_node){
                     node_ptr = node->left;
+                    while (node_ptr->right != null_node)
+                        node_ptr = node_ptr->right;
                 }
                 //cas 2: is lowest left
                 else if (__is_leftest(node) == true){
@@ -124,10 +125,10 @@ namespace ft{
                 }
                 //cas 3: has no left child, return first parent with node/node->parent as right child
                 else if (node->left == null_node){
-                    std::cout << "iterator++ : has no left child" << std::endl;
-                    //cas 3.1: no left child, is left child
-                    if (node == node->parent->right)
+                    //cas 3.1: no left child, is right child
+                    if (node == node->parent->right){
                         node_ptr = node->parent;
+                    }
                     //cas 3.2: no left child, is left child
                     else{
                         while (node == node->parent->left){
