@@ -33,11 +33,12 @@ namespace ft{
     template < class T, bool ConstB >
     class RBTree_iterator{
         public:
-            typedef typename ft::conditional<ConstB, const T, T>::type  value_type;
+            typedef T                                                   value_type;
+            // typedef typename ft::conditional<ConstB, const T, T>::type  value_type;
             typedef value_type&                                         reference;
-            typedef value_type const &                                  const_reference;
+            typedef const value_type &                                  const_reference;
             typedef value_type*                                         pointer;
-            typedef value_type const *                                  const_pointer;
+            typedef const value_type *                                  const_pointer;
             typedef std::ptrdiff_t                                      difference_type;
             typedef std::size_t                                         size_type;
             typedef std::bidirectional_iterator_tag                     iterator_category;
@@ -66,44 +67,39 @@ namespace ft{
                 null_node = rhs.null_node;
                 return (*this);
             }
-            virtual ~RBTree_iterator( void ){}
-		    template <bool B>
-            RBTree_iterator(RBTree_iterator<T, B> const & rhs, typename ft::enable_if<!B>::type* = 0)	{
-                node_ptr = rhs.node_ptr;
-                null_node = rhs.null_node;
-            }
-            // friend RBTree_iterator	    operator+(int n, const RBTree_iterator & rhs){
-            //     return (rhs.node_ptr + n);
-            // }    
+            // template <bool B>
+            // RBTree_iterator(RBTree_iterator<T, B> const & rhs, typename ft::enable_if<!B>::type* = 0)	{ 
+            //     node_ptr = rhs.node_ptr;
+            //     null_node = rhs.null_node; 
+            // }
+            virtual ~RBTree_iterator( void ){}  
         //***** INCREMENT / DECREMENT *****
             RBTree_iterator&    operator++(){
                 node *node = node_ptr;
                 //cas 1: has right child, return right child
                 if (node->right != null_node){
                     node_ptr = node->right;
-                    return (*this);
                 }
                 //cas 2: is highest right
                 //cas 3: has no right child, return first parent with left child
-                if (node->right == null_node){
+                else if (node->right == null_node){
                     node = node->parent;
                     while (node->left == null_node){
                         node = node->parent;
                     }
-                    node_ptr = node;
-                    return (*this);
                 }
+                node_ptr = node;
+                return (*this);
             }
             RBTree_iterator&    operator--(){
                 node *node = node_ptr;
                 //cas 1: has left child, return left child
                 if (node->left != null_node){
                     node_ptr = node->left;
-                    return (*this);
                 }
                 //cas 2: is lowest left
                 //cas 3: has no left child, return first parent with right child
-                if (node->left == null_node){
+                else if (node->left == null_node){
                     node = node->parent;
                     while (node->right == null_node){
                         node = node->parent;

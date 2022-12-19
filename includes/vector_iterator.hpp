@@ -12,9 +12,9 @@ namespace ft{
         public:
             typedef typename ft::conditional<ConstB, const T, T>::type  value_type;
             typedef value_type&                                         reference;
-            typedef value_type const &                                  const_reference;
+            typedef const value_type &                                  const_reference;
             typedef value_type*                                         pointer;
-            typedef value_type const *                                  const_pointer;
+            typedef const value_type *                                  const_pointer;
             typedef std::ptrdiff_t                                      difference_type;
             typedef std::size_t                                         size_type;
             typedef std::random_access_iterator_tag                     iterator_category;

@@ -58,21 +58,17 @@ namespace ft {
         //***** MEMBER FUNCTIONS *****
             //___Constructors___
             explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
-                : _comp(comp), _alloc(alloc), _tree (tree_type(value_compare(_comp), _alloc)) {}
+                : _comp(comp), _alloc(alloc), _tree (value_compare(_comp), _alloc) {}
             
             template <class InputIt>  map (InputIt first, InputIt last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
-                : _comp(comp), _alloc(alloc), _tree(tree_type(value_compare(_comp), _alloc)) {
+                : _comp(comp), _alloc(alloc), _tree(value_compare(_comp), _alloc) {
                 while (first != last){
                     _tree.insert(*first);
                     first++;
                 }
             }    
             
-            map (const map& x){
-                _comp = x._comp;
-                _alloc = x._alloc;
-                _tree = x._tree;
-            }
+            map (const map& x): _comp(x._comp), _alloc(x._alloc), _tree(x._tree){}
 
             ~map( void ){}
 
@@ -101,15 +97,15 @@ namespace ft {
         //***** ELEMENT ACCESS *****
             mapped_type&            operator[] (const key_type& k){
                 (void)k;
-                return(mapped_type());
+                return((*begin()).second);
             }
             mapped_type&            at (const key_type& k){
                 (void)k;
-                return(mapped_type());
+                return((*begin()).second);
             }
             const mapped_type&      at (const key_type& k) const{
                 (void)k;
-                return(mapped_type());
+                return((*begin()).second);
             }
 
         //***** MODIFIERS *****
