@@ -6,7 +6,7 @@
 /*   By: dsaada <dsaada@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 12:46:40 by dsaada            #+#    #+#             */
-/*   Updated: 2022/12/19 12:38:59 by dsaada           ###   ########.fr       */
+/*   Updated: 2022/12/20 09:55:19 by dsaada           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ namespace ft {
             typedef std::size_t                                         size_type;      
         
         public:
-            explicit RBTree( const value_compare& comp, const allocator_type& alloc = allocator_type()): _comp(comp), _alloc(alloc){
+            explicit RBTree( const value_compare& comp, const allocator_type& alloc = allocator_type()): _comp(comp), _alloc(alloc), _size(0){
                 null_node = new node_type;
                 __null_node(null_node);
                 root = null_node;
@@ -56,6 +56,7 @@ namespace ft {
                 __null_node(null_node);
                 root = null_node;
                 insert(x.begin(), x.end());
+                _size = x.size();
             }
             ~RBTree( void ){
                 clear();
@@ -65,6 +66,7 @@ namespace ft {
                 _comp = x._comp;
                 _alloc = x._alloc;
                 insert(x.begin(), x.end()); // a remplacer
+                _size = x.size();
                 return (*this);
             }
 
@@ -108,7 +110,7 @@ namespace ft {
         
         //***** CAPACITY *****
             bool                    empty() const{ return (root == null_node); }
-            size_type               size() const{ return (0); } //should return height of tree
+            size_type               size() const{ return (_size); } //should return height of tree
             size_type               max_size() const{ return (_alloc.max_size()); }
         
         //***** ELEMENT ACCESS *****
@@ -143,6 +145,7 @@ namespace ft {
                     node->color = BLACK;
                     root = node;
                     __update_null_node();
+                    _size++;
                     return (ft::make_pair(iterator(root, null_node), true));
                 }
                 //we search for the right spot for our key
@@ -159,14 +162,16 @@ namespace ft {
                     p->left = node;
                 else if (_comp(p->data, node->data))
                     p->right = node;
-                else // already in the tree
+                else{// already in the tree
+                    _size++;
                     return (ft::make_pair(iterator(node, null_node), false));
-
+                }
                 if (node->parent->color == BLACK){
                     __update_null_node();
+                    _size++;
                     return (ft::make_pair(iterator(node, null_node), true));
                 }
-
+                _size++;
                 __repair_insert(node);
                 __update_null_node();
                 return (ft::make_pair(iterator(node, null_node), true));
@@ -236,6 +241,7 @@ namespace ft {
                     delete node;
                     erase(to_delete);
                 }
+                _size--;
                 __update_null_node();
             }
             void erase (iterator first, iterator last){
@@ -345,6 +351,7 @@ namespace ft {
             node_type       *null_node;
             value_compare   _comp;
             allocator_type  _alloc;
+            size_type       _size;
 
             //---- Helper function to prevent overflow on iterator or out of bound -----
             void    __update_null_node(void){
