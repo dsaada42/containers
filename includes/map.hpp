@@ -119,7 +119,7 @@ namespace ft {
                 _tree.insert(first, last);
             }
             void erase (iterator position){
-                (void)position;
+                _tree.erase(*position);
             }
             size_type erase (const key_type& k){
                 return(_tree.erase(ft::make_pair(k, mapped_type())));
@@ -153,28 +153,24 @@ namespace ft {
                 return(0);
             }
             iterator lower_bound (const key_type& k){
-                (void)k;
-                return(begin());
+                return(_tree.lower_bound(ft::make_pair(k, mapped_type())));
             }
             const_iterator lower_bound (const key_type& k) const{
-                (void)k;
-                return(begin());
+                return(_tree.lower_bound(ft::make_pair(k, mapped_type())));
             }
             iterator upper_bound (const key_type& k){
-                (void)k;
-                return(begin());
+                return(_tree.upper_bound(ft::make_pair(k, mapped_type())));
             }
             const_iterator upper_bound (const key_type& k) const{
-                (void)k;
-                return(begin());
+                return(_tree.upper_bound(ft::make_pair(k, mapped_type())));
             }
             pair<const_iterator,const_iterator> equal_range (const key_type& k) const{
                 (void)k;
-                return(make_pair(key_type(), mapped_type()));
+                return(ft::make_pair(const_iterator(), const_iterator()));
             }
             pair<iterator,iterator> equal_range (const key_type& k){
                 (void)k;
-                return(make_pair(key_type(), mapped_type()));
+                return(ft::make_pair(iterator(), iterator()));
             }
 
         //***** ALLOCATOR *****

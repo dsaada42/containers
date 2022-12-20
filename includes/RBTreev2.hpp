@@ -6,7 +6,7 @@
 /*   By: dsaada <dsaada@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 12:46:40 by dsaada            #+#    #+#             */
-/*   Updated: 2022/12/20 09:55:19 by dsaada           ###   ########.fr       */
+/*   Updated: 2022/12/20 11:42:51 by dsaada           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ namespace ft {
             const_reverse_iterator  rend() const{ return (const_reverse_iterator(begin())); }
         
         //***** CAPACITY *****
-            bool                    empty() const{ return (root == null_node); }
+            bool                    empty() const{ return (_size == 0); }
             size_type               size() const{ return (_size); } //should return height of tree
             size_type               max_size() const{ return (_alloc.max_size()); }
         
@@ -276,14 +276,26 @@ namespace ft {
             //     (void)k;
             //     return(0);
             // }
-            // iterator lower_bound (const key_type& k){
-            //     (void)k;
-            //     return(begin());
-            // }
-            // const_iterator lower_bound (const key_type& k) const{
-            //     (void)k;
-            //     return(begin());
-            // }
+            iterator lower_bound (const value_type& k){
+                iterator current;
+
+                current = begin();
+                
+                while (!_comp((*current)->data, k->data)){
+                    current++;
+                }
+                return(current);
+            }
+            const_iterator lower_bound (const value_type& k) const{
+                iterator current;
+
+                current = begin();
+                
+                while (!_comp((*current)->data, k->data)){
+                    current++;
+                }
+                return(current);
+            }
             // iterator upper_bound (const key_type& k){
             //     (void)k;
             //     return(begin());
