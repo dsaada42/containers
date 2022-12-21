@@ -96,16 +96,13 @@ namespace ft {
 
         //***** ELEMENT ACCESS *****
             mapped_type&            operator[] (const key_type& k){
-                (void)k;
-                return((*begin()).second);
+                return(_tree[ft::make_pair(k, mapped_type())].second);
             }
             mapped_type&            at (const key_type& k){
-                (void)k;
-                return((*begin()).second);
+                return(_tree.at(ft::make_pair(k, mapped_type())).second);
             }
             const mapped_type&      at (const key_type& k) const{
-                (void)k;
-                return((*begin()).second);
+                return(_tree.at(ft::make_pair(k, mapped_type())).second);
             }
 
         //***** MODIFIERS *****
@@ -125,8 +122,7 @@ namespace ft {
                 return(_tree.erase(ft::make_pair(k, mapped_type())));
             }
             void erase (iterator first, iterator last){
-                _tree.erase(first, last);(void)first;
-                (void)last;
+                _tree.erase(first, last);
             }
             void swap (map& x){
                 (void)x;
@@ -137,7 +133,7 @@ namespace ft {
 
         //***** OBSERVERS *****
             key_compare key_comp() const{return(key_compare());}
-            value_compare value_comp() const{return(value_compare());}
+            value_compare value_comp() const{return(value_compare(_comp));}
 
         //***** OPERATIONS *****
             iterator find (const key_type& k){

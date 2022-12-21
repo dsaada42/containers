@@ -6,7 +6,7 @@
 /*   By: dsaada <dsaada@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 12:46:40 by dsaada            #+#    #+#             */
-/*   Updated: 2022/12/20 11:42:51 by dsaada           ###   ########.fr       */
+/*   Updated: 2022/12/21 10:30:23 by dsaada           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,18 +114,26 @@ namespace ft {
             size_type               max_size() const{ return (_alloc.max_size()); }
         
         //***** ELEMENT ACCESS *****
-            // mapped_type& operator[] (const key_type& k){
-            //     (void)k;
-            //     return(mapped_type());
-            // }
-            // mapped_type& at (const key_type& k){
-            //     (void)k;
-            //     return(mapped_type());
-            // }
-            // const mapped_type& at (const key_type& k) const{
-            //     (void)k;
-            //     return(mapped_type());
-            // }
+            value_type& operator[] (const value_type& k){
+                (void)k;
+                return(root->data);
+            }
+            value_type& at (const value_type& k){
+                node_type *node;
+
+                node = __search_last_val(k);
+                if (node != null_node)
+                    return(node->data);
+                return(root->data); // a modifier
+            }
+            const value_type& at (const value_type& k) const{
+                node_type *node;
+
+                node = __search_last_val(k);
+                if (node != null_node)
+                    return(node->data);
+                return(root->data); // a modifier
+            }
         
         //***** MODIFIERS *****
             iterator insert (iterator position, const value_type& val){
@@ -149,6 +157,9 @@ namespace ft {
                     return (ft::make_pair(iterator(root, null_node), true));
                 }
                 //we search for the right spot for our key
+                p = __search_last_val(val);
+                if (p != null_node)
+                    return (ft::make_pair(iterator(p, null_node), false)); 
                 while (tmp != null_node){
                     p = tmp;
                     if (_comp(node->data , tmp->data)) //node->data.first < tmp->data.first
@@ -185,9 +196,11 @@ namespace ft {
                 node_type  *node;
                 
                 node = __search_last_val(val);
-                if (node != null_node)
+                if (node != null_node){
                     erase(node);
-                return (1);
+                    return(1);    
+                }
+                return (0);
             }
             void erase(node_type *node){ 
                 node_type  *to_delete;
@@ -205,6 +218,7 @@ namespace ft {
                         else// l enfant etait noir 
                             __repair_delete(new_node); //il faut repair double black
                     }
+                    _size--;
                 }
                 //case 2 : no right child
                 else if (node->right == null_node){
@@ -216,6 +230,7 @@ namespace ft {
                         else// l enfant etait noir 
                             __repair_delete(new_node); //il faut repair double black
                     }
+                    _size--;
                 }
                 //case 3 : both children are valid
                 else{
@@ -241,7 +256,6 @@ namespace ft {
                     delete node;
                     erase(to_delete);
                 }
-                _size--;
                 __update_null_node();
             }
             void erase (iterator first, iterator last){
@@ -281,29 +295,43 @@ namespace ft {
 
                 current = begin();
                 
-                while (!_comp((*current)->data, k->data)){
+                while (!_comp(*current, k)){
                     current++;
                 }
                 return(current);
             }
             const_iterator lower_bound (const value_type& k) const{
-                iterator current;
+                const_iterator current;
 
                 current = begin();
                 
-                while (!_comp((*current)->data, k->data)){
+                while (!_comp(*current, k)){
                     current++;
                 }
                 return(current);
             }
-            // iterator upper_bound (const key_type& k){
-            //     (void)k;
-            //     return(begin());
-            // }
-            // const_iterator upper_bound (const key_type& k) const{
-            //     (void)k;
-            //     return(begin());
-            // }
+            iterator upper_bound (const value_type& k){
+                iterator current;
+
+                current = end();
+                
+                current--;
+                while (_comp(*current, k)){
+                    current--;
+                }
+                return(current);
+            }
+            const_iterator upper_bound (const value_type& k) const{
+                const_iterator current;
+
+                current = end();
+                
+                current--;
+                while (_comp(*current, k)){
+                    current--;
+                }
+                return(current);
+            }
             // pair<const_iterator,const_iterator> equal_range (const key_type& k) const{
             //     (void)k;
             //     return(make_pair(key_type(), mapped_type()));
@@ -381,7 +409,7 @@ namespace ft {
                 }
             }
             //----- Helper function to find out if a  == b -----
-            bool    __value_equal(value_type a, value_type b){
+            bool    __value_equal(value_type a, value_type b) const{
                 if (_comp(a, b) == _comp(b, a))
                     return (true);
                 return (false);
@@ -394,7 +422,7 @@ namespace ft {
                 node->color = BLACK;
             }
             //----- Find highest of left subtree -----
-            node_type  *__highest_left(node_type *node){
+            node_type  *__highest_left(node_type *node) const{
                 node_type *tmp;
 
                 if (node == null_node)
@@ -407,7 +435,7 @@ namespace ft {
                 return (tmp);
             }
             //----- Find lowest of right subtree -----
-            node_type  *__lowest_right(node_type *node){
+            node_type  *__lowest_right(node_type *node) const{
                 node_type  *tmp;
 
                 if (node == null_node)
@@ -483,7 +511,7 @@ namespace ft {
                 }
             }
             //----- Get sibling -----
-            node_type  *__get_sibling(node_type *node){
+            node_type  *__get_sibling(node_type *node) const{
                 if (node->parent == null_node)
                     return (null_node);
                 else if (node == node->parent->left)
@@ -579,7 +607,7 @@ namespace ft {
                 return (to_assign);
             }  
             //----- Search node by key -----
-            node_type *__search_val(node_type *node, value_type val){
+            node_type *__search_val(node_type *node, value_type val) const{
                 if (node == null_node || __value_equal(val, node->data)) // if val == node->data
                     return(node);
                 if (_comp(val , node->data)) // if val < node->data
@@ -587,7 +615,7 @@ namespace ft {
                 return( __search_val(node->right, val) );
             }
             //----- Search last occurence of key -----
-            node_type *__search_last_val(value_type val){
+            node_type *__search_last_val(value_type val) const{
                 node_type  *current;
                 node_type  *node;
 

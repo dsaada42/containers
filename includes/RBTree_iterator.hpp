@@ -44,7 +44,7 @@ namespace ft{
             typedef std::bidirectional_iterator_tag                     iterator_category;
             typedef RBTree_node< value_type >                           node;
 
-        private:
+        public:
             node *node_ptr;
             node *null_node;
 
@@ -67,11 +67,11 @@ namespace ft{
                 null_node = rhs.null_node;
                 return (*this);
             }
-            // template <bool B>
-            // RBTree_iterator(RBTree_iterator<T, B> const & rhs, typename ft::enable_if<!B>::type* = 0)	{ 
-            //     node_ptr = rhs.node_ptr;
-            //     null_node = rhs.null_node; 
-            // }
+            template <bool B>
+            RBTree_iterator(RBTree_iterator<T, B> const & rhs, typename ft::enable_if<!B>::type* = 0)	{ 
+                node_ptr = rhs.node_ptr;
+                null_node = rhs.null_node; 
+            }
             virtual ~RBTree_iterator( void ){}  
         //***** INCREMENT / DECREMENT *****
             RBTree_iterator&    operator++(){
