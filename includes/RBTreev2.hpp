@@ -6,7 +6,7 @@
 /*   By: dsaada <dsaada@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 12:46:40 by dsaada            #+#    #+#             */
-/*   Updated: 2022/12/21 10:30:23 by dsaada           ###   ########.fr       */
+/*   Updated: 2022/12/21 12:46:09 by dsaada           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -297,6 +297,8 @@ namespace ft {
                 
                 while (!_comp(*current, k)){
                     current++;
+                    if (*current == __max(root)->data)
+                        return(current);
                 }
                 return(current);
             }
@@ -307,6 +309,8 @@ namespace ft {
                 
                 while (!_comp(*current, k)){
                     current++;
+                    if (*current == __max(root)->data)
+                        return(current);
                 }
                 return(current);
             }
@@ -318,6 +322,8 @@ namespace ft {
                 current--;
                 while (_comp(*current, k)){
                     current--;
+                    if (current == begin())
+                        return(current);
                 }
                 return(current);
             }
@@ -329,6 +335,8 @@ namespace ft {
                 current--;
                 while (_comp(*current, k)){
                     current--;
+                    if (current == begin())
+                        return(current);
                 }
                 return(current);
             }
@@ -393,6 +401,23 @@ namespace ft {
             allocator_type  _alloc;
             size_type       _size;
 
+            
+            node_type  *__max(node_type *node) const{
+                node_type *current;
+
+                current = node;
+                while (current->right != null_node)
+                    current = current->right;
+                return(current);
+            }
+            node_type  *__min(node_type *node) const{
+                node_type *current;
+
+                current = node;
+                while (current->left != null_node)
+                    current = current->left;
+                return(current);
+            }
             //---- Helper function to prevent overflow on iterator or out of bound -----
             void    __update_null_node(void){
                 node_type * current;
