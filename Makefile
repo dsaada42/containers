@@ -2,7 +2,7 @@ CXX		=	c++
 
 NAME	=	containers
 
-CPPFLAGS = -Wall -Wextra -Werror -std=c++98
+CPPFLAGS = -Wall -Wextra -Werror -g3 -std=c++98
 
 SRC		=	./srcs/main_test_map.cpp
 

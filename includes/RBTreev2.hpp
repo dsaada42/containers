@@ -6,7 +6,7 @@
 /*   By: dsaada <dsaada@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 12:46:40 by dsaada            #+#    #+#             */
-/*   Updated: 2022/12/22 11:22:45 by dsaada           ###   ########.fr       */
+/*   Updated: 2022/12/22 15:10:48 by dsaada           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,36 +30,42 @@ namespace ft {
     class RBTree{
         
         public:
-            typedef T                                                   value_type;
-            typedef Alloc                                               allocator_type;
-            typedef Compare                                             value_compare;
-            typedef typename allocator_type::reference                  reference;
-            typedef typename allocator_type::const_reference            const_reference;
-            typedef typename allocator_type::pointer                    pointer;
-            typedef typename allocator_type::const_pointer              const_pointer;
-            typedef ft::RBTree_iterator<value_type, false>              iterator;
-            typedef ft::RBTree_iterator<value_type, true>               const_iterator;
-            typedef ft::reverse_iterator<iterator>                      reverse_iterator;
-            typedef ft::reverse_iterator<const_iterator>                const_reverse_iterator;
-            typedef ft::RBTree_node< value_type >                       node_type;
-            typedef std::ptrdiff_t                                      difference_type; //ptrdiff_t
-            typedef std::size_t                                         size_type;      
+            typedef T                                                               value_type;
+            typedef Alloc                                                           allocator_type;
+            typedef Compare                                                         value_compare;
+            typedef typename allocator_type::reference                              reference;
+            typedef typename allocator_type::const_reference                        const_reference;
+            typedef typename allocator_type::pointer                                pointer;
+            typedef typename allocator_type::const_pointer                          const_pointer;
+            typedef ft::RBTree_iterator<value_type, false>                          iterator;
+            typedef ft::RBTree_iterator<value_type, true>                           const_iterator;
+            typedef ft::reverse_iterator<iterator>                                  reverse_iterator;
+            typedef ft::reverse_iterator<const_iterator>                            const_reverse_iterator;
+            typedef ft::RBTree_node< value_type >                                   node_type;
+            typedef std::ptrdiff_t                                                  difference_type; //ptrdiff_t
+            typedef std::size_t                                                     size_type;
+            typedef typename allocator_type::template rebind< node_type >::other    node_allocator_type;
         
         public:
             explicit RBTree( const value_compare& comp, const allocator_type& alloc = allocator_type()): _comp(comp), _alloc(alloc), _size(0){
-                null_node = new node_type;
-                __null_node(null_node);
+                // null_node = new node_type;
+                null_node = __new_node();
+                null_node->color = BLACK;
+                // __null_node(null_node);
                 root = null_node;
             }
             RBTree (const RBTree& x): _comp(x._comp), _alloc(x._alloc){
-                null_node = new node_type;
-                __null_node(null_node);
+                // null_node = new node_type;
+                null_node = __new_node();
+                null_node->color = BLACK;
+                // __null_node(null_node);
                 root = null_node;
                 insert(x.begin(), x.end());
                 _size = x.size();
             }
             ~RBTree( void ){
                 clear();
+                __delete_node(null_node);
             }
             RBTree& operator= (const RBTree& x){
                 clear();
@@ -111,7 +117,7 @@ namespace ft {
         //***** CAPACITY *****
             bool                    empty() const{ return (_size == 0); }
             size_type               size() const{ return (_size); } //should return height of tree
-            size_type               max_size() const{ return (_alloc.max_size()); }
+            size_type               max_size() const{ return (_node_alloc.max_size()); }
         
         //***** ELEMENT ACCESS *****
             value_type& operator[] (const value_type& k){
@@ -142,8 +148,9 @@ namespace ft {
             ft::pair<iterator, bool> insert(const value_type &val){            
                 node_type *tmp = root;
                 node_type *p = 0;
-                node_type *node = new node_type(val);
-
+                // node_type *node = new node_type(val);
+                node_type *node = __new_node(val);
+                
                 node->left = null_node;
                 node->right = null_node;
 
@@ -157,8 +164,10 @@ namespace ft {
                 }
                 //we search for the right spot for our key
                 p = __search_last_val(val);
-                if (p != null_node)
+                if (p != null_node){
+                    __delete_node(node);    
                     return (ft::make_pair(iterator(p, null_node), false)); 
+                }
                 while (tmp != null_node){
                     p = tmp;
                     if (_comp(node->data , tmp->data)) //node->data.first < tmp->data.first
@@ -174,7 +183,8 @@ namespace ft {
                     p->right = node;
                 else{// already in the tree
                     _size++;
-                    return (ft::make_pair(iterator(node, null_node), false));
+                    __delete_node(node);
+                    return (ft::make_pair(iterator(p, null_node), false));
                 }
                 if (node->parent->color == BLACK){
                     __update_null_node();
@@ -210,7 +220,8 @@ namespace ft {
                 //case 1 : no left child 
                 if (node->left == null_node){
                     new_node = __assign_child_parent(node, RIGHT);
-                    delete node;
+                    // delete node;
+                    __delete_node(node);
                     if (original_color == BLACK){// le noeud etait noir
                         if (new_node->color == RED)// l enfant etait rouge , good
                             new_node->color = BLACK;
@@ -222,7 +233,8 @@ namespace ft {
                 //case 2 : no right child
                 else if (node->right == null_node){
                     new_node = __assign_child_parent(node, LEFT);
-                    delete node;
+                    // delete node;
+                    __delete_node(node);
                     if (original_color == BLACK){// le noeud etait noir
                         if (new_node->color == RED)// l enfant etait rouge , good
                             new_node->color = BLACK;
@@ -234,7 +246,8 @@ namespace ft {
                 //case 3 : both children are valid
                 else{
                     to_delete = __highest_left(node);
-                    new_node = new node_type(to_delete->data);
+                    // new_node = new node_type(to_delete->data);
+                    new_node = __new_node(to_delete->data);
                     //on branche au child de droite
                     new_node->right = node->right;
                     new_node->right->parent = new_node;
@@ -252,7 +265,8 @@ namespace ft {
                     new_node->color = original_color;
                     original_color = to_delete->color;
                     //on supprime l'ancien noeud
-                    delete node;
+                    // delete node;
+                    __delete_node(node);
                     erase(to_delete);
                 }
                 __update_null_node();
@@ -429,13 +443,40 @@ namespace ft {
             }
             
         private:
-            node_type       *root;
-            node_type       *null_node;
-            value_compare   _comp;
-            allocator_type  _alloc;
-            size_type       _size;
+            node_type           *root;
+            node_type           *null_node;
+            value_compare       _comp;
+            allocator_type      _alloc;
+            node_allocator_type _node_alloc;
+            size_type           _size;
 
-            
+            //----- delete node -----
+            void    __delete_node(node_type *node){
+                if (node != null_node)
+                    _alloc.destroy(&(node->data));
+                _node_alloc.deallocate(node, 1);
+            }
+            //----- Allocates a node with node_alloc -----
+            node_type  *__new_node(void){
+                node_type   *node = _node_alloc.allocate(1);
+                node->parent = 0;
+                node->left = 0;
+                node->right = 0;
+                node->color = RED;
+
+                return(node);
+            }
+            //----- Allocates a node with node_alloc and constructs data with alloc -----
+            node_type  *__new_node(value_type const & val){
+                node_type   *node = _node_alloc.allocate(1);
+                _alloc.construct(&(node->data), val);
+                node->parent = 0;
+                node->left = 0;
+                node->right = 0;
+                node->color = RED;
+
+                return(node);
+            }            
             node_type  *__max(node_type *node) const{
                 node_type *current;
 
