@@ -37,10 +37,10 @@ namespace ft {
 
         private:
             template <class InputIt> void __vector (InputIt first, InputIt last, typename std::input_iterator_tag){
-                //dans ce cas on ne peut pas savoir le nombre d'elements a l'avance, on doit donc push_back un par un 
                 _size = 0;
                 _capacity = 0;
-                _data = _alloc.allocate(0);
+                _data = NULL;
+                //_data = _alloc.allocate(0);
                 while(first != last){
                     push_back(*first++);
                 }
@@ -104,7 +104,8 @@ namespace ft {
                 _alloc = alloc;
                 _size = 0;
                 _capacity = 0;
-                _data = _alloc.allocate(0);
+                _data = NULL;
+                // _data = _alloc.allocate(0);
             } 
             //____fill constructor : constructs a container with n elements, each is a copy of val  
             explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()){
@@ -134,7 +135,8 @@ namespace ft {
                 for (size_type i = 0; i < _size ; i++){
                     _alloc.destroy(_data + i);
                 }
-                _alloc.deallocate(_data, _capacity);
+                if (_capacity > 0)
+                    _alloc.deallocate(_data, _capacity);
             }
             //____opertor= surcharge___
             vector& operator= (const vector& copy){
@@ -142,7 +144,8 @@ namespace ft {
                 clear();
                 //dans le cas ou on a besoin d'une reallocation
                 if (copy.size() > _capacity){
-                    _alloc.deallocate(_data, _capacity);
+                    if (_capacity > 0)
+                        _alloc.deallocate(_data, _capacity);
                     _capacity = copy.capacity();
                     _data = _alloc.allocate(_capacity);
                 }
@@ -199,7 +202,8 @@ namespace ft {
                         _alloc.construct(&new_data[i], _data[i]);
                         _alloc.destroy(&_data[i]);
                     }
-                    _alloc.deallocate(_data, _capacity);
+                    if (_capacity > 0)
+                        _alloc.deallocate(_data, _capacity);
                     _capacity = n;
                     _data = new_data;
                 }
@@ -352,16 +356,22 @@ namespace ft {
             }
             
         //*****Allocator*****
-            allocator_type get_allocator(void) const{ return (allocator_type()); }
+            allocator_type get_allocator(void) const{ return (_alloc); }
     };
 
     //***** Non member function overloads *****
     //___Relational operators___
     template <class T, class Alloc>  bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
+        if (lhs.size() == 0 && rhs.size() == 0){
+            return (true);
+        }
+        else if (lhs.size() == 0 || rhs.size() == 0){
+            return (false);
+        }
         return (ft::equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
     }
     template <class T, class Alloc>  bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
-        return (!ft::equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+        return (!(rhs == lhs));
     }
     template <class T, class Alloc>  bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
         return (std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())); // petit probleme sur mon lexicographical compare
