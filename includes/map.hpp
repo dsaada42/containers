@@ -125,7 +125,18 @@ namespace ft {
                 _tree.erase(first, last);
             }
             void swap (map& x){
-                (void)x;
+                allocator_type  tmp_alloc;
+                key_compare     tmp_comp;
+
+                tmp_alloc = x._alloc;
+                x._alloc = _alloc;
+                _alloc = tmp_alloc;
+
+                tmp_comp = x._comp;
+                x._comp = _comp;
+                _comp = tmp_comp;
+
+                _tree.swap(x._tree);
             }
             void clear( void ){
                 _tree.clear();
@@ -158,12 +169,10 @@ namespace ft {
                 return(_tree.upper_bound(ft::make_pair(k, mapped_type())));
             }
             pair<const_iterator,const_iterator> equal_range (const key_type& k) const{
-                (void)k;
-                return(ft::make_pair(const_iterator(), const_iterator()));
+                return(_tree.equal_range(ft::make_pair(k, mapped_type())));
             }
             pair<iterator,iterator> equal_range (const key_type& k){
-                (void)k;
-                return(ft::make_pair(iterator(), iterator()));
+                return(_tree.equal_range(ft::make_pair(k, mapped_type())));
             }
 
         //***** ALLOCATOR *****
@@ -200,11 +209,9 @@ namespace ft {
             return (true);
         return (lhs > rhs);    
     }  
-    
     template< class Key, class T, class Compare, class Alloc >
     void swap( map<Key,T,Compare,Alloc>& lhs, map<Key,T,Compare,Alloc>& rhs ){
-        (void)rhs;
-        (void)lhs;
+        lhs.swap(rhs);
     }
 }
 

@@ -6,7 +6,7 @@
 /*   By: dsaada <dsaada@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 12:46:40 by dsaada            #+#    #+#             */
-/*   Updated: 2022/12/22 09:56:35 by dsaada           ###   ########.fr       */
+/*   Updated: 2022/12/22 10:55:08 by dsaada           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,9 +261,33 @@ namespace ft {
                 while (first != last)
                     erase(*first++);
             }
-            // void swap (map& x){
-            //     (void)x;
-            // }
+            void swap (RBTree& x){
+                node_type       *tmp_root;
+                node_type       *tmp_null_node;
+                value_compare   tmp_comp = value_compare(_comp);
+                allocator_type  tmp_alloc;
+                size_type       tmp_size;
+
+                tmp_alloc = x._alloc;
+                x._alloc = _alloc;
+                _alloc = tmp_alloc;
+
+                tmp_comp = x._comp;
+                x._comp = _comp;
+                _comp = tmp_comp;
+
+                tmp_root = x.root;
+                x.root = root;
+                root = tmp_root;
+
+                tmp_size = x._size;
+                x._size = _size;
+                _size = tmp_size;
+
+                tmp_null_node = x.null_node;
+                x.null_node = null_node;
+                null_node = tmp_null_node;
+            }
             void    clear(void){
                 if (root == null_node)
                     return;
@@ -289,63 +313,75 @@ namespace ft {
                 return (1);
             }
             iterator lower_bound (const value_type& k){
-                iterator current;
-
-                current = begin();
+                node_type *current;
+                node_type *lower = null_node;
                 
-                while (!_comp(*current, k)){
-                    current++;
-                    if (*current == __max(root)->data)
-                        return(current);
+                current = root;
+                
+                while(current != null_node){
+                    if (!_comp(current->data, k)){
+                        lower = current;
+                        current = current->left;
+                    }
+                    else
+                        current = current->right;
                 }
-                return(current);
+                return(iterator(lower, null_node));
             }
             const_iterator lower_bound (const value_type& k) const{
-                const_iterator current;
-
-                current = begin();
+                node_type *current;
+                node_type *lower = null_node;
                 
-                while (!_comp(*current, k)){
-                    current++;
-                    if (*current == __max(root)->data)
-                        return(current);
+                current = root;
+                
+                while(current != null_node){
+                    if (!_comp(current->data, k)){
+                        lower = current;
+                        current = current->left;
+                    }
+                    else
+                        current = current->right;
                 }
-                return(current);
+                return(const_iterator(lower, null_node));
             }
             iterator upper_bound (const value_type& k){
-                iterator current;
+                node_type *current;
+                node_type *upper = null_node;
 
-                current = end();
+                current = root;
                 
-                current--;
-                while (_comp(*current, k)){
-                    current--;
-                    if (current == begin())
-                        return(current);
+                while(current != null_node){
+                    if (_comp(k, current->data)){
+                        upper = current;
+                        current = current->left;
+                    }
+                    else
+                        current = current->right;
                 }
-                return(current);
+                return(iterator(upper, null_node));
             }
             const_iterator upper_bound (const value_type& k) const{
-                const_iterator current;
+                node_type *current;
+                node_type *upper = null_node;
 
-                current = end();
+                current = root;
                 
-                current--;
-                while (_comp(*current, k)){
-                    current--;
-                    if (current == begin())
-                        return(current);
+                while(current != null_node){
+                    if (_comp(k, current->data)){
+                        upper = current;
+                        current = current->left;
+                    }
+                    else
+                        current = current->right;
                 }
-                return(current);
+                return(const_iterator(upper, null_node));
             }
-            // pair<const_iterator,const_iterator> equal_range (const key_type& k) const{
-            //     (void)k;
-            //     return(make_pair(key_type(), mapped_type()));
-            // }
-            // pair<iterator,iterator> equal_range (const key_type& k){
-            //     (void)k;
-            //     return(make_pair(key_type(), mapped_type()));
-            // }
+            pair<const_iterator,const_iterator> equal_range (const value_type& k) const{
+                return(ft::make_pair(lower_bound(k), upper_bound(k)));
+            }
+            pair<iterator,iterator> equal_range (const value_type& k){
+                return(ft::make_pair(lower_bound(k), upper_bound(k)));
+            }
 
         //***** ALLOCATOR *****
             allocator_type get_allocator() const{ return (_alloc); }
