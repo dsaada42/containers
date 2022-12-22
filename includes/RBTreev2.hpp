@@ -6,7 +6,7 @@
 /*   By: dsaada <dsaada@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 12:46:40 by dsaada            #+#    #+#             */
-/*   Updated: 2022/12/21 12:46:09 by dsaada           ###   ########.fr       */
+/*   Updated: 2022/12/22 09:56:35 by dsaada           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,7 @@ namespace ft {
         
         //***** ELEMENT ACCESS *****
             value_type& operator[] (const value_type& k){
-                (void)k;
-                return(root->data);
+                return( *(insert(k).first) );
             }
             value_type& at (const value_type& k){
                 node_type *node;
@@ -124,7 +123,7 @@ namespace ft {
                 node = __search_last_val(k);
                 if (node != null_node)
                     return(node->data);
-                return(root->data); // a modifier
+                throw std::out_of_range("trying to access element out of range");
             }
             const value_type& at (const value_type& k) const{
                 node_type *node;
@@ -132,7 +131,7 @@ namespace ft {
                 node = __search_last_val(k);
                 if (node != null_node)
                     return(node->data);
-                return(root->data); // a modifier
+                throw std::out_of_range("trying to access element out of range");
             }
         
         //***** MODIFIERS *****
@@ -278,18 +277,17 @@ namespace ft {
             }
 
         //***** OPERATIONS *****
-            // iterator find (const key_type& k){
-            //     (void)k;
-            //     return(begin());
-            // }
-            // const_iterator find (const key_type& k) const{
-            //     (void)k;
-            //     return(begin());
-            // }
-            // size_type count (const key_type& k) const{
-            //     (void)k;
-            //     return(0);
-            // }
+            iterator find (const value_type& k){
+                return(iterator(__search_last_val(k), null_node));
+            }
+            const_iterator find (const value_type& k) const{
+                return(const_iterator(__search_last_val(k), null_node));  
+            }
+            size_type count (const value_type& k) const{
+                if (__search_last_val(k) == null_node)
+                    return (0);
+                return (1);
+            }
             iterator lower_bound (const value_type& k){
                 iterator current;
 

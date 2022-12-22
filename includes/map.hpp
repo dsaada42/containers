@@ -137,16 +137,13 @@ namespace ft {
 
         //***** OPERATIONS *****
             iterator find (const key_type& k){
-                (void)k;
-                return(begin());
+                return(_tree.find(ft::make_pair(k, mapped_type())));
             }
             const_iterator find (const key_type& k) const{
-                (void)k;
-                return(begin());
+                return(_tree.find(ft::make_pair(k, mapped_type())));
             }
             size_type count (const key_type& k) const{
-                (void)k;
-                return(0);
+                return(_tree.count(ft::make_pair(k, mapped_type())));
             }
             iterator lower_bound (const key_type& k){
                 return(_tree.lower_bound(ft::make_pair(k, mapped_type())));

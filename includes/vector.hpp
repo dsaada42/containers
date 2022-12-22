@@ -59,9 +59,6 @@ namespace ft {
                 }
             }
             template <class InputIt> void __insert (iterator position, InputIt first, InputIt last, typename std::input_iterator_tag){
-                //on doit stocker de position a end dans un vector temporaire
-                //on push back ce qu'on nous donne en parametre
-                //on push_back ce qu'on a save 
                 ft::vector<value_type> tmp(position, end());
                 iterator it = tmp.begin();
                 iterator itend = tmp.end();
