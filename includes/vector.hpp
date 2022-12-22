@@ -352,9 +352,7 @@ namespace ft {
             }
             
         //*****Allocator*****
-            allocator_type get_allocator(void) const{
-                return (_alloc);
-            }
+            allocator_type get_allocator(void) const{ return (allocator_type()); }
     };
 
     //***** Non member function overloads *****
