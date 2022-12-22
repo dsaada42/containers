@@ -6,7 +6,7 @@
 /*   By: dsaada <dsaada@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 12:46:40 by dsaada            #+#    #+#             */
-/*   Updated: 2022/12/22 15:10:48 by dsaada           ###   ########.fr       */
+/*   Updated: 2022/12/22 15:34:18 by dsaada           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,17 +48,13 @@ namespace ft {
         
         public:
             explicit RBTree( const value_compare& comp, const allocator_type& alloc = allocator_type()): _comp(comp), _alloc(alloc), _size(0){
-                // null_node = new node_type;
                 null_node = __new_node();
                 null_node->color = BLACK;
-                // __null_node(null_node);
                 root = null_node;
             }
             RBTree (const RBTree& x): _comp(x._comp), _alloc(x._alloc){
-                // null_node = new node_type;
                 null_node = __new_node();
                 null_node->color = BLACK;
-                // __null_node(null_node);
                 root = null_node;
                 insert(x.begin(), x.end());
                 _size = x.size();
@@ -71,7 +67,7 @@ namespace ft {
                 clear();
                 _comp = x._comp;
                 _alloc = x._alloc;
-                insert(x.begin(), x.end()); // a remplacer
+                insert(x.begin(), x.end());
                 _size = x.size();
                 return (*this);
             }
@@ -96,7 +92,7 @@ namespace ft {
             iterator                end(){
                 node_type *tmp = root;
                 if (tmp != null_node){
-                    while (tmp != null_node) // tmp_>right != null_node ?
+                    while (tmp != null_node)
                         tmp = tmp->right;
                 }
                 return (iterator(tmp, null_node));
@@ -104,7 +100,7 @@ namespace ft {
             const_iterator          end() const{
                 node_type *tmp = root;
                 if (tmp != null_node){
-                    while (tmp != null_node) // tmp->right != null_node ?
+                    while (tmp != null_node)
                         tmp = tmp->right;
                 }
                 return (const_iterator(tmp, null_node));
@@ -116,7 +112,7 @@ namespace ft {
         
         //***** CAPACITY *****
             bool                    empty() const{ return (_size == 0); }
-            size_type               size() const{ return (_size); } //should return height of tree
+            size_type               size() const{ return (_size); }
             size_type               max_size() const{ return (_node_alloc.max_size()); }
         
         //***** ELEMENT ACCESS *****
@@ -148,7 +144,6 @@ namespace ft {
             ft::pair<iterator, bool> insert(const value_type &val){            
                 node_type *tmp = root;
                 node_type *p = 0;
-                // node_type *node = new node_type(val);
                 node_type *node = __new_node(val);
                 
                 node->left = null_node;
@@ -220,7 +215,6 @@ namespace ft {
                 //case 1 : no left child 
                 if (node->left == null_node){
                     new_node = __assign_child_parent(node, RIGHT);
-                    // delete node;
                     __delete_node(node);
                     if (original_color == BLACK){// le noeud etait noir
                         if (new_node->color == RED)// l enfant etait rouge , good
@@ -233,7 +227,6 @@ namespace ft {
                 //case 2 : no right child
                 else if (node->right == null_node){
                     new_node = __assign_child_parent(node, LEFT);
-                    // delete node;
                     __delete_node(node);
                     if (original_color == BLACK){// le noeud etait noir
                         if (new_node->color == RED)// l enfant etait rouge , good
@@ -246,7 +239,6 @@ namespace ft {
                 //case 3 : both children are valid
                 else{
                     to_delete = __highest_left(node);
-                    // new_node = new node_type(to_delete->data);
                     new_node = __new_node(to_delete->data);
                     //on branche au child de droite
                     new_node->right = node->right;
@@ -264,8 +256,6 @@ namespace ft {
                         new_node->parent->right = new_node;
                     new_node->color = original_color;
                     original_color = to_delete->color;
-                    //on supprime l'ancien noeud
-                    // delete node;
                     __delete_node(node);
                     erase(to_delete);
                 }

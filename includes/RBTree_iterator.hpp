@@ -34,7 +34,6 @@ namespace ft{
     class RBTree_iterator{
         public:
             typedef T                                                   value_type;
-            // typedef typename ft::conditional<ConstB, const T, T>::type  value_type;
             typedef value_type&                                         reference;
             typedef const value_type &                                  const_reference;
             typedef value_type*                                         pointer;
