@@ -40,7 +40,6 @@ namespace ft {
                 _size = 0;
                 _capacity = 0;
                 _data = NULL;
-                //_data = _alloc.allocate(0);
                 while(first != last){
                     push_back(*first++);
                 }
@@ -52,7 +51,10 @@ namespace ft {
                     nb++;
                 _size = nb;
                 _capacity = nb;
-                _data = _alloc.allocate(nb);
+                if (nb != 0)
+                    _data = _alloc.allocate(nb);
+                else
+                    _data = NULL;
                 for (size_type i = 0; i < nb; i++){
                     _alloc.construct(&_data[i], *first);
                     first++;
@@ -105,14 +107,16 @@ namespace ft {
                 _size = 0;
                 _capacity = 0;
                 _data = NULL;
-                // _data = _alloc.allocate(0);
             } 
             //____fill constructor : constructs a container with n elements, each is a copy of val  
             explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()){
                 if (n > max_size())
                     throw std::length_error("vector: tried to assign past max size");                
                 _alloc = alloc;
-                _data = _alloc.allocate(n);
+                if (n > 0)
+                    _data = _alloc.allocate(n);
+                else
+                    _data = NULL;
                 _size = n;
                 _capacity = n;
                 for (size_type i = 0; i < n ; i++)
