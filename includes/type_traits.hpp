@@ -41,6 +41,10 @@ namespace ft{
     template<> struct is_integral< unsigned short >             :   true_type {};
     template<> struct is_integral< unsigned long >              :   true_type {};
     template<> struct is_integral< unsigned long long >         :   true_type {};
+    template<> struct is_integral< signed char >                :   true_type {};
+    template<> struct is_integral< const signed char >          :   true_type {};
+    template<> struct is_integral< volatile signed char >       :   true_type {};
+    template<> struct is_integral< const volatile signed char > :   true_type {};    
     template<> struct is_integral< char >                       :   true_type {};
     template<> struct is_integral< short >                      :   true_type {};
     template<> struct is_integral< int >                        :   true_type {};
