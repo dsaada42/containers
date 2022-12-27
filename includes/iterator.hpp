@@ -65,9 +65,12 @@ namespace ft
 			reverse_iterator			operator-	(int n) const							{ return (_it + n + 1); }
 			std::ptrdiff_t				operator-	(const reverse_iterator & x) const		{ return (x.getIter() - _it); }
 			// Dereference
-			value_type &	operator[]	(size_t n) const									{ return (*(_it - n)); }
-			value_type &	operator*	(void) 												{ return (*_it); }   //j ai vire des const sans comprendre pk
-			value_type *	operator->	(void) 												{ return (&(*_it)); }	//j ai vire des const sans comprendre pk
+			const reference	operator[]	(size_t n) const									{ return (*(_it - n)); }
+			reference		operator[]	(size_t n) 											{ return (*(_it - n)); }
+			// reference		operator*	(void) const 										{ return (*_it); }   
+			// pointer			operator->	(void) const										{ return (&(*_it)); }	
+			reference		operator*	(void) 												{ return (*_it); }   //j ai vire des const sans comprendre pk
+			pointer			operator->	(void) 												{ return (&(*_it)); }	//j ai vire des const sans comprendre pk
 			// Member functions
 			Iter						base		(void)									{ return (++Iter(_it)); }
 			Iter						getIter		(void) const							{ return (_it); }
