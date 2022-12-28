@@ -3,6 +3,14 @@
 
 namespace ft{
 
+    // //Enable if const
+    // template < class T = void >
+    // struct enable_if_not_const{};
+    // template < class T >
+    // struct enable_if_not_const< T& >{ typedef T& type; };
+    // template < class T >
+    // struct enable_if_not_const<const T& >{typedef void type;};
+
     //Enable if
     template <bool condition, class T = void>
     struct enable_if{};

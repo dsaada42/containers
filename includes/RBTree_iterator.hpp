@@ -42,6 +42,8 @@ namespace ft{
             typedef std::size_t                                         size_type;
             typedef std::bidirectional_iterator_tag                     iterator_category;
             typedef RBTree_node< value_type >                           node;
+            // typedef typename enable_if_not_const<reference>::type       Reference;
+            // typedef typename enable_if_not_const<pointer>::type         Pointer;
 
         public:
             node *node_ptr;
@@ -140,7 +142,7 @@ namespace ft{
             }
             RBTree_iterator     operator++(int){ RBTree_iterator it = *this; ++(*this); return (it); }
             RBTree_iterator     operator--(int){ RBTree_iterator it = *this; --(*this); return (it); }
-        //***** ACCESS / DEREFERENCE *****
+        //***** ACCESS / DEREFERENCE ***** 
             pointer             operator->(){ return (&node_ptr->data); }
             const_pointer       operator->() const { return (&node_ptr->data); }
             reference           operator*(){ return (node_ptr->data); }
