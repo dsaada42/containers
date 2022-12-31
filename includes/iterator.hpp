@@ -25,6 +25,7 @@ namespace ft
             typedef value_type&                             reference;
             typedef std::random_access_iterator_tag         iterator_category;                                  
     };
+	//ajouter un booleen pour gerer le retour de * et ->
 	template <class Iter>
 	class reverse_iterator {
 		public:
@@ -67,8 +68,10 @@ namespace ft
 			// Dereference
 			const reference	operator[]	(size_t n) const									{ return (*(_it - n)); }
 			reference		operator[]	(size_t n) 											{ return (*(_it - n)); }
-			const reference		operator*	(void) const 										{ return (*_it); }   
-			const pointer			operator->	(void) const										{ return (&(*_it)); }	
+			// reference		operator*	(void) const 										{ return (*_it); }
+			reference		operator*	(void) const 										{ Iter tmp = _it; return (*tmp); }   
+
+			pointer			operator->	(void) const										{ return (&(*_it)); }	
 			// reference		operator*	(void) 												{ return (*_it); }   //j ai vire des const sans comprendre pk
 			// pointer			operator->	(void) 												{ return (&(*_it)); }	//j ai vire des const sans comprendre pk
 			// Member functions
