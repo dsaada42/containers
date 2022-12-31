@@ -25,7 +25,7 @@ namespace ft {
             typedef typename allocator_type::const_reference                const_reference;
             typedef typename allocator_type::pointer                        pointer;
             typedef typename allocator_type::const_pointer                  const_pointer;
-            typedef ft::RBTree_iterator<value_type, false>                  iterator;
+            typedef ft::RBTree_iterator<value_type, true>                   iterator;
             typedef ft::RBTree_iterator<value_type, true>                   const_iterator;
             typedef ft::reverse_iterator<iterator>                          reverse_iterator;
             typedef ft::reverse_iterator<const_iterator>                    const_reverse_iterator;

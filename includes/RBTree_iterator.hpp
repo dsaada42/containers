@@ -42,8 +42,9 @@ namespace ft{
             typedef std::size_t                                         size_type;
             typedef std::bidirectional_iterator_tag                     iterator_category;
             typedef RBTree_node< value_type >                           node;
-            // typedef typename enable_if_not_const<reference>::type       Reference;
-            // typedef typename enable_if_not_const<pointer>::type         Pointer;
+            typedef typename ft::conditional<ConstB, const_reference, reference>::type Reference;
+            typedef typename ft::conditional<ConstB, const_pointer, pointer>::type Pointer;
+
 
         public:
             node *node_ptr;
@@ -73,6 +74,7 @@ namespace ft{
                 node_ptr = rhs.node_ptr;
                 null_node = rhs.null_node; 
             }
+            
             virtual ~RBTree_iterator( void ){}  
         //***** INCREMENT / DECREMENT *****
             RBTree_iterator&    operator++(){
@@ -143,9 +145,10 @@ namespace ft{
             RBTree_iterator     operator++(int){ RBTree_iterator it = *this; ++(*this); return (it); }
             RBTree_iterator     operator--(int){ RBTree_iterator it = *this; --(*this); return (it); }
         //***** ACCESS / DEREFERENCE ***** 
-            pointer             operator->(){ return (&node_ptr->data); }
+            Pointer             operator->(){ return (&node_ptr->data); }
             const_pointer       operator->() const { return (&node_ptr->data); }
-            reference           operator*(){ return (node_ptr->data); }
+            // reference           operator*(){ return (node_ptr->data); }
+            Reference  operator*(){ return (node_ptr->data); }
             const_reference     operator*() const{ return (node_ptr->data); }
         //***** COMPARISON *****
             template <bool B > bool   operator==(const RBTree_iterator<T, B> & rhs ) const{ return (node_ptr == rhs.node_ptr); }

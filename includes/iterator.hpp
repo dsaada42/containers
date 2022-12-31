@@ -67,10 +67,10 @@ namespace ft
 			// Dereference
 			const reference	operator[]	(size_t n) const									{ return (*(_it - n)); }
 			reference		operator[]	(size_t n) 											{ return (*(_it - n)); }
-			// reference		operator*	(void) const 										{ return (*_it); }   
-			// pointer			operator->	(void) const										{ return (&(*_it)); }	
-			reference		operator*	(void) 												{ return (*_it); }   //j ai vire des const sans comprendre pk
-			pointer			operator->	(void) 												{ return (&(*_it)); }	//j ai vire des const sans comprendre pk
+			const reference		operator*	(void) const 										{ return (*_it); }   
+			const pointer			operator->	(void) const										{ return (&(*_it)); }	
+			// reference		operator*	(void) 												{ return (*_it); }   //j ai vire des const sans comprendre pk
+			// pointer			operator->	(void) 												{ return (&(*_it)); }	//j ai vire des const sans comprendre pk
 			// Member functions
 			Iter						base		(void)									{ return (++Iter(_it)); }
 			Iter						getIter		(void) const							{ return (_it); }

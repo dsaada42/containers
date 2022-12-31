@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   RBTreev2.hpp                                       :+:      :+:    :+:   */
+/*   RBTree.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dylan <dylan@student.42.fr>                +#+  +:+       +#+        */
+/*   By: dsaada <dsaada@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 12:46:40 by dsaada            #+#    #+#             */
-/*   Updated: 2022/12/24 13:30:27 by dylan            ###   ########.fr       */
+/*   Updated: 2022/12/31 10:41:19 by dsaada           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,10 @@ namespace ft {
                 (void)position;
                 return (insert(val).first);
             }
+            const_iterator insert (const_iterator position, const value_type& val){
+                (void)position;
+                return (insert(val).first);
+            }
             ft::pair<iterator, bool> insert(const value_type &val){            
                 node_type *tmp = root;
                 node_type *p = 0;
@@ -262,6 +266,10 @@ namespace ft {
                 __update_null_node();
             }
             void erase (iterator first, iterator last){
+                while (first != last)
+                    erase(*first++);
+            }
+            void erase (const_iterator first, const_iterator last){
                 while (first != last)
                     erase(*first++);
             }
