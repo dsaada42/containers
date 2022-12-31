@@ -33,17 +33,17 @@ namespace ft{
     template < class T, bool ConstB >
     class RBTree_iterator{
         public:
-            typedef T                                                   value_type;
-            typedef value_type&                                         reference;
-            typedef const value_type &                                  const_reference;
-            typedef value_type*                                         pointer;
-            typedef const value_type *                                  const_pointer;
-            typedef std::ptrdiff_t                                      difference_type;
-            typedef std::size_t                                         size_type;
-            typedef std::bidirectional_iterator_tag                     iterator_category;
-            typedef RBTree_node< value_type >                           node;
-            typedef typename ft::conditional<ConstB, const_reference, reference>::type Reference;
-            typedef typename ft::conditional<ConstB, const_pointer, pointer>::type Pointer;
+            typedef T                                                                   value_type;
+            typedef value_type&                                                         reference;
+            typedef const value_type &                                                  const_reference;
+            typedef value_type*                                                         pointer;
+            typedef const value_type *                                                  const_pointer;
+            typedef std::ptrdiff_t                                                      difference_type;
+            typedef std::size_t                                                         size_type;
+            typedef std::bidirectional_iterator_tag                                     iterator_category;
+            typedef RBTree_node< value_type >                                           node;
+            typedef typename ft::conditional<ConstB, const_reference, reference>::type  Reference;
+            typedef typename ft::conditional<ConstB, const_pointer, pointer>::type      Pointer;
 
 
         public:
