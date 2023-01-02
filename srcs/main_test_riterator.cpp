@@ -45,8 +45,8 @@ int main (void) {
         else
             print_equal("cit and cit2", false);
 
-        // std::cout << "It = " << *it << std::endl;
-        // std::cout << "Cit = " << *cit << std::endl;
+        std::cout << "It = " << *it << std::endl;
+        std::cout << "Cit = " << *cit << std::endl;
         // ++it;
         // ++cit;
         //std::cout << "It = " << *it << std::endl;
