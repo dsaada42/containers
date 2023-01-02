@@ -34,10 +34,11 @@ namespace ft{
     class RBTree_iterator{
         public:
             typedef T                                                                   value_type;
+            // typedef typename ft::conditional<ConstB, const T, T>::type                  value_type;
             typedef value_type&                                                         reference;
-            typedef const value_type &                                                  const_reference;
+            typedef value_type const &                                                  const_reference;
             typedef value_type*                                                         pointer;
-            typedef const value_type *                                                  const_pointer;
+            typedef value_type const *                                                  const_pointer;
             typedef std::ptrdiff_t                                                      difference_type;
             typedef std::size_t                                                         size_type;
             typedef std::bidirectional_iterator_tag                                     iterator_category;
@@ -151,8 +152,8 @@ namespace ft{
             Reference  operator*(){ return (node_ptr->data); }
             const_reference     operator*() const{ return (node_ptr->data); }
         //***** COMPARISON *****
-            template <bool B > bool   operator==(const RBTree_iterator<T, B> & rhs ) const{ return (node_ptr == rhs.node_ptr); }
-            template <bool B > bool   operator!=(const RBTree_iterator<T, B> & rhs ) const{ return (node_ptr != rhs.node_ptr); }
+            template <bool B > bool   operator==(RBTree_iterator<T, B> const & rhs ) const{ return (node_ptr == rhs.node_ptr); }
+            template <bool B > bool   operator!=(RBTree_iterator<T, B> const & rhs ) const{ return (node_ptr != rhs.node_ptr); }
 
         private:
             bool __is_leftest(node * node){

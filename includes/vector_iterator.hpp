@@ -1,9 +1,9 @@
 #ifndef VECTOR_ITERATOR_HPP
 # define VECTOR_ITERATOR_HPP
-# include "vector.hpp"
-# include "type_traits.hpp"
 # include <iterator>
 # include <cstddef>
+# include "vector.hpp"
+# include "type_traits.hpp"
 
 namespace ft{
 
