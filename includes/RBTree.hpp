@@ -6,7 +6,7 @@
 /*   By: dsaada <dsaada@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 12:46:40 by dsaada            #+#    #+#             */
-/*   Updated: 2023/01/02 14:03:33 by dsaada           ###   ########.fr       */
+/*   Updated: 2023/01/02 17:35:52 by dsaada           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,20 +105,18 @@ namespace ft {
                 }
                 return (const_iterator(tmp, null_node));
             }
-            reverse_iterator        rbegin(){ return (reverse_iterator(end())); }
-            const_reverse_iterator  rbegin() const{ return (const_reverse_iterator(end())); }
-            reverse_iterator        rend(){ return (reverse_iterator(begin())); }
-            const_reverse_iterator  rend() const{ return (const_reverse_iterator(begin())); }
+            reverse_iterator        rbegin()        { return (reverse_iterator(end())); }
+            const_reverse_iterator  rbegin() const  { return (const_reverse_iterator(end())); }
+            reverse_iterator        rend(){ return  (reverse_iterator(begin())); }
+            const_reverse_iterator  rend() const    { return (const_reverse_iterator(begin())); }
         
         //***** CAPACITY *****
-            bool                    empty() const{ return (_size == 0); }
-            size_type               size() const{ return (_size); }
+            bool                    empty() const   { return (_size == 0); }
+            size_type               size() const    { return (_size); }
             size_type               max_size() const{ return (_node_alloc.max_size()); }
         
         //***** ELEMENT ACCESS *****
-            value_type& operator[] (const value_type& k){
-                return( *(insert(k).first) );
-            }
+            value_type& operator[] (const value_type& k){ return( *(insert(k).first) ); }
             value_type& at (const value_type& k){
                 node_type *node;
 
