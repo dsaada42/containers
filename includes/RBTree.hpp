@@ -6,7 +6,7 @@
 /*   By: dsaada <dsaada@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 12:46:40 by dsaada            #+#    #+#             */
-/*   Updated: 2023/01/02 13:39:37 by dsaada           ###   ########.fr       */
+/*   Updated: 2023/01/02 14:03:33 by dsaada           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ namespace ft {
             typedef typename allocator_type::const_pointer                          const_pointer;
             typedef ft::RBTree_iterator<value_type, false>                          iterator;
             typedef ft::RBTree_iterator<value_type, true>                           const_iterator;
-            typedef ft::RBTree_reverse_iterator<iterator>                           reverse_iterator;
-            typedef ft::RBTree_reverse_iterator<const_iterator>                     const_reverse_iterator;
+            typedef ft::reverse_iterator<iterator>                                  reverse_iterator;
+            typedef ft::reverse_iterator<const_iterator>                            const_reverse_iterator;
             typedef ft::RBTree_node< value_type >                                   node_type;
             typedef std::ptrdiff_t                                                  difference_type; //ptrdiff_t
             typedef std::size_t                                                     size_type;

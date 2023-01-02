@@ -35,16 +35,16 @@ namespace ft{
     class RBTree_iterator{
         public:
             typedef T                                                                   value_type;
-            typedef value_type&                                                         reference;
+            typedef value_type&                                                         ref;
             typedef value_type const &                                                  const_reference;
-            typedef value_type*                                                         pointer;
+            typedef value_type*                                                         ptr;
             typedef value_type const *                                                  const_pointer;
             typedef std::ptrdiff_t                                                      difference_type;
             typedef std::size_t                                                         size_type;
             typedef std::bidirectional_iterator_tag                                     iterator_category;
             typedef RBTree_node< value_type >                                           node;
-            typedef typename ft::conditional<ConstB, const_reference, reference>::type  Reference;
-            typedef typename ft::conditional<ConstB, const_pointer, pointer>::type      Pointer;
+            typedef typename ft::conditional<ConstB, const_reference, ref>::type        reference;
+            typedef typename ft::conditional<ConstB, const_pointer, ptr>::type          pointer;
 
 
         public:
@@ -138,10 +138,10 @@ namespace ft{
             RBTree_iterator     operator--(int){ RBTree_iterator it = *this; --(*this); return (it); }
         //***** ACCESS / DEREFERENCE ***** 
             // pointer             operator->(){ return (&node_ptr->data); }
-            Pointer             operator->(){ return (&node_ptr->data); }
+            pointer             operator->(){ return (&node_ptr->data); }
             const_pointer       operator->() const { return (&node_ptr->data); }
             // reference           operator*(){ return (node_ptr->data); }
-            Reference  operator*(){ return (node_ptr->data); }
+            reference  operator*(){ return (node_ptr->data); }
             const_reference     operator*() const{ return (node_ptr->data); }
         //***** COMPARISON *****
             template <bool B > bool   operator==(RBTree_iterator<T, B> const & rhs ) const{ return (node_ptr == rhs.node_ptr); }
