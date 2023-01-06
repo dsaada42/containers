@@ -6,7 +6,7 @@
 /*   By: dsaada <dsaada@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 12:46:40 by dsaada            #+#    #+#             */
-/*   Updated: 2023/01/02 17:35:52 by dsaada           ###   ########.fr       */
+/*   Updated: 2023/01/06 14:24:18 by dsaada           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ namespace ft {
             typedef ft::reverse_iterator<iterator>                                  reverse_iterator;
             typedef ft::reverse_iterator<const_iterator>                            const_reverse_iterator;
             typedef ft::RBTree_node< value_type >                                   node_type;
-            typedef std::ptrdiff_t                                                  difference_type; //ptrdiff_t
+            typedef std::ptrdiff_t                                                  difference_type;
             typedef std::size_t                                                     size_type;
             typedef typename allocator_type::template rebind< node_type >::other    node_allocator_type;
         
@@ -395,48 +395,6 @@ namespace ft {
 
         //***** ALLOCATOR *****
             allocator_type get_allocator() const{ return (_alloc); }
-            
-        //*****************  TESTING ****************************
-            //----- Print Tree -----
-            void __print_tree(node_type *node, std::string offset, bool end) {
-                if (node != null_node) {
-                std::cout<<offset;
-                if (end) { 
-                    std::cout<<"R----";
-                    offset += "     ";
-                }
-                else {
-                    std::cout<<"L----";
-                    offset += "|    ";
-                }
-                std::string color = node->color?"RED":"BLACK";
-                std::cout<<node->data.first<<"("<<color<<")";
-                std::cout<<" -> "<<node->data.second<<std::endl;
-                __print_tree(node->left, offset, false);
-                __print_tree(node->right, offset, true);
-                }
-            }
-            void printTree(void){
-                if (root != null_node)
-                    __print_tree(root, "", true);
-                else
-                    std::cout << "Empty tree" << std::endl;
-                std::cout << std::endl;
-            }
-            void printNode(node_type *node){
-                std::cout << "*******************************************************************" << std::endl;
-                std::cout << "*     Key = " << node->data.first << std::endl;
-                std::cout << "*     Value = " << node->data.second << std::endl;
-                std::cout << "*     color = ";
-                if (node->color == BLACK)
-                    std::cout << "BLACK" << std::endl;
-                else
-                    std::cout << "RED" << std::endl;
-                std::cout << "*     Parent = " << node->parent->data.first << std::endl;
-                std::cout << "*     Left = " << node->left->data.first << std::endl;
-                std::cout << "*     Right = " << node->right->data.first << std::endl;
-                std::cout << "*******************************************************************" << std::endl;
-            }
             
         private:
             node_type           *root;

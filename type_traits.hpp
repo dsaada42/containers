@@ -1,15 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   type_traits.hpp                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dsaada <dsaada@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/06 14:25:00 by dsaada            #+#    #+#             */
+/*   Updated: 2023/01/06 14:25:01 by dsaada           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef TYPE_TRAITS_HPP
 # define TYPE_TRAITS_HPP
 
 namespace ft{
-
-    // //Enable if const
-    // template < class T = void >
-    // struct enable_if_not_const{};
-    // template < class T >
-    // struct enable_if_not_const< T& >{ typedef T& type; };
-    // template < class T >
-    // struct enable_if_not_const<const T& >{typedef void type;};
 
     //Enable if
     template <bool condition, class T = void>

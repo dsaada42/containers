@@ -52,6 +52,8 @@
         "streambuf": "cpp",
         "cinttypes": "cpp",
         "typeinfo": "cpp",
-        "span": "cpp"
+        "span": "cpp",
+        "list": "cpp",
+        "fstream": "cpp"
     }
 }

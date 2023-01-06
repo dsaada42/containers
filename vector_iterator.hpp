@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   vector_iterator.hpp                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dsaada <dsaada@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/06 14:25:11 by dsaada            #+#    #+#             */
+/*   Updated: 2023/01/06 14:25:21 by dsaada           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef VECTOR_ITERATOR_HPP
 # define VECTOR_ITERATOR_HPP
 # include <iterator>
@@ -20,7 +32,7 @@ namespace ft{
             typedef std::random_access_iterator_tag                     iterator_category;
         
         public:
-            pointer _ptr; //a changer en private + getter ?
+            pointer _ptr;
 
         public:
         //***** CONSTRUCTORS / DESTRUCTOR / OPERATOR= *****
