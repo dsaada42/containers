@@ -6,7 +6,7 @@
 /*   By: dsaada <dsaada@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 14:25:27 by dsaada            #+#    #+#             */
-/*   Updated: 2023/01/06 14:26:10 by dsaada           ###   ########.fr       */
+/*   Updated: 2023/01/06 15:54:16 by dsaada           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,18 +242,6 @@ namespace ft {
 
         //*****MODIFIERS*****
             template <class InputIt>  void assign (InputIt first, typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type last){
-                // if(_size)
-                //     clear();
-                // size_type nb = 0;
-                // for( InputIt tmp = first; tmp != last; tmp++)
-                //     nb++;
-                // if (nb > _capacity)
-                //     reserve(nb);
-                // for (size_type i = 0; i < nb; i++){
-                //     _alloc.construct(&_data[i], *first);
-                //     first++;
-                // }
-                // _size = nb;
                 if (_size)
                     clear();
                 while (first != last){
@@ -322,20 +310,6 @@ namespace ft {
                 return (position);
             }
             iterator erase (iterator first, iterator last){
-                // size_type nb = 0;
-
-                // nb = last - first;
-                // if (nb == 0)
-                //     return (first);
-                // //on decale tous les elements a partir de la position de last - first
-                // for (size_type i = first - begin(); i < _size; i++){
-                //     _data[i] = _data[i + nb]; 
-                // }
-                // //on supprime les nb derniers elements
-                // for (size_type i = _size - nb; i < _size; i++)
-                //     _alloc.destroy(&_data[i]);
-                // _size -= nb;
-                // return(first);
                 iterator temp = first;
                 while( first != last--)
                     erase(last);
@@ -387,7 +361,7 @@ namespace ft {
         return (!(rhs == lhs));
     }
     template <class T, class Alloc>  bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
-        return (std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())); // petit probleme sur mon lexicographical compare
+        return (std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
     }	
     template <class T, class Alloc>  bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
         if (rhs == lhs)
@@ -395,7 +369,7 @@ namespace ft {
         return (lhs < rhs);
     }
     template <class T, class Alloc>  bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
-        return (std::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));  // petit probleme sur mon lexicographical compare
+        return (std::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));
     }	
     template <class T, class Alloc>  bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
         if (rhs == lhs)

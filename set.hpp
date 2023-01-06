@@ -6,7 +6,7 @@
 /*   By: dsaada <dsaada@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 14:24:38 by dsaada            #+#    #+#             */
-/*   Updated: 2023/01/06 14:24:39 by dsaada           ###   ########.fr       */
+/*   Updated: 2023/01/06 15:54:42 by dsaada           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ namespace ft {
     }
     template< class T, class Compare, class Alloc >
     bool operator<( const set<T,Compare,Alloc>& lhs, const set<T,Compare,Alloc>& rhs ){
-        return (std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())); // petit probleme sur mon lexicographical compare
+        return (std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
     }
     template< class T, class Compare, class Alloc >
     bool operator<=( const set<T,Compare,Alloc>& lhs, const set<T,Compare,Alloc>& rhs ){
@@ -147,7 +147,7 @@ namespace ft {
     }
     template< class T, class Compare, class Alloc >
     bool operator>( const set<T,Compare,Alloc>& lhs, const set<T,Compare,Alloc>& rhs ){
-        return (std::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));  // petit probleme sur mon lexicographical compare   
+        return (std::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));  
     }
     template< class T, class Compare, class Alloc >
     bool operator>=( const set<T,Compare,Alloc>& lhs, const set<T,Compare,Alloc>& rhs ){
